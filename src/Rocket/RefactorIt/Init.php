@@ -167,7 +167,7 @@ class Init implements RefactorItCommand
      */
     private function getRefactorItConfigFile(): string
     {
-        return getcwd() . Init::REFACTOR_IT_PATH . Config::CONFIG_FILE;
+        return $this->getRefactorItPath() . Config::CONFIG_FILE;
     }
 
     /**
@@ -175,6 +175,6 @@ class Init implements RefactorItCommand
      */
     private function getRefactorItRulesFile(): string
     {
-        return getcwd() . Init::REFACTOR_IT_PATH . DefaultRules::RULES_FILE;
+        return $this->getRefactorItPath() . DefaultRules::RULES_FILE;
     }
 }
