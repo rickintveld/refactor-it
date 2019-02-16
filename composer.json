@@ -15,7 +15,8 @@
         "php": ">=7.1.0",
         "symfony/console": "*",
         "mnapoli/silly": "*",
-        "friendsofphp/php-cs-fixer": "*"
+        "friendsofphp/php-cs-fixer": "*",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

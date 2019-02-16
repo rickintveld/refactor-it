@@ -1,16 +1,12 @@
 <?php
 namespace Rocket\RefactorIt\Config;
 
-use Rocket\RefactorIt\Common\JsonParser;
-
 /**
  * Class DefaultRules
  * @package Rocket\RefactorIt\Config
  */
-class DefaultRules implements JsonParser
+class DefaultRules extends Rules
 {
-    const RULES_FILE = 'rules.json';
-
     /** @var array */
     protected $orderedClassElements = [
         'use_trait',
@@ -489,9 +485,9 @@ class DefaultRules implements JsonParser
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function toJSON(): string
+    public function toArray(): array
     {
         $properties = [];
         $variables = get_object_vars($this);
@@ -505,9 +501,7 @@ class DefaultRules implements JsonParser
 
         $properties = array_merge($properties, ['@PSR2' => true]);
 
-        return json_encode(array_filter($properties, function ($value) {
-            return $value !== null;
-        }), JSON_PRETTY_PRINT);
+        return $properties;
     }
 
     /**
@@ -516,6 +510,8 @@ class DefaultRules implements JsonParser
      */
     public function fromJSON(array $json): DefaultRules
     {
+        parent::fromJSON($json);
+
         if (isset($json['ordered_class_elements']) && is_array($json['ordered_class_elements']) && count($json['ordered_class_elements']) > 0) {
             $this->setOrderedClassElements($json['ordered_class_elements']);
         }
@@ -613,5 +609,29 @@ class DefaultRules implements JsonParser
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function toJSON(): string
+    {
+        parent::toJSON();
+
+        $properties = [];
+        $variables = get_object_vars($this);
+
+        foreach ($variables as $key => $value) {
+            $snakeCased = preg_replace('/[A-Z]/', '_$0', $key);
+            $snakeCased = strtolower($snakeCased);
+            $snakeCasedKey = ltrim($snakeCased, '_');
+            $properties[$snakeCasedKey] = $value;
+        }
+
+        $properties = array_merge($properties, ['@PSR2' => true]);
+
+        return json_encode(array_filter($properties, function ($value) {
+            return $value !== null;
+        }), JSON_PRETTY_PRINT);
     }
 }

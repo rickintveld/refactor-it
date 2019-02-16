@@ -1,11 +1,10 @@
 <?php
 
+use Rocket\RefactorIt\Fixer\Fixer;
 use Rocket\RefactorIt\Init;
 use Silly\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Helper\QuestionHelper;
 
 const REFACTOR_IT_VERSION = '1.0.0';
 
@@ -20,34 +19,24 @@ $app = new Application('Refactor it', REFACTOR_IT_VERSION);
 
 $init = new Init();
 
+$fixer = new Fixer();
+
 $app->command('config [--reset-project]', function ($resetProject, InputInterface $input, OutputInterface $output)  use ($init) {
 
-    /**
-     * @todo Create the rules json
-     */
-
-    $init->execute($input, $output, $this->getHelperSet(), ['reset-project' => $resetProject]);
+    try {
+        $init->execute($input, $output, $this->getHelperSet(), ['reset-project' => $resetProject]);
+    } catch (\Exception $exception) {
+        $output->writeln('<error>' . $exception->getMessage() . '</error>');
+    }
 
 })->descriptions('(re)sets the refactor-it pattern config');
 
-$app->command('it [--all]', function ($all, InputInterface $input, OutputInterface $output) {
-    /**
-     * @todo
-     * Get the GIT diff names and store them into a array
-     * Get the refactor-it config.json content
-     * Loop true the files and refactor the code
-     */
+$app->command('it [--all]', function ($all, InputInterface $input, OutputInterface $output) use ($fixer) {
 
-    if ($all) {
-        /** @var QuestionHelper $helper */
-        $helper = $this->getHelperSet()->get('question');
-
-        $output->writeln('<info>The files in the gitignore will be skipped!</info>');
-        $question = new ConfirmationQuestion('Are you sure you want to refactor the whole project [Y|n] ?', false);
-
-        if ($helper->ask($input, $output, $question)) {
-            $output->writeln('Refactoring the whole project');
-        }
+    try {
+        $fixer->execute($input, $output, $this->getHelperSet(), $all);
+    } catch (\Exception $exception) {
+        $output->writeln('<error>' . $exception->getMessage() . '</error>');
     }
 
 })->descriptions('Refactors your PHP project to the selected coding standards!');
