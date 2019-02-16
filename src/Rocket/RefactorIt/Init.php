@@ -33,6 +33,7 @@ class Init implements RefactorItCommand
                 $this->writeConfig($config);
             } catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
+                return;
             }
         }
 
@@ -50,9 +51,12 @@ class Init implements RefactorItCommand
                     $this->writeConfig($config);
                 } catch (\Exception $exception) {
                     $output->writeln('<error>' . $exception->getMessage() . '</error>');
+                    return;
                 }
             }
         }
+
+        $output->writeln('<info>Done writing the refactor-it config, it\'s located in the root of your project!</info>');
     }
 
     /**
