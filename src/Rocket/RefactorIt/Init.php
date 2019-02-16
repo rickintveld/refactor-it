@@ -68,7 +68,7 @@ class Init implements RefactorItCommand
      * @param bool $empty
      * @return Config
      */
-    public function getProjectConfig($empty = false)
+    private function getProjectConfig($empty = false)
     {
         return $this->getConfig(new Config(), $empty);
     }
@@ -78,7 +78,7 @@ class Init implements RefactorItCommand
      * @param bool $empty
      * @return Config
      */
-    public function getConfig(Config $config, bool $empty = false)
+    private function getConfig(Config $config, bool $empty = false)
     {
         if ($empty === false && file_exists($this->getRefactorItConfigFile())) {
             $json = file_get_contents($this->getRefactorItConfigFile());
@@ -92,7 +92,7 @@ class Init implements RefactorItCommand
      * @param bool $empty
      * @return DefaultRules
      */
-    protected function getDefaultRules(bool $empty = false): DefaultRules
+    private function getDefaultRules(bool $empty = false): DefaultRules
     {
         return $this->getRefactorRules(new DefaultRules(), $empty);
     }
@@ -102,7 +102,7 @@ class Init implements RefactorItCommand
      * @param bool $empty
      * @return DefaultRules
      */
-    protected function getRefactorRules(DefaultRules $defaultRules, bool $empty = false): DefaultRules
+    private function getRefactorRules(DefaultRules $defaultRules, bool $empty = false): DefaultRules
     {
         if ($empty === false && file_exists($this->getRefactorItRulesFile())) {
             $json = file_get_contents($this->getRefactorItRulesFile());
@@ -116,7 +116,7 @@ class Init implements RefactorItCommand
      * @param Config $config
      * @throws \Exception
      */
-    public function writeConfig(Config $config)
+    private function writeConfig(Config $config)
     {
         $path = dirname($this->getRefactorItPath());
 
