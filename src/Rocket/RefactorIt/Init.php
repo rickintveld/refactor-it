@@ -49,7 +49,7 @@ class Init implements RefactorItCommand
             $question = new ConfirmationQuestion('Are you sure you want to reset your project (y/N)?', false);
 
             if ($helper->ask($input, $output, $question)) {
-                $output->writeln('Resetting the config');
+                $output->writeln('<info>Resetting the refactor-it config</info>');
 
                 try {
                     $this->writeConfig($config);
