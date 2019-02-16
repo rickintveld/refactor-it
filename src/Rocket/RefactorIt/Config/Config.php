@@ -24,9 +24,6 @@ class Config implements JsonParser
     protected $lineEnding = "\r\n";
 
     /** @var string */
-    protected $projectName = '';
-
-    /** @var string */
     protected $projectPath = '';
 
     /**
@@ -108,25 +105,6 @@ class Config implements JsonParser
     /**
      * @return string
      */
-    public function getProjectName(): string
-    {
-        return $this->projectName;
-    }
-
-    /**
-     * @param string $projectName
-     * @return $this
-     */
-    public function setProjectName(string $projectName): Config
-    {
-        $this->projectName = $projectName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getProjectPath(): string
     {
         return $this->projectPath;
@@ -169,10 +147,6 @@ class Config implements JsonParser
             $this->setProjectPath($json['projectPath']);
         }
 
-        if (isset($json['projectName']) && strlen($json['projectName']) > 0) {
-            $this->setProjectName($json['projectName']);
-        }
-
         return $this;
     }
 
@@ -212,10 +186,6 @@ class Config implements JsonParser
 
         if (empty($this->projectPath) === true) {
             Throw new \Exception('No project path is set in the config');
-        }
-
-        if (empty($this->projectName) === true) {
-            Throw new \Exception('No project name is set in the config');
         }
 
         return true;
