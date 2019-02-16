@@ -50,7 +50,7 @@ $app->command('it [--all]', function ($all, InputInterface $input, OutputInterfa
         }
     }
 
-})->descriptions('Refactors the code within the changed PHP files');
+})->descriptions('Refactors your PHP project to the selected coding standards!');
 
 /** @noinspection PhpUnhandledExceptionInspection because we do want to display the error through Symfony Console and not handle it ourselves */
 $app->run();
