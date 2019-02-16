@@ -53,6 +53,9 @@ class Finder
                     'tokens' => ['extra'],
                 ],
                 'phpdoc_add_missing_param_annotation' => true,
+                'is_null' => true,
+                'linebreak_after_opening_tag' => true,
+                'lowercase_cast' => true,
             ])
             ->setIndent("\t")
             ->setLineEnding("\r\n")

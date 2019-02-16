@@ -3,6 +3,7 @@ namespace Rocket\RefactorIt;
 
 use Rocket\RefactorIt\Common\RefactorItCommand;
 use Rocket\RefactorIt\Config\Config;
+use Rocket\RefactorIt\Config\DefaultRules;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,8 +30,10 @@ class Init implements RefactorItCommand
 
         if ($resetProject === false) {
             $config = $this->getProjectConfig(false);
+            $rules = $this->getDefaultRules(false);
             try {
                 $this->writeConfig($config);
+                $this->writeRefactorRules($rules);
             } catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
                 return;
@@ -41,6 +44,7 @@ class Init implements RefactorItCommand
             /** @var QuestionHelper $helper */
             $helper = $helperSet->get('question');
             $config = $this->getProjectConfig(true);
+            $rules = $this->getDefaultRules(true);
 
             $question = new ConfirmationQuestion('Are you sure you want to reset your project (y/N)?', false);
 
@@ -49,6 +53,7 @@ class Init implements RefactorItCommand
 
                 try {
                     $this->writeConfig($config);
+                    $this->writeRefactorRules($rules);
                 } catch (\Exception $exception) {
                     $output->writeln('<error>' . $exception->getMessage() . '</error>');
                     return;
@@ -73,7 +78,7 @@ class Init implements RefactorItCommand
      * @param bool $empty
      * @return Config
      */
-    public function getConfig(Config $config, $empty = false)
+    public function getConfig(Config $config, bool $empty = false)
     {
         if ($empty === false && file_exists($this->getRefactorItConfigFile())) {
             $json = file_get_contents($this->getRefactorItConfigFile());
@@ -81,6 +86,30 @@ class Init implements RefactorItCommand
         }
 
         return $config;
+    }
+
+    /**
+     * @param bool $empty
+     * @return DefaultRules
+     */
+    protected function getDefaultRules(bool $empty = false): DefaultRules
+    {
+        return $this->getRefactorRules(new DefaultRules(), $empty);
+    }
+
+    /**
+     * @param DefaultRules $defaultRules
+     * @param bool $empty
+     * @return DefaultRules
+     */
+    protected function getRefactorRules(DefaultRules $defaultRules, bool $empty = false): DefaultRules
+    {
+        if ($empty === false && file_exists($this->getRefactorItRulesFile())) {
+            $json = file_get_contents($this->getRefactorItRulesFile());
+            $defaultRules = $defaultRules->fromJSON(json_decode($json, true));
+        }
+
+        return $defaultRules;
     }
 
     /**
@@ -105,6 +134,27 @@ class Init implements RefactorItCommand
     }
 
     /**
+     * @param DefaultRules $defaultRules
+     * @throws \Exception
+     */
+    private function writeRefactorRules(DefaultRules $defaultRules)
+    {
+        $path = dirname($this->getRefactorItPath());
+
+        if (file_exists($path) === false) {
+            mkdir($path, 0777, true);
+        }
+
+        if (file_exists($this->getRefactorItPath()) === false) {
+            mkdir($this->getRefactorItPath(), 0777, true);
+        }
+
+        if (@file_put_contents($this->getRefactorItRulesFile(), $defaultRules->toJSON()) === false) {
+            throw new \Exception('Could not write the rules; either the directory doesn\'t exist or we have no permission to write (' . $path . ').');
+        }
+    }
+
+    /**
      * @return string
      */
     private function getRefactorItPath(): string
@@ -118,5 +168,13 @@ class Init implements RefactorItCommand
     private function getRefactorItConfigFile(): string
     {
         return getcwd() . Init::REFACTOR_IT_PATH . Config::CONFIG_FILE;
+    }
+
+    /**
+     * @return string
+     */
+    private function getRefactorItRulesFile(): string
+    {
+        return getcwd() . Init::REFACTOR_IT_PATH . DefaultRules::RULES_FILE;
     }
 }

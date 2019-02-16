@@ -155,9 +155,9 @@ class Config implements JsonParser
      */
     public function toJSON(): string
     {
-        $variables = get_object_vars($this);
+        $properties = get_object_vars($this);
 
-        return json_encode(array_filter($variables, function ($value) {
+        return json_encode(array_filter($properties, function ($value) {
             return $value !== null;
         }), JSON_PRETTY_PRINT);
     }
