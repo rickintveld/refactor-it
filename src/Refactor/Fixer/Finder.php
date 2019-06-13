@@ -27,5 +27,4 @@ class Finder
             ->setFinder($finder);
     }
 
-
 }

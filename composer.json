@@ -11,9 +11,9 @@
     }],
     "require": {
         "php": ">=7.1.0",
-        "symfony/console": "*",
-        "mnapoli/silly": "*",
-        "friendsofphp/php-cs-fixer": "*",
+        "symfony/console": "4.2.*",
+        "mnapoli/silly": "1.7.*",
+        "friendsofphp/php-cs-fixer": "2.*",
         "ext-json": "*"
     },
     "autoload": {
@@ -23,7 +23,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rocket\\": "tests/Rocket"
+            "Refactor\\": "tests/Refactor"
         }
     },
     "bin": [

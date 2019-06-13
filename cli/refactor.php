@@ -1,7 +1,7 @@
 <?php
 
-use Rocket\RefactorIt\Fixer\Fixer;
-use Rocket\RefactorIt\Init;
+use Refactor\Fixer\Fixer;
+use Refactor\Init;
 use Silly\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,8 +17,8 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 /* Application initiation */
 $app = new Application('Refactor it', REFACTOR_IT_VERSION);
 
-$init = new Refactor\Init();
-$fixer = new Refactor\Fixer\Fixer();
+$init = new Init();
+$fixer = new Fixer();
 
 $app->command('config [--reset-project]', function ($resetProject, InputInterface $input, OutputInterface $output)  use ($init) {
 
@@ -30,10 +30,10 @@ $app->command('config [--reset-project]', function ($resetProject, InputInterfac
 
 })->descriptions('(re)sets the refactor-it pattern config');
 
-$app->command('diffs', function ($all, InputInterface $input, OutputInterface $output) use ($fixer) {
+$app->command('diffs', function (InputInterface $input, OutputInterface $output) use ($fixer) {
 
     try {
-        $fixer->execute($input, $output, $this->getHelperSet(), $all);
+        $fixer->execute($input, $output, $this->getHelperSet());
     } catch (\Exception $exception) {
         $output->writeln('<error>' . $exception->getMessage() . '</error>');
     }
