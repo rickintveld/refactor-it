@@ -1,9 +1,9 @@
 <?php
-namespace Rocket\RefactorIt;
+namespace Refactor;
 
-use Rocket\RefactorIt\Common\RefactorItCommand;
-use Rocket\RefactorIt\Config\Config;
-use Rocket\RefactorIt\Config\DefaultRules;
+use Refactor\Common\RefactorItCommand;
+use Refactor\Config\Config;
+use Refactor\Config\DefaultRules;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,11 +12,12 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * Class Init
- * @package Rocket\RefactorIt
+ * @package Refactor
  */
 class Init implements RefactorItCommand
 {
     const REFACTOR_IT_PATH = '/private/refactor-it/';
+    const GITIGNORE_CONTENT = "/*\r\n!/config.json\r\n!/.gitignore";
 
     /**
      * @param InputInterface $input
@@ -29,11 +30,12 @@ class Init implements RefactorItCommand
         $resetProject = $parameters['reset-project'];
 
         if ($resetProject === false) {
-            $config = $this->getProjectConfig(false);
-            $rules = $this->getDefaultRules(false);
+            $config = $this->getProjectConfig();
+            $rules = $this->getDefaultRules();
             try {
                 $this->writeConfig($config);
                 $this->writeRefactorRules($rules);
+                $this->configureGitIgnore();
             } catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
                 return;
@@ -54,6 +56,7 @@ class Init implements RefactorItCommand
                 try {
                     $this->writeConfig($config);
                     $this->writeRefactorRules($rules);
+                    $this->configureGitIgnore();
                 } catch (\Exception $exception) {
                     $output->writeln('<error>' . $exception->getMessage() . '</error>');
                     return;
@@ -68,7 +71,7 @@ class Init implements RefactorItCommand
      * @param bool $empty
      * @return Config
      */
-    private function getProjectConfig($empty = false)
+    private function getProjectConfig(bool $empty = false)
     {
         return $this->getConfig(new Config(), $empty);
     }
@@ -176,5 +179,16 @@ class Init implements RefactorItCommand
     private function getRefactorItRulesFile(): string
     {
         return $this->getRefactorItPath() . DefaultRules::RULES_FILE;
+    }
+
+    /**
+     * Generates the git ignore file!
+     */
+    private function configureGitIgnore()
+    {
+        $gitIgnore = $this->getRefactorItPath() . '.gitignore';
+        if (!file_exists($gitIgnore)) {
+            file_put_contents($gitIgnore, self::GITIGNORE_CONTENT);
+        }
     }
 }

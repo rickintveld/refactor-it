@@ -1,12 +1,12 @@
 <?php
-namespace Rocket\RefactorIt\Fixer;
+namespace Refactor\Fixer;
 
-use Rocket\RefactorIt\Config\Config;
-use Rocket\RefactorIt\Config\DefaultRules;
+use Refactor\Config\Config;
+use Refactor\Config\DefaultRules;
 
 /**
  * Class Finder
- * @package Rocket\RefactorIt\Fixer
+ * @package Refactor\Fixer
  */
 class Finder
 {

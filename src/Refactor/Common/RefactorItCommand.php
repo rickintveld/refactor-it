@@ -1,5 +1,5 @@
 <?php
-namespace Rocket\RefactorIt\Common;
+namespace Refactor\Common;
 
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
@@ -7,7 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Interface RefactorCommand
- * @package Rocket\RefactorIt\Common
+ * @package Refactor\Common
  */
 interface RefactorItCommand
 {

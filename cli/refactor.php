@@ -17,9 +17,8 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 /* Application initiation */
 $app = new Application('Refactor it', REFACTOR_IT_VERSION);
 
-$init = new Init();
-
-$fixer = new Fixer();
+$init = new Refactor\Init();
+$fixer = new Refactor\Fixer\Fixer();
 
 $app->command('config [--reset-project]', function ($resetProject, InputInterface $input, OutputInterface $output)  use ($init) {
 
@@ -31,7 +30,7 @@ $app->command('config [--reset-project]', function ($resetProject, InputInterfac
 
 })->descriptions('(re)sets the refactor-it pattern config');
 
-$app->command('it [--all]', function ($all, InputInterface $input, OutputInterface $output) use ($fixer) {
+$app->command('diffs', function ($all, InputInterface $input, OutputInterface $output) use ($fixer) {
 
     try {
         $fixer->execute($input, $output, $this->getHelperSet(), $all);
@@ -39,7 +38,7 @@ $app->command('it [--all]', function ($all, InputInterface $input, OutputInterfa
         $output->writeln('<error>' . $exception->getMessage() . '</error>');
     }
 
-})->descriptions('Refactors your PHP project to the selected coding standards!');
+})->descriptions('Refactors your PHP project GIT diffs to the selected coding standards!');
 
 /** @noinspection PhpUnhandledExceptionInspection because we do want to display the error through Symfony Console and not handle it ourselves */
 $app->run();

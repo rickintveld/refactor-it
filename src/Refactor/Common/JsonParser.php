@@ -1,5 +1,5 @@
 <?php
-namespace Rocket\RefactorIt\Common;
+namespace Refactor\Common;
 
 /**
  * Interface JsonParser

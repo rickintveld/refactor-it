@@ -1,17 +1,17 @@
 <?php
-namespace Rocket\RefactorIt\Fixer;
+namespace Refactor\Fixer;
 
-use Rocket\RefactorIt\Config\Config;
-use Rocket\RefactorIt\Config\DefaultRules;
-use Rocket\RefactorIt\Config\Rules;
-use Rocket\RefactorIt\Init;
+use Refactor\Config\Config;
+use Refactor\Config\DefaultRules;
+use Refactor\Config\Rules;
+use Refactor\Init;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Fixer
- * @package Rocket\RefactorIt\Fixer
+ * @package Refactor\Fixer
  */
 class Fixer
 {

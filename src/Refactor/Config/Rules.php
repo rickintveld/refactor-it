@@ -1,11 +1,11 @@
 <?php
-namespace Rocket\RefactorIt\Config;
+namespace Refactor\Config;
 
-use Rocket\RefactorIt\Common\JsonParser;
+use Refactor\Common\JsonParser;
 
 /**
  * Class Rules
- * @package Rocket\RefactorIt\Config
+ * @package Refactor\Config
  */
 class Rules implements JsonParser
 {

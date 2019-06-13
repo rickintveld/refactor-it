@@ -1,9 +1,9 @@
 <?php
-namespace Rocket\RefactorIt\Config;
+namespace Refactor\Config;
 
 /**
  * Class DefaultRules
- * @package Rocket\RefactorIt\Config
+ * @package Refactor\Config
  */
 class DefaultRules extends Rules
 {

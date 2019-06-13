@@ -1,16 +1,14 @@
 {
     "name": "rocket/refactor",
-    "homepage": "https://bitbucket.org/redkiwi-general/pullit/src/HEAD/README.md",
+    "homepage": "https://github.com/rickone1/refactor-it/README.md",
     "description": "Automated code refactor tool",
     "keywords": ["refactor", "reindent", "rocket", "sync", "rsync"],
     "license": "MIT",
     "version": "1.0.0",
-    "authors": [
-        {
-            "name": "Rick in t Veld",
-            "email": "intveld@redkiwi.nl"
-        }
-    ],
+    "authors": [{
+        "name": "Rick in t Veld",
+        "email": "rick_91@live.nl"
+    }],
     "require": {
         "php": ">=7.1.0",
         "symfony/console": "*",
@@ -20,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rocket\\": "src/Rocket"
+            "Rocket\\": "src/Refactor"
         }
     },
     "autoload-dev": {
