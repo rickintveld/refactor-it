@@ -1,5 +1,5 @@
 {
-    "name": "rocket/refactor",
+    "name": "rintveld/refactor",
     "homepage": "https://github.com/rickone1/refactor-it/README.md",
     "description": "Automated code refactor tool",
     "keywords": ["refactor", "reindent", "rocket", "sync", "rsync"],
@@ -7,7 +7,7 @@
     "version": "1.0.0",
     "authors": [{
         "name": "Rick in t Veld",
-        "email": "rick_91@live.nl"
+        "email": "rickone@live.nl"
     }],
     "require": {
         "php": ">=7.1.0",
