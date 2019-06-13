@@ -1,7 +1,7 @@
 <?php
 namespace Refactor;
 
-use Refactor\Common\RefactorItCommand;
+use Refactor\Common\RefactorCommandInterface;
 use Refactor\Config\Config;
 use Refactor\Config\DefaultRules;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  * Class Init
  * @package Refactor
  */
-class Init implements RefactorItCommand
+class Init implements RefactorCommandInterface
 {
     const REFACTOR_IT_PATH = '/private/refactor-it/';
     const GITIGNORE_CONTENT = "/*\r\n!/config.json\r\n!/.gitignore";

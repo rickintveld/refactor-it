@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Interface RefactorCommand
  * @package Refactor\Common
  */
-interface RefactorItCommand
+interface RefactorCommandInterface
 {
     /**
      * @param InputInterface $input

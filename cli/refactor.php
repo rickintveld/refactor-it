@@ -1,7 +1,5 @@
 <?php
 
-use Refactor\Fixer\Fixer;
-use Refactor\Init;
 use Silly\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,8 +15,8 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 /* Application initiation */
 $app = new Application('Refactor it', REFACTOR_IT_VERSION);
 
-$init = new Init();
-$fixer = new Fixer();
+$init = new \Refactor\Init();
+$fixer = new \Refactor\Fixer\Fixer();
 
 $app->command('config [--reset-project]', function ($resetProject, InputInterface $input, OutputInterface $output)  use ($init) {
 

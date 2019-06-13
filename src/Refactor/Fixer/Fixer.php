@@ -104,5 +104,4 @@ class Fixer
     {
         return $this->getRefactorItPath() . DefaultRules::RULES_FILE;
     }
-
 }
