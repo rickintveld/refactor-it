@@ -58,6 +58,17 @@ class Fixer
      */
     private function runRefactor(array $files, OutputInterface $output)
     {
+        $output->writeln('');
+        if (empty($files)) {
+            $output->writeln('<comment>😢 There are no files yet to refactor!</comment>');
+            /**
+             * @todo check if a .git or .svn file is available in the root of the project.
+             * Give the user some advice to use different configs for the vcs he / she is using when the command isn't the same as the located vcs system
+             */
+
+            return;
+        }
+
         foreach ($files as $file) {
             $process = Process::fromShellCommandline(implode(' ', $this->getRefactorCommand($file)));
             $process->run();
@@ -70,7 +81,7 @@ class Fixer
         }
 
         $this->cleanUp($output);
-        $this->signature($output);
+        $output->writeln('<info>😎 All done...</info>');
     }
 
     /**
@@ -87,7 +98,7 @@ class Fixer
             $file,
             '--format=json',
             '--allow-risky=yes',
-            "--rules='{$this->getRules()->toJSON()}'"
+            "--rules='{$this->getInlineRules($this->getRules()->toJSON())}'"
         ];
     }
 
@@ -142,10 +153,13 @@ class Fixer
     }
 
     /**
-     * @param OutputInterface $output
+     * @param string $rules
+     * @return false|string
      */
-    private function signature(OutputInterface $output)
+    private function getInlineRules(string $rules):? string
     {
-        $output->writeln('<info>' . Signature::write() . '</info>');
+        $inlineRules = json_decode($rules, true);
+
+        return json_encode($inlineRules);
     }
 }

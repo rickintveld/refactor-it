@@ -11,11 +11,6 @@ class Finder
 {
     const VCS_TYPES = ['git', 'svn'];
 
-    public function __construct()
-    {
-        // Stub
-    }
-
     /**
      * @param string $vcs
      * @throws \Refactor\Exception\UnknownVcsTypeException

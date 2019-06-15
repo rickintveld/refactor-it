@@ -18,9 +18,9 @@ $app = new Application('Refactor it', REFACTOR_IT_VERSION);
 $init = new \Refactor\Init();
 $fixer = new \Refactor\Console\Fixer();
 
-$app->command('config [--reset-project]', function ($resetProject, InputInterface $input, OutputInterface $output) use ($init) {
+$app->command('config [--reset-config]', function ($resetConfig, InputInterface $input, OutputInterface $output) use ($init) {
     try {
-        $init->execute($input, $output, $this->getHelperSet(), ['reset-project' => $resetProject]);
+        $init->execute($input, $output, $this->getHelperSet(), ['reset-config' => $resetConfig]);
     } catch (\Exception $exception) {
         $output->writeln('<error>' . $exception->getMessage() . '</error>');
     }

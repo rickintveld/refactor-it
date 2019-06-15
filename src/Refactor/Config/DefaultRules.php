@@ -632,6 +632,6 @@ class DefaultRules extends Rules implements JsonParserInterface
 
         return json_encode(array_filter($properties, function ($value) {
             return $value !== null;
-        }));
+        }), JSON_PRETTY_PRINT);
     }
 }

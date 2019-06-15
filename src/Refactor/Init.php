@@ -4,6 +4,7 @@ namespace Refactor;
 use Refactor\Common\RefactorCommandInterface;
 use Refactor\Config\Config;
 use Refactor\Config\DefaultRules;
+use Refactor\Console\Signature;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -18,7 +19,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class Init implements RefactorCommandInterface
 {
     const REFACTOR_IT_PATH = '/private/refactor-it/';
-    const GITIGNORE_CONTENT = "/*\r\n!/config.json\r\n/rules.json\r\n!/.gitignore";
+    const GITIGNORE_CONTENT = "/config.json\r\n/rules.json\r\n!/.gitignore";
 
     /**
      * @param InputInterface $input
@@ -28,9 +29,9 @@ class Init implements RefactorCommandInterface
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters)
     {
-        $resetProject = $parameters['reset-project'];
+        $resetConfig = $parameters['reset-config'];
 
-        if ($resetProject === false) {
+        if ($resetConfig === false) {
             $config = $this->getProjectConfig();
             $rules = $this->getDefaultRules();
             try {
@@ -44,7 +45,7 @@ class Init implements RefactorCommandInterface
             }
         }
 
-        if ($resetProject === true) {
+        if ($resetConfig === true) {
             /** @var QuestionHelper $helper */
             $helper = $helperSet->get('question');
             $config = $this->getProjectConfig(true);
@@ -67,7 +68,8 @@ class Init implements RefactorCommandInterface
             }
         }
 
-        $output->writeln('<info>Done writing the refactor-it config, it\'s located in the root of your project!</info>');
+        $output->writeln('<info>Done writing the refactor-it config, it\'s located in the root of your project in the private folder!</info>');
+        $output->writeln('<info>' . Signature::write() . '</info>');
     }
 
     /**
@@ -86,8 +88,8 @@ class Init implements RefactorCommandInterface
      */
     private function getConfig(Config $config, bool $empty = false)
     {
-        if ($empty === false && file_exists($this->getRefactorItConfigFile())) {
-            $json = file_get_contents($this->getRefactorItConfigFile());
+        if ($empty === false && file_exists(PathUtility::getRefactorItConfigFile())) {
+            $json = file_get_contents(PathUtility::getRefactorItConfigFile());
             $config = $config->fromJSON(json_decode($json, true));
         }
 
@@ -110,8 +112,8 @@ class Init implements RefactorCommandInterface
      */
     private function getRefactorRules(DefaultRules $defaultRules, bool $empty = false): DefaultRules
     {
-        if ($empty === false && file_exists($this->getRefactorItRulesFile())) {
-            $json = file_get_contents($this->getRefactorItRulesFile());
+        if ($empty === false && file_exists(PathUtility::getRefactorItRulesFile())) {
+            $json = file_get_contents(PathUtility::getRefactorItRulesFile());
             $defaultRules = $defaultRules->fromJSON(json_decode($json, true));
         }
 
