@@ -1,11 +1,13 @@
 <?php
 namespace Refactor\Config;
 
+use Refactor\Common\JsonParserInterface;
+
 /**
  * Class DefaultRules
  * @package Refactor\Config
  */
-class DefaultRules extends Rules
+class DefaultRules extends Rules implements JsonParserInterface
 {
     /** @var array */
     protected $orderedClassElements = [
@@ -510,8 +512,6 @@ class DefaultRules extends Rules
      */
     public function fromJSON(array $json): DefaultRules
     {
-        parent::fromJSON($json);
-
         if (isset($json['ordered_class_elements']) && is_array($json['ordered_class_elements']) && count($json['ordered_class_elements']) > 0) {
             $this->setOrderedClassElements($json['ordered_class_elements']);
         }
@@ -632,6 +632,6 @@ class DefaultRules extends Rules
 
         return json_encode(array_filter($properties, function ($value) {
             return $value !== null;
-        }), JSON_PRETTY_PRINT);
+        }));
     }
 }

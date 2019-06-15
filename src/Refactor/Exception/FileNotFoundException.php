@@ -1,5 +1,5 @@
 <?php
-namespace Refactor\Exceptions;
+namespace Refactor\Exception;
 
 /**
  * Class FileNotFoundException

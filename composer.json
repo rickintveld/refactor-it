@@ -7,7 +7,7 @@
     "version": "1.0.0",
     "authors": [{
         "name": "Rick in t Veld",
-        "email": "rickone@live.nl"
+        "email": "rick.in.t.veld@opinity.nl"
     }],
     "require": {
         "php": ">=7.1.0",

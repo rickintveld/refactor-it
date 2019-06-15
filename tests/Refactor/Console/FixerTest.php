@@ -1,5 +1,5 @@
 <?php
-namespace Refactor\Fixer;
+namespace Refactor\Console;
 
 use PHPUnit\Framework\TestCase;
 
@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
  * Class FinderTest
  * @package Refactor\Fixer
  */
-class FinderTest extends TestCase
+class FixerTest extends TestCase
 {
     // Stub
 }

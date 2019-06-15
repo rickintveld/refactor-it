@@ -1,25 +1,13 @@
 <?php
 namespace Refactor\Config;
 
-use Refactor\Common\JsonParser;
-
 /**
  * Class Rules
  * @package Refactor\Config
  */
-class Rules implements JsonParser
+class Rules
 {
     const RULES_FILE = 'rules.json';
-
-    /**
-     * @param array $json
-     * @return Rules
-     */
-    public function fromJSON(array $json)
-    {
-
-        return $this;
-    }
 
     /**
      * @return string

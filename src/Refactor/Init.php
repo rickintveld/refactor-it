@@ -4,6 +4,7 @@ namespace Refactor;
 use Refactor\Common\RefactorCommandInterface;
 use Refactor\Config\Config;
 use Refactor\Config\DefaultRules;
+use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +18,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class Init implements RefactorCommandInterface
 {
     const REFACTOR_IT_PATH = '/private/refactor-it/';
-    const GITIGNORE_CONTENT = "/*\r\n!/config.json\r\n!/.gitignore";
+    const GITIGNORE_CONTENT = "/*\r\n!/config.json\r\n/rules.json\r\n!/.gitignore";
 
     /**
      * @param InputInterface $input
@@ -38,6 +39,7 @@ class Init implements RefactorCommandInterface
                 $this->configureGitIgnore();
             } catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
+
                 return;
             }
         }
@@ -59,6 +61,7 @@ class Init implements RefactorCommandInterface
                     $this->configureGitIgnore();
                 } catch (\Exception $exception) {
                     $output->writeln('<error>' . $exception->getMessage() . '</error>');
+
                     return;
                 }
             }
@@ -121,17 +124,17 @@ class Init implements RefactorCommandInterface
      */
     private function writeConfig(Config $config)
     {
-        $path = dirname($this->getRefactorItPath());
+        $path = dirname(PathUtility::getRefactorItPath());
 
         if (file_exists($path) === false) {
             mkdir($path, 0777, true);
         }
 
-        if (file_exists($this->getRefactorItPath()) === false) {
-            mkdir($this->getRefactorItPath(), 0777, true);
+        if (file_exists(PathUtility::getRefactorItPath()) === false) {
+            mkdir(PathUtility::getRefactorItPath(), 0777, true);
         }
 
-        if (@file_put_contents($this->getRefactorItConfigFile(), $config->toJSON()) === false) {
+        if (@file_put_contents(PathUtility::getRefactorItConfigFile(), $config->toJSON()) === false) {
             throw new \Exception('Could not write config; either the directory doesn\'t exist or we have no permission to write (' . $path . ').');
         }
     }
@@ -142,43 +145,19 @@ class Init implements RefactorCommandInterface
      */
     private function writeRefactorRules(DefaultRules $defaultRules)
     {
-        $path = dirname($this->getRefactorItPath());
+        $path = dirname(PathUtility::getRefactorItPath());
 
         if (file_exists($path) === false) {
             mkdir($path, 0777, true);
         }
 
-        if (file_exists($this->getRefactorItPath()) === false) {
-            mkdir($this->getRefactorItPath(), 0777, true);
+        if (file_exists(PathUtility::getRefactorItPath()) === false) {
+            mkdir(PathUtility::getRefactorItPath(), 0777, true);
         }
 
-        if (@file_put_contents($this->getRefactorItRulesFile(), $defaultRules->toJSON()) === false) {
+        if (@file_put_contents(PathUtility::getRefactorItRulesFile(), $defaultRules->toJSON()) === false) {
             throw new \Exception('Could not write the rules; either the directory doesn\'t exist or we have no permission to write (' . $path . ').');
         }
-    }
-
-    /**
-     * @return string
-     */
-    private function getRefactorItPath(): string
-    {
-        return getcwd() . Init::REFACTOR_IT_PATH;
-    }
-
-    /**
-     * @return string
-     */
-    private function getRefactorItConfigFile(): string
-    {
-        return $this->getRefactorItPath() . Config::CONFIG_FILE;
-    }
-
-    /**
-     * @return string
-     */
-    private function getRefactorItRulesFile(): string
-    {
-        return $this->getRefactorItPath() . DefaultRules::RULES_FILE;
     }
 
     /**
@@ -186,7 +165,7 @@ class Init implements RefactorCommandInterface
      */
     private function configureGitIgnore()
     {
-        $gitIgnore = $this->getRefactorItPath() . '.gitignore';
+        $gitIgnore = PathUtility::getRefactorItPath() . '.gitignore';
         if (!file_exists($gitIgnore)) {
             file_put_contents($gitIgnore, self::GITIGNORE_CONTENT);
         }

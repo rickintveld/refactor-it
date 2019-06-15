@@ -5,7 +5,7 @@ namespace Refactor\Common;
  * Interface JsonParser
  * @package Rocket\Refactor\Common
  */
-interface JsonParser
+interface JsonParserInterface
 {
     /**
      * @param array $json

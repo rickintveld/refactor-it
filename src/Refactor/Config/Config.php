@@ -1,13 +1,13 @@
 <?php
 namespace Refactor\Config;
 
-use Refactor\Common\JsonParser;
+use Refactor\Common\JsonParserInterface;
 
 /**
  * Class RefactorItConfig
  * @package Refactor\Config
  */
-class Config implements JsonParser
+class Config implements JsonParserInterface
 {
     const CONFIG_FILE = 'config.json';
 
@@ -25,6 +25,9 @@ class Config implements JsonParser
 
     /** @var string */
     protected $projectPath = '';
+
+    /** @var string */
+    protected $vcs = 'git';
 
     /**
      * @return array
@@ -122,6 +125,22 @@ class Config implements JsonParser
     }
 
     /**
+     * @return string
+     */
+    public function getVcs(): string
+    {
+        return $this->vcs;
+    }
+
+    /**
+     * @param string $vcs
+     */
+    public function setVcs(string $vcs)
+    {
+        $this->vcs = $vcs;
+    }
+
+    /**
      * @param array $json
      * @return Config
      */
@@ -131,20 +150,24 @@ class Config implements JsonParser
             $this->setExcludedPaths($json['excludedPaths']);
         }
 
-        if (isset($json['format']) && strlen($json['format']) > 0) {
+        if (isset($json['format']) && empty($json['format']) === false) {
             $this->setFormat($json['format']);
         }
 
-        if (isset($json['indenting']) && strlen($json['indenting']) > 0) {
+        if (isset($json['indenting']) && empty($json['indenting']) === false) {
             $this->setIndenting($json['indenting']);
         }
 
-        if (isset($json['lineEnding']) && strlen($json['lineEnding']) > 0) {
+        if (isset($json['lineEnding']) && empty($json['lineEnding']) === false) {
             $this->setLineEnding($json['lineEnding']);
         }
 
-        if (isset($json['projectPath']) && strlen($json['projectPath']) > 0) {
+        if (isset($json['projectPath']) && empty($json['projectPath']) === false) {
             $this->setProjectPath($json['projectPath']);
+        }
+
+        if (isset($json['vcs']) && empty($json['vcs']) === false) {
+            $this->setVcs($json['vcs']);
         }
 
         return $this;
@@ -163,29 +186,33 @@ class Config implements JsonParser
     }
 
     /**
+     * @throws \Refactor\Exception\MissingConfigException
      * @return bool
-     * @throws \Exception
      */
     public function checkRequiredConfig(): bool
     {
         if (empty($this->excludedPaths) === true) {
-            Throw new \Exception('No excluded paths are set in the config');
+            throw new \Refactor\Exception\MissingConfigException('No excluded paths are set in the config', 1560518036394);
         }
 
         if (empty($this->format) === true) {
-            Throw new \Exception('No format is set in the config');
+            throw new \Refactor\Exception\MissingConfigException('No format is set in the config', 1560518031780);
         }
 
         if (empty($this->indenting) === true) {
-            Throw new \Exception('No indenting is set in the config');
+            throw new \Refactor\Exception\MissingConfigException('No indenting is set in the config', 1560518028348);
         }
 
         if (empty($this->lineEnding) === true) {
-            Throw new \Exception('No line ending is set in the config');
+            throw new \Refactor\Exception\MissingConfigException('No line ending is set in the config', 1560518025278);
         }
 
         if (empty($this->projectPath) === true) {
-            Throw new \Exception('No project path is set in the config');
+            throw new \Refactor\Exception\MissingConfigException('No project path is set in the config', 1560518022664);
+        }
+
+        if (empty($this->vcs) === true) {
+            throw new \Refactor\Exception\MissingConfigException('No version control system [vsc] is set in the config', 1560518018743);
         }
 
         return true;
