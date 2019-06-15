@@ -65,11 +65,11 @@ class Finder
             );
         }
 
-        if ($vcs === 'git') {
+        if ($vcs === Finder::VCS_TYPES['git']) {
             $commands = ['git', 'diff', '--name-only', './'];
         }
 
-        if ($vcs === 'svn') {
+        if ($vcs === Finder::VCS_TYPES['svn']) {
             $commands = ['svn', 'status'];
         }
 
