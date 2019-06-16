@@ -40,6 +40,7 @@ class Fixer
      * @param HelperSet $helperSet
      * @throws \Refactor\Exception\FileNotFoundException
      * @throws \Refactor\Exception\UnknownVcsTypeException
+     * @throws \Refactor\Exception\WrongVcsTypeException
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet)
     {
@@ -64,11 +65,6 @@ class Fixer
     {
         if (empty($files)) {
             $output->writeln('<comment>' . $this->animal->speak('There are no files yet to refactor!') . '</comment>');
-            /**
-             * @todo check if a .git or .svn file is available in the root of the project.
-             * Give the user some advice to use different configs for the vcs he / she is using when the command isn't the same as the located vcs system
-             */
-
             return;
         }
 
