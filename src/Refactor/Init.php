@@ -4,7 +4,7 @@ namespace Refactor;
 use Refactor\Common\RefactorCommandInterface;
 use Refactor\Config\Config;
 use Refactor\Config\DefaultRules;
-use Refactor\Console\Signature;
+use Refactor\Console\Animal;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -20,6 +20,14 @@ class Init implements RefactorCommandInterface
 {
     const REFACTOR_IT_PATH = '/private/refactor-it/';
     const GITIGNORE_CONTENT = "/config.json\r\n/rules.json\r\n!/.gitignore";
+
+    /** @var Animal */
+    private $animal;
+
+    public function __construct()
+    {
+        $this->animal = new Animal();
+    }
 
     /**
      * @param InputInterface $input
@@ -68,8 +76,10 @@ class Init implements RefactorCommandInterface
             }
         }
 
-        $output->writeln('<info>Done writing the refactor-it config, it\'s located in the root of your project in the private folder!</info>');
-        $output->writeln('<info>' . Signature::write() . '</info>');
+        $output->writeln(
+            '<info>' . $this->animal->speak('Done writing the refactor-it config. It\'s located in the root of your project in the private folder!') . '</info>'
+        );
+        $output->writeln('<info>' . \Refactor\Console\Signature::write() . '</info>');
     }
 
     /**

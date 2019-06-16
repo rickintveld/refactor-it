@@ -9,15 +9,18 @@ use Symfony\Component\Process\Process;
  */
 class Finder
 {
-    const VCS_TYPES = ['git', 'svn'];
+    private const VCS_SUPPORTED_TYPES = ['git', 'svn'];
 
     /**
      * @param string $vcs
      * @throws \Refactor\Exception\UnknownVcsTypeException
+     * @throws \Refactor\Exception\WrongVcsTypeException
      * @return array
      */
     public function findAdjustedFiles(string $vcs): array
     {
+        $this->validateSelectedVcsType($vcs);
+
         $files = [];
         $process = new Process(
             $this->getVcsCommand($vcs)
@@ -59,20 +62,44 @@ class Finder
         $commands = [];
         $vcs = strtolower($vcs);
 
-        if (in_array($vcs, Finder::VCS_TYPES, true) === false) {
+        if (in_array($vcs, Finder::VCS_SUPPORTED_TYPES, true) === false) {
             throw new \Refactor\Exception\UnknownVcsTypeException(
-                'The selected vcs type is not supported, only git and svn is supported!'
+                'The selected vcs type ('. $vcs .') is not supported, only git and svn is supported!',
+                1560674657669
             );
         }
-
-        if ($vcs === Finder::VCS_TYPES['git']) {
+        if ($vcs === 'git') {
             $commands = ['git', 'diff', '--name-only', './'];
         }
-
-        if ($vcs === Finder::VCS_TYPES['svn']) {
+        if ($vcs === 'svn') {
             $commands = ['svn', 'status'];
         }
 
         return $commands;
+    }
+
+    /**
+     * @param string $vcs
+     * @throws \Refactor\Exception\WrongVcsTypeException
+     */
+    private function validateSelectedVcsType(string $vcs)
+    {
+        $files = [];
+        $vcsConfigFile = '.' . $vcs;
+        $process = new Process(['ls', '-a']);
+        $process->start();
+
+        while ($process->isRunning()) {
+            if ($process->isSuccessful()) {
+                $files = explode("\n", $process->getOutput());
+            }
+        }
+
+        if (in_array($vcsConfigFile, $files, true) === false) {
+            throw new \Refactor\Exception\WrongVcsTypeException(
+                'You have set the vcs config to ' . $vcs . ' but we found none or a another vcs config file in the root of your project. Try adjusting the config json settings and try again!',
+                1560678044538
+            );
+        }
     }
 }

@@ -15,6 +15,9 @@ use Symfony\Component\Process\Process;
  */
 class Fixer
 {
+    /** @var Animal */
+    private $animal;
+
     /** @var GarbageCollector */
     private $garbageCollector;
 
@@ -26,6 +29,7 @@ class Fixer
      */
     public function __construct()
     {
+        $this->animal = new Animal();
         $this->garbageCollector = new GarbageCollector();
         $this->finder = new Finder();
     }
@@ -58,9 +62,8 @@ class Fixer
      */
     private function runRefactor(array $files, OutputInterface $output)
     {
-        $output->writeln('');
         if (empty($files)) {
-            $output->writeln('<comment>😢 There are no files yet to refactor!</comment>');
+            $output->writeln('<comment>' . $this->animal->speak('There are no files yet to refactor!') . '</comment>');
             /**
              * @todo check if a .git or .svn file is available in the root of the project.
              * Give the user some advice to use different configs for the vcs he / she is using when the command isn't the same as the located vcs system
@@ -74,14 +77,15 @@ class Fixer
             $process->run();
 
             if (!empty($process->getErrorOutput()) && strpos('.php_cs.cache', $process->getErrorOutput()) !== false) {
-                $output->writeln('<error>😭' . $process->getErrorOutput() . '</error>');
+                $output->writeln('<error>' . $process->getErrorOutput() . '</error>');
             } else {
-                $output->writeln('<info>😎 Done refactoring ' . $file . '</info>');
+                $output->writeln('<info>Done refactoring ' . $file . '</info>');
             }
         }
 
-        $this->cleanUp($output);
-        $output->writeln('<info>😎 All done...</info>');
+        $this->cleanUp();
+        $output->writeln('<info>' . $this->animal->speak('All done...') . '</info>');
+        $output->writeln('<info>' . Signature::write() . '</info>');
     }
 
     /**
@@ -143,13 +147,11 @@ class Fixer
     }
 
     /**
-     * @param OutputInterface $output
+     * Removes the php cs fixer cache file
      */
-    private function cleanUp(OutputInterface $output)
+    private function cleanUp()
     {
-        $output->writeln('');
-        $output->writeln('<comment>Cleaning the cache...</comment>');
-        $this->garbageCollector->cleanUp();
+        $this->garbageCollector->cleanUpCacheFile();
     }
 
     /**

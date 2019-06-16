@@ -14,7 +14,8 @@
         "symfony/console": "4.2.*",
         "mnapoli/silly": "1.7.*",
         "friendsofphp/php-cs-fixer": "2.*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "alrik11es/cowsayphp": "^1.2"
     },
     "autoload": {
         "psr-4": {
