@@ -65,6 +65,7 @@ class Fixer
     {
         if (empty($files)) {
             $output->writeln('<comment>' . $this->animal->speak('There are no files yet to refactor!') . '</comment>');
+
             return;
         }
 
@@ -72,7 +73,7 @@ class Fixer
             $process = Process::fromShellCommandline(implode(' ', $this->getRefactorCommand($file)));
             $process->run();
 
-            if (!empty($process->getErrorOutput()) && strpos('.php_cs.cache', $process->getErrorOutput()) !== false) {
+            if (!empty($process->getErrorOutput())) {
                 $output->writeln('<error>' . $process->getErrorOutput() . '</error>');
             } else {
                 $output->writeln('<info>Done refactoring ' . $file . '</info>');
@@ -80,7 +81,7 @@ class Fixer
         }
 
         $this->cleanUp();
-        $output->writeln('<info>' . $this->animal->speak('All done...') . '</info>');
+        $output->writeln('<info>' . $this->animal->speak("All done... \nYour code has been refactored!") . '</info>');
         $output->writeln('<info>' . Signature::write() . '</info>');
     }
 
@@ -98,6 +99,7 @@ class Fixer
             $file,
             '--format=json',
             '--allow-risky=yes',
+            '--using-cache=no',
             "--rules='{$this->getInlineRules($this->getRules()->toJSON())}'"
         ];
     }
