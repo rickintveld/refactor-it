@@ -33,19 +33,24 @@ class Finder
             }
         }
 
-        return $this->getPhpFilesOnly($files);
+        return $this->getPhpFilesOnly($files, $vcs);
     }
 
     /**
      * @param array $files
+     * @param string $vcs
      * @return array
      */
-    private function getPhpFilesOnly(array $files): array
+    private function getPhpFilesOnly(array $files, string $vcs): array
     {
         $filteredFiles = [];
         foreach ($files as $file) {
+            if ($vcs === 'svn') {
+                $file = substr($file, 1);
+                $file = preg_replace('/\s+/', '', $file);
+            }
             if (substr($file, -4) === '.php') {
-                $filteredFiles[] = getcwd() . '/' . $file;
+                $filteredFiles[] = preg_replace('/\s+/', '\ ', getcwd() . '/' . $file);
             }
         }
 
@@ -64,7 +69,7 @@ class Finder
 
         if (in_array($vcs, Finder::VCS_SUPPORTED_TYPES, true) === false) {
             throw new \Refactor\Exception\UnknownVcsTypeException(
-                'The selected vcs type ('. $vcs .') is not supported, only git and svn is supported!',
+                'The selected vcs type (' . $vcs . ') is not supported, only git and svn is supported!',
                 1560674657669
             );
         }
