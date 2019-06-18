@@ -1,7 +1,6 @@
 <?php
 namespace Refactor\Utility;
 
-use Refactor\Config\Config;
 use Refactor\Config\DefaultRules;
 use Refactor\Init;
 
@@ -25,14 +24,6 @@ class PathUtility
     public static function getRefactorItPath(): string
     {
         return self::getRootPath() . Init::REFACTOR_IT_PATH;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getRefactorItConfigFile(): string
-    {
-        return self::getRefactorItPath() . Config::CONFIG_FILE;
     }
 
     /**

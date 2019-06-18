@@ -1,10 +1,10 @@
 <?php
 namespace Refactor\Console;
 
-use Refactor\Config\Config;
 use Refactor\Config\DefaultRules;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -44,14 +44,8 @@ class Fixer
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet)
     {
-        try {
-            $config = $this->getConfig();
-        } catch (\Refactor\Exception\FileNotFoundException $exception) {
-            throw $exception;
-        }
-
         $this->runRefactor(
-            $this->finder->findAdjustedFiles($config->getVcs()),
+            $this->finder->findAdjustedFiles(),
             $output
         );
     }
@@ -69,18 +63,26 @@ class Fixer
             return;
         }
 
+        $output->writeln('<comment>Starting the code refactoring of the following files...</comment>');
+        $progressBar = new ProgressBar($output, count($files));
+        $progressBar->start();
+
         foreach ($files as $file) {
             $process = Process::fromShellCommandline(implode(' ', $this->getRefactorCommand($file)));
             $process->run();
 
-            if (!empty($process->getErrorOutput())) {
-                $output->writeln('<error>' . $process->getErrorOutput() . '</error>');
+            if ($process->isSuccessful()) {
+                $output->writeln('<info> Refactoring ' . $file . '</info>');
             } else {
-                $output->writeln('<info>Done refactoring ' . $file . '</info>');
+                $output->writeln('<error>' . $process->getErrorOutput() . '</error>');
             }
+
+            $progressBar->advance();
         }
 
         $this->cleanUp();
+        $progressBar->finish();
+
         $output->writeln('<info>' . $this->animal->speak("All done... \nYour code has been refactored!") . '</info>');
         $output->writeln('<info>' . Signature::write() . '</info>');
     }
@@ -102,26 +104,6 @@ class Fixer
             '--using-cache=no',
             "--rules='{$this->getInlineRules($this->getRules()->toJSON())}'"
         ];
-    }
-
-    /**
-     * @throws \Refactor\Exception\FileNotFoundException
-     * @return Config
-     */
-    private function getConfig(): Config
-    {
-        if (file_exists(PathUtility::getRefactorItConfigFile())) {
-            $config = new Config();
-            $json = file_get_contents(PathUtility::getRefactorItConfigFile());
-            $config->fromJSON(json_decode($json, true));
-        } else {
-            throw new \Refactor\Exception\FileNotFoundException(
-                'The config file was not found! Try running refactor config in the root of your project',
-                1560437309238
-            );
-        }
-
-        return $config;
     }
 
     /**

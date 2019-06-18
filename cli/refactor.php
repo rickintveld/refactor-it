@@ -19,11 +19,7 @@ $init = new \Refactor\Init();
 $fixer = new \Refactor\Console\Fixer();
 
 $app->command('config [--reset-config]', function ($resetConfig, InputInterface $input, OutputInterface $output) use ($init) {
-    try {
-        $init->execute($input, $output, $this->getHelperSet(), ['reset-config' => $resetConfig]);
-    } catch (\Exception $exception) {
-        $output->writeln('<error>' . $exception->getMessage() . '</error>');
-    }
+    $init->execute($input, $output, $this->getHelperSet(), ['reset-config' => $resetConfig]);
 })->descriptions('(re)sets the refactor-it pattern config');
 
 $app->command('diffs', function (InputInterface $input, OutputInterface $output) use ($fixer) {

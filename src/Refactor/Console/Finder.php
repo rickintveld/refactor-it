@@ -9,7 +9,10 @@ use Symfony\Component\Process\Process;
  */
 class Finder
 {
-    private const VCS_SUPPORTED_TYPES = ['git', 'svn'];
+    private const GIT = 'git';
+    private const GIT_CONFIG = '.git';
+    private const SVN = 'svn';
+    private const SVN_CONFIG = '.svn';
 
     /**
      * @param string $vcs
@@ -17,9 +20,9 @@ class Finder
      * @throws \Refactor\Exception\WrongVcsTypeException
      * @return array
      */
-    public function findAdjustedFiles(string $vcs): array
+    public function findAdjustedFiles(): array
     {
-        $this->validateSelectedVcsType($vcs);
+        $vcs = $this->validateVcsUsage();
 
         $files = [];
         $process = new Process(
@@ -67,7 +70,7 @@ class Finder
         $commands = [];
         $vcs = strtolower($vcs);
 
-        if (in_array($vcs, Finder::VCS_SUPPORTED_TYPES, true) === false) {
+        if (in_array($vcs, [self::GIT, self::SVN], true) === false) {
             throw new \Refactor\Exception\UnknownVcsTypeException(
                 'The selected vcs type (' . $vcs . ') is not supported, only git and svn is supported!',
                 1560674657669
@@ -84,13 +87,12 @@ class Finder
     }
 
     /**
-     * @param string $vcs
      * @throws \Refactor\Exception\WrongVcsTypeException
+     * @return string
      */
-    private function validateSelectedVcsType(string $vcs)
+    private function validateVcsUsage(): string
     {
         $files = [];
-        $vcsConfigFile = '.' . $vcs;
         $process = new Process(['ls', '-a']);
         $process->start();
 
@@ -100,11 +102,17 @@ class Finder
             }
         }
 
-        if (in_array($vcsConfigFile, $files, true) === false) {
+        if (in_array(self::GIT_CONFIG, $files, true) === true) {
+            $vcs = 'git';
+        } elseif (in_array(self::SVN_CONFIG, $files, true) === true) {
+            $vcs = 'svn';
+        } else {
             throw new \Refactor\Exception\WrongVcsTypeException(
-                'You have set the vcs config to ' . $vcs . ' but we found none or a another vcs config file in the root of your project. Try adjusting the config json settings and try again!',
+                'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
                 1560678044538
             );
         }
+
+        return $vcs;
     }
 }
