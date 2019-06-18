@@ -63,7 +63,9 @@ class Fixer
             return;
         }
 
-        $output->writeln('<comment>Starting the code refactoring of the following files...</comment>');
+        $output->writeln('<info>Refactoring...</info>');
+        $output->writeln(''); // empty line
+
         $progressBar = new ProgressBar($output, count($files));
         $progressBar->start();
 
@@ -72,7 +74,7 @@ class Fixer
             $process->run();
 
             if ($process->isSuccessful()) {
-                $output->writeln('<info> Refactoring ' . $file . '</info>');
+                $output->writeln('<info> ' . $file . '</info>');
             } else {
                 $output->writeln('<error>' . $process->getErrorOutput() . '</error>');
             }
@@ -83,6 +85,7 @@ class Fixer
         $this->cleanUp();
         $progressBar->finish();
 
+        $output->writeln(''); // empty line
         $output->writeln('<info>' . $this->animal->speak("All done... \nYour code has been refactored!") . '</info>');
         $output->writeln('<info>' . Signature::write() . '</info>');
     }
