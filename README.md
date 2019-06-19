@@ -1,100 +1,92 @@
 # Refactor it!
 
-### Simple startup
-
-When no project files are present yet:
-
-- `pullit install`; first time installation
-
-- `pullit init`; first time project init (when no Pullit files are in the project)
-
-### Configuration
-
-Edit the local core file in `~/.pullit.json`
+### Requires
 
 ```bash
-{
-    "towerUsername": "wiardvanrij",
-    "mysqlUser": "root",
-    "mysqlPassword": "root",
-    "mysqlHost": "localhost",
-    "mysqlPort": 3306
-}
+composer global require rintveld/refactor-it
 ```
 
-- towerUsename: The username you use to connect to the commandcloud
-- mysqlUser: Localhost mysql username
-- mysqlPassword: Localhost mysql password
-- mysqlHost: Localhost mysql host
-- mysqlPort: Localhost mysql port
+### Updating
+If you'd like to upgrade Refactor-it, simply execute:
+```bash
+composer global update
+```
+
+
+### Simple startup
+
+When no refactor rules are present yet:
+
+- `refactor-it init`; first time project init
  
- 
- ### Project configuration
+ ### Project rules configuration
  
  You will be provided with a 
 
-- ```private/pullit/project.json``` Project base configuration (Should be in GIT)
-- ```private/pullit/local.json```  Local configuration overrides for this project (Place this in your .gitignore!)
+- ```private/refactor-it/rules.json``` Project based configuration
 
-Your `.gitignore` file should contain the following:
-```git
-/private/pullit/*
-!/private/pullit/project.json
-```
+By default the rules.json will be filled with a set of refactoring rules. 
+These rules will be used to refactor your code. You can add or remove rules from this file.
+The rules can be found here -> https://cs.symfony.com/
 
-**project.json:**
+Default set: **rules.json:**
 
 ```bash
 {
-    "cms": "wp",
-    "remoteHost": "vps0018",
-    "remoteUsername": "sctest",
-    "remotePath": "\/home\/sctest\/",
-    "dumpType": "backup",
-    "externalMysqlUser": "sctest",
-    "externalMysqlHost": "",
-    "paths": ["www/index.php", "www/wp/readme.html"],
-    "excludedPaths": [],
-    "backendUsername": "",
-    "backendPassword": "",
-    "localDomains": [
-        ["dev.domain.nl", 1]
-    ]
-    
+    "ordered_class_elements": [
+        "use_trait",
+        "constant_public",
+        "constant_protected",
+        "constant_private",
+        "property_public",
+        "property_protected",
+        "property_private",
+        "construct",
+        "destruct",
+        "magic"
+    ],
+    "array_syntax": {
+        "syntax": "short"
+    },
+    "concat_space": {
+        "spacing": "one"
+    },
+    "phpdoc_trim": true,
+    "phpdoc_order": true,
+    "phpdoc_scalar": true,
+    "phpdoc_types": true,
+    "ordered_imports": true,
+    "blank_line_before_return": true,
+    "no_blank_lines_before_namespace": true,
+    "no_blank_lines_after_phpdoc": true,
+    "no_empty_phpdoc": true,
+    "no_empty_statement": true,
+    "no_mixed_echo_print": {
+        "use": "echo"
+    },
+    "no_trailing_whitespace": true,
+    "no_unused_imports": true,
+    "no_whitespace_in_blank_line": true,
+    "object_operator_without_whitespace": true,
+    "function_typehint_space": true,
+    "no_extra_consecutive_blank_lines": {
+        "tokens": [
+            "extra"
+        ]
+    },
+    "phpdoc_add_missing_param_annotation": true,
+    "is_null": true,
+    "linebreak_after_opening_tag": true,
+    "lowercase_cast": true,
+    "@PSR2": true
 }
 
 ```
 
-- cms: wp, typo3, mage2 (for t.b.a. features)
-- remoteHost: vps number
-- remoteUsername: the username
-- remotePath: The path of the user (mostly /home/{username})
-- dumpType: backup, live
-- externalMysqlUser: mysql user on the remote host
-- externalMysqlHost: external mysql host, you can keep this one empty if no external server used
-- paths: Array of the folders / files you want to sync. Start from the remote Path
-- excludedPaths: t.b.a.
-- backendUsername: add your local backend username, default is redkiwi (Currently TYPO3 only)
-- backendPassword: add your local backend password, default is redkiwi (Currently TYPO3 only)
-- localDomains: Array of all the local domains you will need for the project, key = domain, value = page id (Currently TYPO3 only)
+### Available commands:
+- **refactor-it init**                 *Sets the Refactor it rules*
+- **refactor-it init --reset-rules**   *Resets the Refactor it rules*
+- **refactor-it diff**                 *Syncs the files*
 
-# Available commands:
-- config   Displays or (re)sets the Pullit config
-- diffs    Syncs the files
-
-#Development
-
-### How to test this tool?
-1: Add the project path to your `~/.composer/composer.json` as repository, for example:
-
-```json
-  "repositories": [
-    {
-      "type": "path",
-      "url": "/Users/Username/Projects/refactor-it"
-    }
-  ]
-```
-
-2: You can now use the command `pullit`
-
+### Done
+You can now use the command `refactor-it`

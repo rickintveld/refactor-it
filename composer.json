@@ -1,5 +1,5 @@
 {
-    "name": "rintveld/refactor",
+    "name": "rintveld/refactor-it",
     "homepage": "https://github.com/rickone1/refactor-it/README.md",
     "description": "Automated code refactor tool",
     "keywords": ["refactor", "reindent", "rocket", "sync", "rsync"],
@@ -28,7 +28,7 @@
         }
     },
     "bin": [
-        "refactor"
+        "refactor-it"
     ],
     "require-dev": {
         "phpunit/phpunit": "^7.1"

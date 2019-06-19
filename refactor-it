@@ -17,4 +17,4 @@ if [ "$PHP_VERSION" -lt "71" ]; then
     echo "Invalid PHP version";
 fi
 
-php "$DIR/cli/refactor.php" "$@"
+php "$DIR/cli/refactor-it.php" "$@"
