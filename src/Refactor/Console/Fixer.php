@@ -76,7 +76,7 @@ class Fixer
             if ($process->isSuccessful()) {
                 $output->writeln('<info> ' . $file . '</info>');
             } else {
-                $output->writeln('<error>' . $process->getErrorOutput() . '</error>');
+                $output->writeln('<error>' . $process->getOutput() . '</error>');
             }
 
             $progressBar->advance();
