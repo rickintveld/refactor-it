@@ -1,7 +1,7 @@
 <?php
 namespace Refactor;
 
-use Refactor\Common\RefactorCommandInterface;
+use Refactor\Common\CommandInterface;
 use Refactor\Config\Rules;
 use Refactor\Console\Animal;
 use Refactor\Console\Signature;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  * Class Init
  * @package Refactor
  */
-class Init implements RefactorCommandInterface
+class Init implements CommandInterface
 {
     const REFACTOR_IT_PATH = '/private/refactor-it/';
     const GITIGNORE_CONTENT = "/rules.json\r\n!/.gitignore";
@@ -33,9 +33,9 @@ class Init implements RefactorCommandInterface
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param HelperSet $helperSet
-     * @param array $parameters
+     * @param array|null $parameters
      */
-    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters)
+    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null)
     {
         $resetRules = $parameters['reset-rules'];
 

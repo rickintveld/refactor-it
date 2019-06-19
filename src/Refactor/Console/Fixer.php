@@ -1,9 +1,12 @@
 <?php
 namespace Refactor\Console;
 
+use Refactor\Common\CommandInterface;
 use Refactor\Config\Rules;
 use Refactor\Utility\PathUtility;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -11,7 +14,7 @@ use Symfony\Component\Process\Process;
  * Class Fixer
  * @package Refactor\Fixer
  */
-class Fixer
+class Fixer implements CommandInterface
 {
     /** @var Animal */
     private $animal;
@@ -33,12 +36,15 @@ class Fixer
     }
 
     /**
+     * @param InputInterface $input
      * @param OutputInterface $output
+     * @param HelperSet $helperSet
+     * @param array|null $parameters
      * @throws \Refactor\Exception\FileNotFoundException
      * @throws \Refactor\Exception\UnknownVcsTypeException
      * @throws \Refactor\Exception\WrongVcsTypeException
      */
-    public function execute(OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null)
     {
         $this->runRefactor(
             $this->finder->findAdjustedFiles(),

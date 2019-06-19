@@ -31,9 +31,7 @@ class Finder
 
         $process->start();
         while ($process->isRunning()) {
-            if ($process->isSuccessful()) {
-                $files = explode("\n", $process->getOutput());
-            }
+            $files = explode("\n", $process->getOutput());
         }
 
         return $this->getPhpFilesOnly($files, $vcs);
@@ -97,22 +95,19 @@ class Finder
         $process->start();
 
         while ($process->isRunning()) {
-            if ($process->isSuccessful()) {
-                $files = explode("\n", $process->getOutput());
-            }
+            $files = explode("\n", $process->getOutput());
         }
 
         if (in_array(self::GIT_CONFIG, $files, true) === true) {
-            $vcs = 'git';
-        } elseif (in_array(self::SVN_CONFIG, $files, true) === true) {
-            $vcs = 'svn';
-        } else {
-            throw new \Refactor\Exception\WrongVcsTypeException(
-                'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
-                1560678044538
-            );
+            return self::GIT;
+        }
+        if (in_array(self::SVN_CONFIG, $files, true) === true) {
+            return self::SVN;
         }
 
-        return $vcs;
+        throw new \Refactor\Exception\WrongVcsTypeException(
+            'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
+            1560678044538
+        );
     }
 }

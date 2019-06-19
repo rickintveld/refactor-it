@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Interface RefactorCommand
  * @package Refactor\Common
  */
-interface RefactorCommandInterface
+interface CommandInterface
 {
     /**
      * @param InputInterface $input
@@ -17,5 +17,5 @@ interface RefactorCommandInterface
      * @param HelperSet $helperSet
      * @param array ...$parameters
      */
-    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters);
+    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null);
 }

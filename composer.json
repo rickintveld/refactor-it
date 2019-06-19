@@ -4,7 +4,7 @@
     "description": "Automated code refactor tool",
     "keywords": ["refactor", "reindent", "rocket", "sync", "rsync"],
     "license": "MIT",
-    "version": "1.0.0",
+    "version": "1.2.1",
     "authors": [{
         "name": "Rick in t Veld",
         "email": "rick.in.t.veld@opinity.nl"
