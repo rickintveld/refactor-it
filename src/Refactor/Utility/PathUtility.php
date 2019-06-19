@@ -1,7 +1,7 @@
 <?php
 namespace Refactor\Utility;
 
-use Refactor\Config\DefaultRules;
+use Refactor\Config\Rules;
 use Refactor\Init;
 
 /**
@@ -31,6 +31,6 @@ class PathUtility
      */
     public static function getRefactorItRulesFile(): string
     {
-        return self::getRefactorItPath() . DefaultRules::RULES_FILE;
+        return self::getRefactorItPath() . Rules::RULES_FILE;
     }
 }

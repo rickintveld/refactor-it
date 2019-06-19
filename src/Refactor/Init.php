@@ -2,8 +2,9 @@
 namespace Refactor;
 
 use Refactor\Common\RefactorCommandInterface;
-use Refactor\Config\DefaultRules;
+use Refactor\Config\Rules;
 use Refactor\Console\Animal;
+use Refactor\Console\Signature;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -36,10 +37,10 @@ class Init implements RefactorCommandInterface
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters)
     {
-        $resetConfig = $parameters['reset-config'];
+        $resetRules = $parameters['reset-rules'];
 
-        if ($resetConfig === false) {
-            $rules = $this->getDefaultRules();
+        if ($resetRules === false) {
+            $rules = $this->getRules();
             try {
                 $this->writeRefactorRules($rules);
                 $this->configureGitIgnore();
@@ -50,15 +51,15 @@ class Init implements RefactorCommandInterface
             }
         }
 
-        if ($resetConfig === true) {
+        if ($resetRules === true) {
             /** @var QuestionHelper $helper */
             $helper = $helperSet->get('question');
-            $rules = $this->getDefaultRules(true);
+            $rules = $this->getRules(true);
 
             $question = new ConfirmationQuestion('Are you sure you want to reset your project (y/N)?', false);
 
             if ($helper->ask($input, $output, $question)) {
-                $output->writeln('<info>Resetting the refactor-it config</info>');
+                $output->writeln('<info>Resetting the refactor-it rules</info>');
 
                 try {
                     $this->writeRefactorRules($rules);
@@ -71,41 +72,39 @@ class Init implements RefactorCommandInterface
             }
         }
 
-        $output->writeln(
-            '<info>' . $this->animal->speak('Done writing the refactor-it config. It\'s located in the root of your project in the private folder!') . '</info>'
-        );
-        $output->writeln('<info>' . \Refactor\Console\Signature::write() . '</info>');
+        $output->writeln('<info>' . $this->animal->speak('Done writing the refactor-it config. It\'s located in the root of your project in the private folder!') . '</info>');
+        $output->writeln('<info>' . Signature::write() . '</info>');
     }
 
     /**
      * @param bool $empty
-     * @return DefaultRules
+     * @return Rules
      */
-    private function getDefaultRules(bool $empty = false): DefaultRules
+    private function getRules(bool $empty = false): Rules
     {
-        return $this->getRefactorRules(new DefaultRules(), $empty);
+        return $this->getRefactorRules(new Rules(), $empty);
     }
 
     /**
-     * @param DefaultRules $defaultRules
+     * @param Rules $rules
      * @param bool $empty
-     * @return DefaultRules
+     * @return Rules
      */
-    private function getRefactorRules(DefaultRules $defaultRules, bool $empty = false): DefaultRules
+    private function getRefactorRules(Rules $rules, bool $empty = false): Rules
     {
         if ($empty === false && file_exists(PathUtility::getRefactorItRulesFile())) {
             $json = file_get_contents(PathUtility::getRefactorItRulesFile());
-            $defaultRules = $defaultRules->fromJSON(json_decode($json, true));
+            $rules = $rules->fromJSON(json_decode($json, true));
         }
 
-        return $defaultRules;
+        return $rules;
     }
 
     /**
-     * @param DefaultRules $defaultRules
+     * @param Rules $defaultRules
      * @throws \Exception
      */
-    private function writeRefactorRules(DefaultRules $defaultRules)
+    private function writeRefactorRules(Rules $defaultRules)
     {
         $path = dirname(PathUtility::getRefactorItPath());
 

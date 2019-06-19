@@ -1,11 +1,9 @@
 <?php
 namespace Refactor\Console;
 
-use Refactor\Config\DefaultRules;
+use Refactor\Config\Rules;
 use Refactor\Utility\PathUtility;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -35,14 +33,12 @@ class Fixer
     }
 
     /**
-     * @param InputInterface $input
      * @param OutputInterface $output
-     * @param HelperSet $helperSet
      * @throws \Refactor\Exception\FileNotFoundException
      * @throws \Refactor\Exception\UnknownVcsTypeException
      * @throws \Refactor\Exception\WrongVcsTypeException
      */
-    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet)
+    public function execute(OutputInterface $output)
     {
         $this->runRefactor(
             $this->finder->findAdjustedFiles(),
@@ -110,13 +106,13 @@ class Fixer
     }
 
     /**
-     * @throws \Refactor\Exception\FileNotFoundException
-     * @return DefaultRules
+     *@throws \Refactor\Exception\FileNotFoundException
+     * @return Rules
      */
-    private function getRules(): DefaultRules
+    private function getRules(): Rules
     {
         if (file_exists(PathUtility::getRefactorItRulesFile())) {
-            $rules = new DefaultRules();
+            $rules = new Rules();
             $json = file_get_contents(PathUtility::getRefactorItRulesFile());
             $rules->fromJSON(json_decode($json, true));
         } else {

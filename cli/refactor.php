@@ -18,13 +18,13 @@ $app = new Application('Refactor it', REFACTOR_IT_VERSION);
 $init = new \Refactor\Init();
 $fixer = new \Refactor\Console\Fixer();
 
-$app->command('config [--reset-config]', function ($resetConfig, InputInterface $input, OutputInterface $output) use ($init) {
-    $init->execute($input, $output, $this->getHelperSet(), ['reset-config' => $resetConfig]);
-})->descriptions('(re)sets the refactor-it pattern config');
+$app->command('init [--reset-rules]', function ($resetRules, InputInterface $input, OutputInterface $output) use ($init) {
+    $init->execute($input, $output, $this->getHelperSet(), ['reset-rules' => $resetRules]);
+})->descriptions('Generates the file with the refactoring rules');
 
-$app->command('diffs', function (InputInterface $input, OutputInterface $output) use ($fixer) {
+$app->command('diff', function (OutputInterface $output) use ($fixer) {
     try {
-        $fixer->execute($input, $output, $this->getHelperSet());
+        $fixer->execute($output);
     } catch (\Exception $exception) {
         $output->writeln('<error>' . $exception->getMessage() . '</error>');
     }

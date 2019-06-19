@@ -2,6 +2,9 @@
 namespace Refactor\Console;
 
 use Cowsayphp\Farm;
+use Cowsayphp\Farm\Cow;
+use Cowsayphp\Farm\Tux;
+use Cowsayphp\Farm\Whale;
 
 /**
  * Class Animal
@@ -25,12 +28,7 @@ class Animal
      */
     private function randomAnimal(): string
     {
-        $animals = [
-            \Cowsayphp\Farm\Cow::class,
-            \Cowsayphp\Farm\Tux::class,
-            \Cowsayphp\Farm\Whale::class,
-        ];
-
+        $animals = [Cow::class, Tux::class, Whale::class];
         $randomKey = array_rand($animals, 1);
 
         return $animals[$randomKey];
