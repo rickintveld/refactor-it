@@ -29,9 +29,9 @@ class CommandTest extends \PHPUnit\Framework\TestCase
     public function getVcsCommandWorksAsExpected()
     {
         $command = $this->command->getVcsCommand('git');
-        $this->assertNotEmpty($command);
-        $this->assertIsArray($command);
-        $this->assertArrayNotHasKey('svn', $command);
+        $this::assertNotEmpty($command);
+        $this::assertIsArray($command);
+        $this::assertArrayNotHasKey('svn', $command);
     }
 
     /**
