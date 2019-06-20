@@ -28,7 +28,6 @@ class FinderTest extends TestCase
      * @test
      * @throws \Refactor\Exception\UnknownVcsTypeException
      * @throws \Refactor\Exception\WrongVcsTypeException
-     * @expectedException \Refactor\Exception\WrongVcsTypeException
      */
     public function findAdjustedFilesWorksAsExpected()
     {
