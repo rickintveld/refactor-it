@@ -33,4 +33,12 @@ class PathUtility
     {
         return self::getRefactorItPath() . Rules::RULES_FILE;
     }
+
+    /**
+     * @return string
+     */
+    public static function getGitIgnoreFile(): string
+    {
+        return self::getRefactorItPath() . '/.gitignore';
+    }
 }

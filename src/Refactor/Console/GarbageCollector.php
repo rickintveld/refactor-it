@@ -7,7 +7,7 @@ namespace Refactor\Console;
  */
 class GarbageCollector
 {
-    private const PHP_CS_CACHE_FILE = '.php_cs.cache';
+    public const PHP_CS_CACHE_FILE = '.php_cs.cache';
 
     public function cleanUpCacheFile()
     {

@@ -112,7 +112,7 @@ class Fixer implements CommandInterface
     }
 
     /**
-     *@throws \Refactor\Exception\FileNotFoundException
+     * @throws \Refactor\Exception\FileNotFoundException
      * @return Rules
      */
     private function getRules(): Rules

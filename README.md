@@ -90,3 +90,6 @@ Default set: **rules.json:**
 
 ### Done
 You can now use the command `refactor-it`
+
+### PS
+make sure you've got export PATH=~/.composer/vendor/bin:$PATH in you're .bash_profile :)
