@@ -34,22 +34,12 @@ class CommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Refactor\Exception\UnknownVcsTypeException
-     */
-    public function getVcsCommandThrowsException()
-    {
-        $this->command->getVcsCommand('test');
-        $this->expectException(\Refactor\Exception\UnknownVcsTypeException::class);
-        $this->expectExceptionMessage('The selected vcs type (test) is not supported, only git and svn is supported!');
-    }
-
-    /**
      * @test
      * @throws \Refactor\Exception\WrongVcsTypeException
+     * @expectedException \Refactor\Exception\WrongVcsTypeException
      */
-    public function validateVcsUsageWorksAsExpected()
+    public function validateVcsUsageThrowsExceptionOnFailure()
     {
-        $vcs = $this->command->validateVcsUsage();
-        $this->assertEquals(Finder::GIT, $vcs);
+        $this->command->validateVcsUsage();
     }
 }
