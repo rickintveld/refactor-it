@@ -1,4 +1,5 @@
-# Refactor it!
+# Refactor it! 
+[![Build Status](https://travis-ci.org/rickone1/refactor-it.svg?branch=master)](https://travis-ci.org/rickone1/refactor-it)
 
 ### Requires
 
