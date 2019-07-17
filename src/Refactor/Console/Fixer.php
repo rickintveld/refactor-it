@@ -99,9 +99,10 @@ class Fixer implements CommandInterface
      */
     private function getRefactorCommand(string $file): array
     {
+        $executable = realpath(dirname(__DIR__).'/../../vendor/bin/');
         return [
             'php',
-            getcwd() . '/vendor/bin/php-cs-fixer',
+            $executable . '/php-cs-fixer',
             'fix',
             $file,
             '--format=json',
