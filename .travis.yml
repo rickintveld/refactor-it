@@ -1,0 +1,12 @@
+language: php
+
+# PHP VERSION
+php:
+  - 7.1.23
+
+# Run composer install before executing the build
+before_script:
+  - composer install
+
+# Run the unit tests
+script: phpunit --configuration phpunit.xml

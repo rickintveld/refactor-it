@@ -101,10 +101,10 @@ class Init implements CommandInterface
     }
 
     /**
-     * @param Rules $defaultRules
+     * @param Rules $rules
      * @throws \Exception
      */
-    private function writeRefactorRules(Rules $defaultRules)
+    private function writeRefactorRules(Rules $rules)
     {
         $path = dirname(PathUtility::getRefactorItPath());
 
@@ -116,7 +116,7 @@ class Init implements CommandInterface
             mkdir(PathUtility::getRefactorItPath(), 0777, true);
         }
 
-        if (@file_put_contents(PathUtility::getRefactorItRulesFile(), $defaultRules->toJSON()) === false) {
+        if (@file_put_contents(PathUtility::getRefactorItRulesFile(), $rules->toJSON()) === false) {
             throw new \Exception('Could not write the rules; either the directory doesn\'t exist or we have no permission to write (' . $path . ').', 1560888611458);
         }
     }

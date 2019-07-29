@@ -99,9 +99,10 @@ class Fixer implements CommandInterface
      */
     private function getRefactorCommand(string $file): array
     {
+        $executable = realpath(dirname(__DIR__).'/../../vendor/bin/');
         return [
             'php',
-            getcwd() . '/vendor/bin/php-cs-fixer',
+            $executable . '/php-cs-fixer',
             'fix',
             $file,
             '--format=json',
@@ -112,7 +113,7 @@ class Fixer implements CommandInterface
     }
 
     /**
-     *@throws \Refactor\Exception\FileNotFoundException
+     * @throws \Refactor\Exception\FileNotFoundException
      * @return Rules
      */
     private function getRules(): Rules

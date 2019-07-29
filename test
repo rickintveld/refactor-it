@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+echo "Starting the unit tests";
+
+./vendor/bin/phpunit --configuration phpunit.xml
