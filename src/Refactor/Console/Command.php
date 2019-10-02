@@ -1,46 +1,40 @@
 <?php
 namespace Refactor\Console;
 
+use Joli\JoliNotif\Notification;
+use Joli\JoliNotif\NotifierFactory;
+use Refactor\Common\NotifierInterface;
+use Refactor\Exception\WrongVcsTypeException;
 use Symfony\Component\Process\Process;
-use Refactor\Console\Finder;
 
 /**
  * Class Command
  * @package Refactor\Console
  */
-class Command
+class Command implements NotifierInterface
 {
     public const GIT_COMMAND = ['git', 'diff', '--name-only', './'];
+    public const GIT_NEW_FILE_COMMAND = ['git', 'diff', '--name-only', '--diff-filter=A', '--cached'];
     public const SVN_COMMAND = ['svn', 'status'];
 
     /**
-     * @param string $vcs
-     * @throws \Refactor\Exception\UnknownVcsTypeException
      * @return array
      */
-    public function getVcsCommand(string $vcs): array
+    public function getGitCommands(): array
     {
-        $commands = [];
-        $vcs = strtolower($vcs);
-
-        if (in_array($vcs, [Finder::GIT, Finder::SVN], true) === false) {
-            throw new \Refactor\Exception\UnknownVcsTypeException(
-                'The selected vcs type (' . $vcs . ') is not supported, only git and svn is supported!',
-                1560674657669
-            );
-        }
-        if ($vcs === 'git') {
-            $commands = self::GIT_COMMAND;
-        }
-        if ($vcs === 'svn') {
-            $commands = self::SVN_COMMAND;
-        }
-
-        return $commands;
+        return [self::GIT_COMMAND, self::GIT_NEW_FILE_COMMAND];
     }
 
     /**
-     * @throws \Refactor\Exception\WrongVcsTypeException
+     * @return array
+     */
+    public function getSvnCommand(): array
+    {
+        return [self::SVN_COMMAND];
+    }
+
+    /**
+     * @throws WrongVcsTypeException
      * @return string
      */
     public function validateVcsUsage(): string
@@ -60,9 +54,32 @@ class Command
             return Finder::SVN;
         }
 
-        throw new \Refactor\Exception\WrongVcsTypeException(
+        $this->pushNotification(
+            'Exception Error [1560678044538]',
+            'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
+            true
+        );
+
+        throw new WrongVcsTypeException(
             'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
             1560678044538
         );
+    }
+
+    /**
+     * @param string $title
+     * @param string $body
+     * @param bool $exception
+     */
+    public function pushNotification(string $title, string $body, bool $exception): void
+    {
+        $notifier = NotifierFactory::create();
+        $notification = new Notification();
+        $notification
+            ->setTitle($title)
+            ->setBody($body)
+            ->setIcon($exception ? NotifierInterface::SUCCESS_ICON : NotifierInterface::FAIL_ICON);
+
+        $notifier->send($notification);
     }
 }

@@ -1,8 +1,12 @@
 <?php
 namespace Refactor\Console;
 
+use Joli\JoliNotif\Notification;
+use Joli\JoliNotif\NotifierFactory;
 use Refactor\Common\CommandInterface;
+use Refactor\Common\NotifierInterface;
 use Refactor\Config\Rules;
+use Refactor\Exception\FileNotFoundException;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -14,7 +18,7 @@ use Symfony\Component\Process\Process;
  * Class Fixer
  * @package Refactor\Fixer
  */
-class Fixer implements CommandInterface
+class Fixer implements CommandInterface, NotifierInterface
 {
     /** @var Animal */
     private $animal;
@@ -40,7 +44,7 @@ class Fixer implements CommandInterface
      * @param OutputInterface $output
      * @param HelperSet $helperSet
      * @param array|null $parameters
-     * @throws \Refactor\Exception\FileNotFoundException
+     * @throws FileNotFoundException
      * @throws \Refactor\Exception\UnknownVcsTypeException
      * @throws \Refactor\Exception\WrongVcsTypeException
      */
@@ -55,7 +59,7 @@ class Fixer implements CommandInterface
     /**
      * @param array $files
      * @param OutputInterface $output
-     * @throws \Refactor\Exception\FileNotFoundException
+     * @throws FileNotFoundException
      */
     private function runRefactor(array $files, OutputInterface $output)
     {
@@ -66,7 +70,7 @@ class Fixer implements CommandInterface
         }
 
         $output->writeln('<info>Refactoring...</info>');
-        $output->writeln(''); // empty line
+        $output->writeln('');
 
         $progressBar = new ProgressBar($output, count($files));
         $progressBar->start();
@@ -87,14 +91,20 @@ class Fixer implements CommandInterface
         $this->cleanUp();
         $progressBar->finish();
 
-        $output->writeln(''); // empty line
+        $this->pushNotification(
+            'Refactor complete',
+            'The refactor process is completed!',
+            false
+        );
+
+        $output->writeln('');
         $output->writeln('<info>' . $this->animal->speak("All done... \nYour code has been refactored!") . '</info>');
         $output->writeln('<info>' . Signature::write() . '</info>');
     }
 
     /**
      * @param string $file
-     * @throws \Refactor\Exception\FileNotFoundException
+     * @throws FileNotFoundException
      * @return array
      */
     private function getRefactorCommand(string $file): array
@@ -113,7 +123,7 @@ class Fixer implements CommandInterface
     }
 
     /**
-     * @throws \Refactor\Exception\FileNotFoundException
+     * @throws FileNotFoundException
      * @return Rules
      */
     private function getRules(): Rules
@@ -123,7 +133,7 @@ class Fixer implements CommandInterface
             $json = file_get_contents(PathUtility::getRefactorItRulesFile());
             $rules->fromJSON(json_decode($json, true));
         } else {
-            throw new \Refactor\Exception\FileNotFoundException(
+            throw new FileNotFoundException(
                 'The refactor rules file was not found! Try running refactor config in the root of your project',
                 1560437366837
             );
@@ -149,5 +159,22 @@ class Fixer implements CommandInterface
         $inlineRules = json_decode($rules, true);
 
         return json_encode($inlineRules);
+    }
+
+    /**
+     * @param string $title
+     * @param string $body
+     * @param bool $exception
+     */
+    public function pushNotification(string $title, string $body, bool $exception): void
+    {
+        $notifier = NotifierFactory::create();
+        $notification = new Notification();
+        $notification
+            ->setTitle($title)
+            ->setBody($body)
+            ->setIcon($exception ? NotifierInterface::SUCCESS_ICON : NotifierInterface::FAIL_ICON);
+
+        $notifier->send($notification);
     }
 }

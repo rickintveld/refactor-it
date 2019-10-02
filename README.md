@@ -87,7 +87,7 @@ Default set: **rules.json:**
 ### Available commands:
 - **refactor-it init**                 *Sets the Refactor it rules*
 - **refactor-it init --reset-rules**   *Resets the Refactor it rules*
-- **refactor-it diff**                 *Syncs the files*
+- **refactor-it diff**                 *Refactor the changed files*
 
 ### Done
 You can now use the command `refactor-it`
