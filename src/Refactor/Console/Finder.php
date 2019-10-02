@@ -1,13 +1,18 @@
 <?php
 namespace Refactor\Console;
 
+use Joli\JoliNotif\Notification;
+use Joli\JoliNotif\NotifierFactory;
+use Refactor\Common\NotifierInterface;
+use Refactor\Exception\UnknownVcsTypeException;
+use Refactor\Exception\WrongVcsTypeException;
 use Symfony\Component\Process\Process;
 
 /**
  * Class Finder
  * @package Refactor\Fixer
  */
-class Finder
+class Finder implements NotifierInterface
 {
     public const GIT = 'git';
     public const GIT_CONFIG = '.git';
@@ -27,25 +32,46 @@ class Finder
 
     /**
      * @param string $vcs
-     * @throws \Refactor\Exception\UnknownVcsTypeException
-     * @throws \Refactor\Exception\WrongVcsTypeException
+     * @throws UnknownVcsTypeException
+     * @throws WrongVcsTypeException
      * @return array
      */
     public function findAdjustedFiles(): array
     {
+        $commands = [];
+        $count = 0;
+        $files = [];
+        $newFiles = [];
         $vcs = $this->command->validateVcsUsage();
 
-        $files = [];
-        $process = new Process(
-            $this->command->getVcsCommand($vcs)
-        );
-
-        $process->start();
-        while ($process->isRunning()) {
-            $files = explode("\n", $process->getOutput());
+        if (in_array($vcs, Command::SVN_COMMAND, true)) {
+            $commands = $this->command->getSvnCommand();
+        }
+        if (in_array($vcs, Command::GIT_COMMAND, true)) {
+            $commands = $this->command->getGitCommands();
         }
 
-        return $this->getPhpFilesOnly($files, $vcs);
+        if (empty($vcs) === true) {
+            $this->pushNotification('Exception Error [1570009542585]', 'There is no version control system found in your project!', true);
+            throw new UnknownVcsTypeException('There is no version control system found in your project!', 1570009542585);
+        }
+
+        foreach ($commands as $command) {
+            $process = new Process($command);
+            $process->start();
+            while ($process->isRunning()) {
+                if ($count === 0) {
+                    $files = explode(PHP_EOL, $process->getOutput());
+                } else {
+                    $newFiles = explode(PHP_EOL, $process->getOutput());
+                }
+            }
+            $count++;
+        }
+
+        $allFiles = array_merge($files, $newFiles);
+
+        return $this->getPhpFilesOnly(array_filter($allFiles), $vcs);
     }
 
     /**
@@ -61,11 +87,28 @@ class Finder
                 $file = substr($file, 1);
                 $file = preg_replace('/\s+/', '', $file);
             }
-            if (substr($file, -4) === '.php') {
+            if (!empty($file) && substr($file, -4) === '.php') {
                 $filteredFiles[] = preg_replace('/\s+/', '\ ', getcwd() . '/' . $file);
             }
         }
 
         return $filteredFiles;
+    }
+
+    /**
+     * @param string $title
+     * @param string $body
+     * @param bool $exception
+     */
+    public function pushNotification(string $title, string $body, bool $exception): void
+    {
+        $notifier = NotifierFactory::create();
+        $notification = new Notification();
+        $notification
+            ->setTitle($title)
+            ->setBody($body)
+            ->setIcon($exception ? NotifierInterface::SUCCESS_ICON : NotifierInterface::FAIL_ICON);
+
+        $notifier->send($notification);
     }
 }
