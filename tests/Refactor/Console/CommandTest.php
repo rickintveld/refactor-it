@@ -24,29 +24,6 @@ class CommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @throws \Refactor\Exception\UnknownVcsTypeException
-     */
-    public function getVcsCommandWorksAsExpected()
-    {
-        $command = $this->command->getVcsCommand('git');
-        $this::assertNotEmpty($command, 'The commands array is not empty');
-        $this::assertArrayNotHasKey('svn', $command, 'Whoops SVN is found in the root of this project!');
-    }
-
-    /**
-     * @test
-     * @throws \Refactor\Exception\UnknownVcsTypeException
-     * @expectedException \Refactor\Exception\UnknownVcsTypeException
-     */
-    public function getVcsCommandFailsAsExpected()
-    {
-        $vcs = 'fail';
-        $this->command->getVcsCommand($vcs);
-        $this->expectExceptionMessage('The selected vcs type (' . $vcs . ') is not supported, only git and svn is supported!');
-    }
-
-    /**
-     * @test
      * @throws \Refactor\Exception\WrongVcsTypeException
      */
     public function validateVcsUsageThrowsExceptionOnFailure()
