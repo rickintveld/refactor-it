@@ -1,11 +1,13 @@
 <?php
 namespace Refactor\Console;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Class CommandTest
  * @package Refactor\Console
  */
-class CommandTest extends \PHPUnit\Framework\TestCase
+class CommandTest extends TestCase
 {
     /** @var Command */
     protected $command;
@@ -26,7 +28,7 @@ class CommandTest extends \PHPUnit\Framework\TestCase
      * @test
      * @throws \Refactor\Exception\WrongVcsTypeException
      */
-    public function validateVcsUsageThrowsExceptionOnFailure()
+    public function validateVcsUsageThrowsExceptionOnFailure(): void
     {
         $this->command->validateVcsUsage();
         $this->assertTrue(true, 'Whoops, looks like the exception has been thrown');
@@ -36,9 +38,32 @@ class CommandTest extends \PHPUnit\Framework\TestCase
      * @test
      * @throws \Refactor\Exception\WrongVcsTypeException
      */
-    public function validateVcsUsageWorksLikeExpected()
+    public function validateVcsUsageWorksLikeExpected(): void
     {
         $vcs = $this->command->validateVcsUsage();
         $this->assertEquals('git', $vcs);
+    }
+
+    /**
+     * @test
+     */
+    public function validateSvnUsage(): void
+    {
+        $vcs = $this->command->getSvnCommand();
+        $this->assertIsArray($vcs);
+
+        $svn = $vcs[0];
+        $this->assertEquals('svn', $svn[0]);
+    }
+
+    /**
+     * @test
+     */
+    public function validateGitUsage(): void
+    {
+        $vcs = $this->command->getGitCommands();
+
+        $git = $vcs[0];
+        $this->assertEquals('git', $git[0]);
     }
 }
