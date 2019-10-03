@@ -32,6 +32,11 @@ class FinderTest extends TestCase
     public function findAdjustedFilesWorksAsExpected(): void
     {
         $files = $this->finder->findAdjustedFiles();
-        $this->assertEmpty($files, 'No code changes where found!');
+
+        if (empty($files)) {
+            $this->assertEmpty($files, 'No code changes where found!');
+        } else {
+            $this->assertIsArray($files, 'Some code changes where found!');
+        }
     }
 }
