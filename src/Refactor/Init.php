@@ -45,9 +45,11 @@ class Init implements CommandInterface
                 $this->writeRefactorRules($rules);
                 $this->configureGitIgnore();
             } catch (\Exception $exception) {
+                // @codeCoverageIgnoreStart
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
 
                 return;
+                // @codeCoverageIgnoreEnd
             }
         }
 
@@ -111,15 +113,21 @@ class Init implements CommandInterface
         $path = dirname(PathUtility::getRefactorItPath());
 
         if (file_exists($path) === false) {
+            // @codeCoverageIgnoreStart
             mkdir($path, 0777, true);
+            // @codeCoverageIgnoreEnd
         }
 
         if (file_exists(PathUtility::getRefactorItPath()) === false) {
+            // @codeCoverageIgnoreStart
             mkdir(PathUtility::getRefactorItPath(), 0777, true);
+            // @codeCoverageIgnoreEnd
         }
 
         if (@file_put_contents(PathUtility::getRefactorItRulesFile(), $rules->toJSON()) === false) {
+            // @codeCoverageIgnoreStart
             throw new \Exception('Could not write the rules; either the directory doesn\'t exist or we have no permission to write (' . $path . ').', 1560888611458);
+            // @codeCoverageIgnoreEnd
         }
     }
 
@@ -130,7 +138,9 @@ class Init implements CommandInterface
     {
         $gitIgnore = PathUtility::getRefactorItPath() . '.gitignore';
         if (!file_exists($gitIgnore)) {
+            // @codeCoverageIgnoreStart
             file_put_contents($gitIgnore, self::GITIGNORE_CONTENT);
+            // @codeCoverageIgnoreEnd
         }
     }
 }

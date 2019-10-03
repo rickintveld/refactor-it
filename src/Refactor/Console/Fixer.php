@@ -1,10 +1,7 @@
 <?php
 namespace Refactor\Console;
 
-use Joli\JoliNotif\Notification;
-use Joli\JoliNotif\NotifierFactory;
 use Refactor\Common\CommandInterface;
-use Refactor\Common\NotifierInterface;
 use Refactor\Config\Rules;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Utility\PathUtility;
@@ -18,7 +15,7 @@ use Symfony\Component\Process\Process;
  * Class Fixer
  * @package Refactor\Fixer
  */
-class Fixer implements CommandInterface, NotifierInterface
+class Fixer extends PushCommand implements CommandInterface
 {
     /** @var Animal */
     private $animal;
@@ -109,7 +106,8 @@ class Fixer implements CommandInterface, NotifierInterface
      */
     private function getRefactorCommand(string $file): array
     {
-        $executable = realpath(dirname(__DIR__).'/../../vendor/bin/');
+        $executable = realpath(dirname(__DIR__) . '/../../vendor/bin/');
+
         return [
             'php',
             $executable . '/php-cs-fixer',
@@ -159,23 +157,5 @@ class Fixer implements CommandInterface, NotifierInterface
         $inlineRules = json_decode($rules, true);
 
         return json_encode($inlineRules);
-    }
-
-    /**
-     * @param string $title
-     * @param string $body
-     * @param bool $exception
-     * @codeCoverageIgnore
-     */
-    public function pushNotification(string $title, string $body, bool $exception): void
-    {
-        $notifier = NotifierFactory::create();
-        $notification = new Notification();
-        $notification
-            ->setTitle($title)
-            ->setBody($body)
-            ->setIcon($exception ? NotifierInterface::SUCCESS_ICON : NotifierInterface::FAIL_ICON);
-
-        $notifier->send($notification);
     }
 }

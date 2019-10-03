@@ -1,9 +1,6 @@
 <?php
 namespace Refactor\Console;
 
-use Joli\JoliNotif\Notification;
-use Joli\JoliNotif\NotifierFactory;
-use Refactor\Common\NotifierInterface;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
 use Symfony\Component\Process\Process;
@@ -12,7 +9,7 @@ use Symfony\Component\Process\Process;
  * Class Finder
  * @package Refactor\Fixer
  */
-class Finder implements NotifierInterface
+class Finder extends PushCommand
 {
     public const GIT = 'git';
     public const GIT_CONFIG = '.git';
@@ -51,8 +48,10 @@ class Finder implements NotifierInterface
         }
 
         if (empty($vcs) === true) {
+            // @codeCoverageIgnoreStart
             $this->pushNotification('Exception Error [1570009542585]', 'There is no version control system found in your project!', true);
             throw new UnknownVcsTypeException('There is no version control system found in your project!', 1570009542585);
+            // @codeCoverageIgnoreEnd
         }
 
         foreach ($commands as $command) {
@@ -82,9 +81,11 @@ class Finder implements NotifierInterface
     {
         $filteredFiles = [];
         foreach ($files as $file) {
-            if ($vcs === 'svn') {
+            if ($vcs === self::SVN) {
+                // @codeCoverageIgnoreStart
                 $file = substr($file, 1);
                 $file = preg_replace('/\s+/', '', $file);
+                // @codeCoverageIgnoreEnd
             }
             if (!empty($file) && substr($file, -4) === '.php') {
                 $filteredFiles[] = preg_replace('/\s+/', '\ ', getcwd() . '/' . $file);
@@ -92,23 +93,5 @@ class Finder implements NotifierInterface
         }
 
         return $filteredFiles;
-    }
-
-    /**
-     * @param string $title
-     * @param string $body
-     * @param bool $exception
-     * @codeCoverageIgnore
-     */
-    public function pushNotification(string $title, string $body, bool $exception): void
-    {
-        $notifier = NotifierFactory::create();
-        $notification = new Notification();
-        $notification
-            ->setTitle($title)
-            ->setBody($body)
-            ->setIcon($exception ? NotifierInterface::SUCCESS_ICON : NotifierInterface::FAIL_ICON);
-
-        $notifier->send($notification);
     }
 }

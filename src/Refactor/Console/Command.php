@@ -1,9 +1,6 @@
 <?php
 namespace Refactor\Console;
 
-use Joli\JoliNotif\Notification;
-use Joli\JoliNotif\NotifierFactory;
-use Refactor\Common\NotifierInterface;
 use Refactor\Exception\WrongVcsTypeException;
 use Symfony\Component\Process\Process;
 
@@ -11,7 +8,7 @@ use Symfony\Component\Process\Process;
  * Class Command
  * @package Refactor\Console
  */
-class Command implements NotifierInterface
+class Command extends PushCommand
 {
     public const GIT_COMMAND = ['git', 'diff', '--name-only', './'];
     public const GIT_NEW_FILE_COMMAND = ['git', 'diff', '--name-only', '--diff-filter=A', '--cached'];
@@ -50,39 +47,21 @@ class Command implements NotifierInterface
         if (in_array(Finder::GIT_CONFIG, $files, true) === true) {
             return Finder::GIT;
         }
+        // @codeCoverageIgnoreStart
         if (in_array(Finder::SVN_CONFIG, $files, true) === true) {
             return Finder::SVN;
         }
 
-        // @codeCoverageIgnoreStart
         $this->pushNotification(
             'Exception Error [1560678044538]',
             'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
             true
         );
-        // @codeCoverageIgnoreEnd
 
         throw new WrongVcsTypeException(
             'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
             1560678044538
         );
-    }
-
-    /**
-     * @param string $title
-     * @param string $body
-     * @param bool $exception
-     * @codeCoverageIgnore
-     */
-    public function pushNotification(string $title, string $body, bool $exception): void
-    {
-        $notifier = NotifierFactory::create();
-        $notification = new Notification();
-        $notification
-            ->setTitle($title)
-            ->setBody($body)
-            ->setIcon($exception ? NotifierInterface::SUCCESS_ICON : NotifierInterface::FAIL_ICON);
-
-        $notifier->send($notification);
+        // @codeCoverageIgnoreEnd
     }
 }
