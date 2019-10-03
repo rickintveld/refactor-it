@@ -51,6 +51,7 @@ class Init implements CommandInterface
             }
         }
 
+        // @codeCoverageIgnoreStart
         if ($resetRules === true) {
             /** @var QuestionHelper $helper */
             $helper = $helperSet->get('question');
@@ -71,6 +72,7 @@ class Init implements CommandInterface
                 }
             }
         }
+        // @codeCoverageIgnoreEnd
 
         $output->writeln('<info>' . $this->animal->speak('Done writing the refactor-it config. It\'s located in the root of your project in the private folder!') . '</info>');
         $output->writeln('<info>' . Signature::write() . '</info>');
