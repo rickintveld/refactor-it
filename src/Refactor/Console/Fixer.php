@@ -165,6 +165,7 @@ class Fixer implements CommandInterface, NotifierInterface
      * @param string $title
      * @param string $body
      * @param bool $exception
+     * @codeCoverageIgnore
      */
     public function pushNotification(string $title, string $body, bool $exception): void
     {

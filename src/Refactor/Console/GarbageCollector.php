@@ -4,6 +4,7 @@ namespace Refactor\Console;
 use Joli\JoliNotif\Notification;
 use Joli\JoliNotif\NotifierFactory;
 use Refactor\Common\NotifierInterface;
+use Refactor\Utility\PathUtility;
 
 /**
  * Class GarbageCollector
@@ -15,9 +16,13 @@ class GarbageCollector implements NotifierInterface
 
     public function cleanUpCacheFile(): void
     {
-        if (file_exists(\Refactor\Utility\PathUtility::getRootPath() . '/' . self::PHP_CS_CACHE_FILE) === true) {
-            unlink(\Refactor\Utility\PathUtility::getRootPath() . '/' . self::PHP_CS_CACHE_FILE);
-            $this->pushNotification('Garbage notification', 'The garbage collector removed the php cache file!', false);
+        if (file_exists(PathUtility::getRootPath() . '/' . self::PHP_CS_CACHE_FILE) === true) {
+            unlink(PathUtility::getRootPath() . '/' . self::PHP_CS_CACHE_FILE);
+            $this->pushNotification(
+                'Garbage notification',
+                'The garbage collector removed the php cache file!',
+                false
+            );
         }
     }
 
@@ -25,6 +30,7 @@ class GarbageCollector implements NotifierInterface
      * @param string $title
      * @param string $body
      * @param bool $exception
+     * @codeCoverageIgnore
      */
     public function pushNotification(string $title, string $body, bool $exception): void
     {

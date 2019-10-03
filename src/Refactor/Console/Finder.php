@@ -31,7 +31,6 @@ class Finder implements NotifierInterface
     }
 
     /**
-     * @param string $vcs
      * @throws UnknownVcsTypeException
      * @throws WrongVcsTypeException
      * @return array
@@ -99,6 +98,7 @@ class Finder implements NotifierInterface
      * @param string $title
      * @param string $body
      * @param bool $exception
+     * @codeCoverageIgnore
      */
     public function pushNotification(string $title, string $body, bool $exception): void
     {

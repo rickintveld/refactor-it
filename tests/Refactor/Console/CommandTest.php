@@ -46,6 +46,16 @@ class CommandTest extends TestCase
 
     /**
      * @test
+     * @throws \Refactor\Exception\WrongVcsTypeException
+     */
+    public function validateSvnUsageToFailAsExpected(): void
+    {
+        $vcs = $this->command->validateVcsUsage();
+        $this->assertNotEquals('svn', $vcs);
+    }
+
+    /**
+     * @test
      */
     public function validateSvnUsage(): void
     {

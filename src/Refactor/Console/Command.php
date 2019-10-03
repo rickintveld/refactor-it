@@ -54,11 +54,13 @@ class Command implements NotifierInterface
             return Finder::SVN;
         }
 
+        // @codeCoverageIgnoreStart
         $this->pushNotification(
             'Exception Error [1560678044538]',
             'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
             true
         );
+        // @codeCoverageIgnoreEnd
 
         throw new WrongVcsTypeException(
             'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
@@ -70,6 +72,7 @@ class Command implements NotifierInterface
      * @param string $title
      * @param string $body
      * @param bool $exception
+     * @codeCoverageIgnore
      */
     public function pushNotification(string $title, string $body, bool $exception): void
     {
