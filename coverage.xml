@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1570192100">
-  <project timestamp="1570192100">
+<coverage generated="1570192472">
+  <project timestamp="1570192472">
     <package name="Refactor\Command">
       <file name="/Users/rintveld/Projects/refactor-it/src/Refactor/Command/RefactorCommand.php">
         <class name="Refactor\Command\RefactorCommand" namespace="Refactor\Command" fullPackage="Refactor" package="Refactor">

@@ -1,5 +1,6 @@
 # Refactor it! 
 [![Build Status](https://travis-ci.org/rickone1/refactor-it.svg?branch=master)](https://travis-ci.org/rickone1/refactor-it)
+[![codecov](https://codecov.io/gh/rickone1/refactor-it/branch/master/graph/badge.svg)](https://codecov.io/gh/rickone1/refactor-it)
 
 ### Requires
 
