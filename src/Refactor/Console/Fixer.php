@@ -4,16 +4,19 @@ namespace Refactor\Console;
 use Refactor\Command\RefactorCommand;
 use Refactor\Common\CommandInterface;
 use Refactor\Exception\FileNotFoundException;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
+use Joli\JoliNotif\Notification;
+use Joli\JoliNotif\NotifierFactory;
+use Refactor\Common\CommandInterface;
+use Refactor\Common\NotifierInterface;
+use Refactor\Config\Rules;
+use Refactor\Exception\FileNotFoundException;
+use Refactor\Utility\PathUtility;
 
 /**
  * Class Fixer
  * @package Refactor\Fixer
  */
+
 class Fixer extends PushCommand implements CommandInterface
 {
     /** @var Animal */
@@ -98,12 +101,29 @@ class Fixer extends PushCommand implements CommandInterface
         $output->writeln('<info>' . $this->animal->speak("All done... \nYour code has been refactored!") . '</info>');
         $output->writeln('<info>' . Signature::write() . '</info>');
     }
-
+  
     /**
      * Removes the php cs fixer cache file
      */
     private function cleanUp()
     {
         $this->garbageCollector->cleanUpCacheFile();
+    }
+
+    /**
+     * @param string $title
+     * @param string $body
+     * @param bool $exception
+     */
+    public function pushNotification(string $title, string $body, bool $exception): void
+    {
+        $notifier = NotifierFactory::create();
+        $notification = new Notification();
+        $notification
+            ->setTitle($title)
+            ->setBody($body)
+            ->setIcon($exception ? NotifierInterface::SUCCESS_ICON : NotifierInterface::FAIL_ICON);
+
+        $notifier->send($notification);
     }
 }
