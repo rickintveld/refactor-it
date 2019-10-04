@@ -24,6 +24,7 @@ class Command extends PushCommand
 
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function getSvnCommand(): array
     {

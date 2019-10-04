@@ -57,18 +57,6 @@ class CommandTest extends TestCase
     /**
      * @test
      */
-    public function validateSvnUsage(): void
-    {
-        $vcs = $this->command->getSvnCommand();
-        $this->assertIsArray($vcs);
-
-        $svn = $vcs[0];
-        $this->assertEquals('svn', $svn[0]);
-    }
-
-    /**
-     * @test
-     */
     public function validateGitUsage(): void
     {
         $vcs = $this->command->getGitCommands();
