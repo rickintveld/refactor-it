@@ -4,6 +4,7 @@ namespace Refactor\Console;
 /**
  * Class Signature
  * @package Refactor\Console
+ * @codeCoverageIgnore
  */
 class Signature
 {
