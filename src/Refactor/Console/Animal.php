@@ -9,6 +9,7 @@ use Cowsayphp\Farm\Whale;
 /**
  * Class Animal
  * @package Refactor\Console
+ * @codeCoverageIgnore
  */
 class Animal
 {

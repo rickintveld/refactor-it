@@ -31,14 +31,4 @@ class RefactorCommandTest extends TestCase
     {
         $this->refactorCommand->getCommand(dirname(__DIR__, 3) . '/exception.txt');
     }
-
-    /**
-     * @throws \Refactor\Exception\FileNotFoundException
-     */
-    public function testRefactorCommandToReturnAsExpected(): void
-    {
-        $command = $this->refactorCommand->getCommand(dirname(__DIR__, 3) . '/composer.json');
-
-        $this->assertIsArray($command);
-    }
 }
