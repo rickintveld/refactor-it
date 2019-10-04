@@ -9,33 +9,18 @@ use PHPUnit\Framework\TestCase;
  */
 class SignatureTest extends TestCase
 {
-    /** @var string */
-    private $signature;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->signature = \Refactor\Console\Signature::write();
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-        unset($this->signature);
-    }
-
     public function testSignatureOutputIsString(): void
     {
-        $this->assertIsString($this->signature);
+        $this->assertIsString(\Refactor\Console\Signature::write());
     }
 
     public function testSignatureOutputIsNotNull(): void
     {
-        $this->assertNotNull($this->signature);
+        $this->assertNotNull(\Refactor\Console\Signature::write());
     }
 
     public function testSignatureOutputIsNotEmpty(): void
     {
-        $this->assertNotEmpty($this->signature);
+        $this->assertNotEmpty(\Refactor\Console\Signature::write());
     }
 }

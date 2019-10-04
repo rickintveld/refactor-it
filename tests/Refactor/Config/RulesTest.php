@@ -29,7 +29,6 @@ class RulesTest extends TestCase
             $json = file_get_contents(\Refactor\Utility\PathUtility::getRefactorItRulesFile());
             $rules->fromJSON(json_decode($json, true));
 
-            $this->assertIsArray($rules->getOrderedClassElements());
             $this->assertIsArray($rules->getArraySyntax());
             $this->assertIsArray($rules->getConcatSpace());
 
