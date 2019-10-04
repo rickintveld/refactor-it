@@ -1,5 +1,4 @@
 <?php
-
 namespace Refactor\Console;
 
 use PHPUnit\Framework\TestCase;
@@ -16,7 +15,7 @@ class SignatureTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->signature = Signature::write();
+        $this->signature = \Refactor\Console\Signature::write();
     }
 
     protected function tearDown()

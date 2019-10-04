@@ -2,7 +2,6 @@
 namespace Refactor\Config;
 
 use PHPUnit\Framework\TestCase;
-use Refactor\Utility\PathUtility;
 
 /**
  * Class RulesTest
@@ -25,9 +24,9 @@ class RulesTest extends TestCase
      */
     public function validateRuleObjectTypes(): void
     {
-        if (file_exists(PathUtility::getRefactorItRulesFile())) {
-            $rules = new Rules();
-            $json = file_get_contents(PathUtility::getRefactorItRulesFile());
+        if (file_exists(\Refactor\Utility\PathUtility::getRefactorItRulesFile())) {
+            $rules = new \Refactor\Config\Rules();
+            $json = file_get_contents(\Refactor\Utility\PathUtility::getRefactorItRulesFile());
             $rules->fromJSON(json_decode($json, true));
 
             $this->assertIsArray($rules->getOrderedClassElements());

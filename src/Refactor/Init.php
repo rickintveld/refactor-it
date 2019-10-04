@@ -18,8 +18,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class Init implements CommandInterface
 {
-    const REFACTOR_IT_PATH = '/private/refactor-it/';
-    const GITIGNORE_CONTENT = "/rules.json\r\n!/.gitignore";
+    public const REFACTOR_IT_PATH = '/private/refactor-it/';
+    public const GITIGNORE_CONTENT = "/rules.json\r\n!/.gitignore";
 
     /** @var Animal */
     private $animal;
@@ -35,7 +35,7 @@ class Init implements CommandInterface
      * @param HelperSet $helperSet
      * @param array|null $parameters
      */
-    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null)
+    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
         $resetRules = $parameters['reset-rules'];
 
@@ -44,8 +44,8 @@ class Init implements CommandInterface
             try {
                 $this->writeRefactorRules($rules);
                 $this->configureGitIgnore();
-            } catch (\Exception $exception) {
-                // @codeCoverageIgnoreStart
+            } // @codeCoverageIgnoreStart
+            catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
 
                 return;
