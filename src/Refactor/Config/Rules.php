@@ -9,7 +9,7 @@ use Refactor\Common\JsonParserInterface;
  */
 class Rules implements JsonParserInterface
 {
-    const RULES_FILE = 'rules.json';
+    public const RULES_FILE = 'rules.json';
 
     /** @var array */
     protected $orderedClassElements = [

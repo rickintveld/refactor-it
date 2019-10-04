@@ -40,18 +40,18 @@ class Finder extends PushCommand
         $newFiles = [];
         $vcs = $this->command->validateVcsUsage();
 
-        if (in_array($vcs, Command::SVN_COMMAND, true)) {
-            $commands = $this->command->getSvnCommand();
-        }
-        if (in_array($vcs, Command::GIT_COMMAND, true)) {
-            $commands = $this->command->getGitCommands();
-        }
-
         if (empty($vcs) === true) {
             // @codeCoverageIgnoreStart
             $this->pushNotification('Exception Error [1570009542585]', 'There is no version control system found in your project!', true);
             throw new UnknownVcsTypeException('There is no version control system found in your project!', 1570009542585);
             // @codeCoverageIgnoreEnd
+        }
+
+        if (in_array($vcs, Command::SVN_COMMAND, true)) {
+            $commands = $this->command->getSvnCommand();
+        }
+        if (in_array($vcs, Command::GIT_COMMAND, true)) {
+            $commands = $this->command->getGitCommands();
         }
 
         foreach ($commands as $command) {

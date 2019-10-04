@@ -1,10 +1,9 @@
 <?php
 namespace Refactor\Console;
 
+use Refactor\Command\RefactorCommand;
 use Refactor\Common\CommandInterface;
-use Refactor\Config\Rules;
 use Refactor\Exception\FileNotFoundException;
-use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,20 +19,21 @@ class Fixer extends PushCommand implements CommandInterface
     /** @var Animal */
     private $animal;
 
-    /** @var GarbageCollector */
-    private $garbageCollector;
-
     /** @var Finder */
     private $finder;
 
-    /**
-     * Fixer constructor.
-     */
+    /** @var GarbageCollector */
+    private $garbageCollector;
+
+    /** @var RefactorCommand */
+    private $refactorCommand;
+
     public function __construct()
     {
         $this->animal = new Animal();
-        $this->garbageCollector = new GarbageCollector();
         $this->finder = new Finder();
+        $this->garbageCollector = new GarbageCollector();
+        $this->refactorCommand = new RefactorCommand();
     }
 
     /**
@@ -73,7 +73,7 @@ class Fixer extends PushCommand implements CommandInterface
         $progressBar->start();
 
         foreach ($files as $file) {
-            $process = Process::fromShellCommandline(implode(' ', $this->getRefactorCommand($file)));
+            $process = Process::fromShellCommandline(implode(' ', $this->refactorCommand->getCommand($file)));
             $process->run();
 
             if ($process->isSuccessful()) {
@@ -100,62 +100,10 @@ class Fixer extends PushCommand implements CommandInterface
     }
 
     /**
-     * @param string $file
-     * @throws FileNotFoundException
-     * @return array
-     */
-    private function getRefactorCommand(string $file): array
-    {
-        $executable = realpath(dirname(__DIR__) . '/../../vendor/bin/');
-
-        return [
-            'php',
-            $executable . '/php-cs-fixer',
-            'fix',
-            $file,
-            '--format=json',
-            '--allow-risky=yes',
-            '--using-cache=no',
-            "--rules='{$this->getInlineRules($this->getRules()->toJSON())}'"
-        ];
-    }
-
-    /**
-     * @throws FileNotFoundException
-     * @return Rules
-     */
-    private function getRules(): Rules
-    {
-        if (file_exists(PathUtility::getRefactorItRulesFile())) {
-            $rules = new Rules();
-            $json = file_get_contents(PathUtility::getRefactorItRulesFile());
-            $rules->fromJSON(json_decode($json, true));
-        } else {
-            throw new FileNotFoundException(
-                'The refactor rules file was not found! Try running refactor config in the root of your project',
-                1560437366837
-            );
-        }
-
-        return $rules;
-    }
-
-    /**
      * Removes the php cs fixer cache file
      */
     private function cleanUp()
     {
         $this->garbageCollector->cleanUpCacheFile();
-    }
-
-    /**
-     * @param string $rules
-     * @return false|string
-     */
-    private function getInlineRules(string $rules):? string
-    {
-        $inlineRules = json_decode($rules, true);
-
-        return json_encode($inlineRules);
     }
 }
