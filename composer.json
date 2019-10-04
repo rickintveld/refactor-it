@@ -2,9 +2,10 @@
     "name": "rintveld/refactor-it",
     "homepage": "https://github.com/rickone1/refactor-it/README.md",
     "description": "Automated code refactor tool",
-    "keywords": ["refactor", "refactor-it", "rintveld", "bad code", "code improvement"],
+    "keywords": ["refactor", "refactor-it", "rintveld", "bad code", "code fixer", "code improvement"],
     "license": "MIT",
-    "version": "1.0.3",
+    "type": "project",
+    "version": "1.0.4",
     "authors": [{
         "name": "Rick in t Veld",
         "email": "rick.in.t.veld@opinity.nl"
