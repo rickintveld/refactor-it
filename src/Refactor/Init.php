@@ -18,8 +18,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class Init implements CommandInterface
 {
-    const REFACTOR_IT_PATH = '/private/refactor-it/';
-    const GITIGNORE_CONTENT = "/rules.json\r\n!/.gitignore";
+    public const REFACTOR_IT_PATH = '/private/refactor-it/';
+    public const GITIGNORE_CONTENT = "/rules.json\r\n!/.gitignore";
 
     /** @var Animal */
     private $animal;
@@ -35,7 +35,7 @@ class Init implements CommandInterface
      * @param HelperSet $helperSet
      * @param array|null $parameters
      */
-    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null)
+    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
         $resetRules = $parameters['reset-rules'];
 
@@ -44,13 +44,16 @@ class Init implements CommandInterface
             try {
                 $this->writeRefactorRules($rules);
                 $this->configureGitIgnore();
-            } catch (\Exception $exception) {
+            } // @codeCoverageIgnoreStart
+            catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
 
                 return;
+                // @codeCoverageIgnoreEnd
             }
         }
 
+        // @codeCoverageIgnoreStart
         if ($resetRules === true) {
             /** @var QuestionHelper $helper */
             $helper = $helperSet->get('question');
@@ -71,6 +74,7 @@ class Init implements CommandInterface
                 }
             }
         }
+        // @codeCoverageIgnoreEnd
 
         $output->writeln('<info>' . $this->animal->speak('Done writing the refactor-it config. It\'s located in the root of your project in the private folder!') . '</info>');
         $output->writeln('<info>' . Signature::write() . '</info>');
@@ -109,15 +113,21 @@ class Init implements CommandInterface
         $path = dirname(PathUtility::getRefactorItPath());
 
         if (file_exists($path) === false) {
+            // @codeCoverageIgnoreStart
             mkdir($path, 0777, true);
+            // @codeCoverageIgnoreEnd
         }
 
         if (file_exists(PathUtility::getRefactorItPath()) === false) {
+            // @codeCoverageIgnoreStart
             mkdir(PathUtility::getRefactorItPath(), 0777, true);
+            // @codeCoverageIgnoreEnd
         }
 
         if (@file_put_contents(PathUtility::getRefactorItRulesFile(), $rules->toJSON()) === false) {
+            // @codeCoverageIgnoreStart
             throw new \Exception('Could not write the rules; either the directory doesn\'t exist or we have no permission to write (' . $path . ').', 1560888611458);
+            // @codeCoverageIgnoreEnd
         }
     }
 
@@ -128,7 +138,9 @@ class Init implements CommandInterface
     {
         $gitIgnore = PathUtility::getRefactorItPath() . '.gitignore';
         if (!file_exists($gitIgnore)) {
+            // @codeCoverageIgnoreStart
             file_put_contents($gitIgnore, self::GITIGNORE_CONTENT);
+            // @codeCoverageIgnoreEnd
         }
     }
 }

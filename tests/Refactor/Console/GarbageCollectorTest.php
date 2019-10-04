@@ -2,6 +2,7 @@
 namespace Refactor\Console;
 
 use PHPUnit\Framework\TestCase;
+use Refactor\Utility\PathUtility;
 
 /**
  * Class GarbageCollectorTest
@@ -12,10 +13,19 @@ class GarbageCollectorTest extends TestCase
     /** @var GarbageCollector */
     protected $garbageCollector;
 
+    protected $cacheFile;
+
     protected function setUp()
     {
         parent::setUp();
         $this->garbageCollector = new GarbageCollector();
+
+        $this->cacheFile = PathUtility::getRootPath() . '/' . GarbageCollector::PHP_CS_CACHE_FILE;
+        if (file_exists($this->cacheFile) === false) {
+            $tempCacheFile = fopen($this->cacheFile, 'wb');
+            fwrite($tempCacheFile, 'cleanUpCacheFileWorksAsExpected');
+            fclose($tempCacheFile);
+        }
     }
 
     protected function tearDown()
@@ -24,19 +34,14 @@ class GarbageCollectorTest extends TestCase
         unset($this->garbageCollector);
     }
 
-    /**
-     * @test
-     */
-    public function cleanUpCacheFileWorksAsExpected()
+    public function testCleanUpCacheFileExists(): void
     {
-        $cacheFile = \Refactor\Utility\PathUtility::getRootPath() . '/' . GarbageCollector::PHP_CS_CACHE_FILE;
-        if (file_exists($cacheFile) === false) {
-            $tempCacheFile = fopen($cacheFile, 'wb');
-            fwrite($tempCacheFile, 'cleanUpCacheFileWorksAsExpected');
-            fclose($tempCacheFile);
-        }
+        $this->assertFileExists($this->cacheFile);
+    }
 
+    public function testCleanUpCacheFileWorksAsExpected(): void
+    {
         $this->garbageCollector->cleanUpCacheFile();
-        $this->assertFileNotExists($cacheFile);
+        $this->assertFileNotExists($this->cacheFile);
     }
 }

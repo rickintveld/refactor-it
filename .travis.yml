@@ -1,5 +1,8 @@
 language: php
 
+env:
+  - CODECOV_TOKEN="dd163804-60b6-49c9-a868-6c878322e3d1"
+
 # PHP VERSION
 php:
   - 7.1.23
@@ -9,4 +12,7 @@ before_script:
   - composer install
 
 # Run the unit tests
-script: phpunit --configuration phpunit.xml
+script: phpunit --coverage-html build/coverage-report --configuration phpunit.xml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

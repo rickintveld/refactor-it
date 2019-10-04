@@ -25,6 +25,7 @@ class Animal
 
     /**
      * @return string
+     * @codeCoverageIgnore
      */
     private function randomAnimal(): string
     {

@@ -2,4 +2,4 @@
 
 echo "Starting the unit tests";
 
-./vendor/bin/phpunit --configuration phpunit.xml
+./vendor/bin/phpunit --coverage-html build/coverage-report --configuration phpunit.xml

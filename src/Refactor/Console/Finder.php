@@ -1,9 +1,6 @@
 <?php
 namespace Refactor\Console;
 
-use Joli\JoliNotif\Notification;
-use Joli\JoliNotif\NotifierFactory;
-use Refactor\Common\NotifierInterface;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
 use Symfony\Component\Process\Process;
@@ -12,7 +9,7 @@ use Symfony\Component\Process\Process;
  * Class Finder
  * @package Refactor\Fixer
  */
-class Finder implements NotifierInterface
+class Finder extends PushCommand
 {
     public const GIT = 'git';
     public const GIT_CONFIG = '.git';
@@ -31,7 +28,6 @@ class Finder implements NotifierInterface
     }
 
     /**
-     * @param string $vcs
      * @throws UnknownVcsTypeException
      * @throws WrongVcsTypeException
      * @return array
@@ -44,16 +40,20 @@ class Finder implements NotifierInterface
         $newFiles = [];
         $vcs = $this->command->validateVcsUsage();
 
+        if (empty($vcs)) {
+            // @codeCoverageIgnoreStart
+            $this->pushNotification('Exception Error [1570009542585]', 'There is no version control system found in your project!', true);
+            throw new UnknownVcsTypeException('There is no version control system found in your project!', 1570009542585);
+            // @codeCoverageIgnoreEnd
+        }
+
         if (in_array($vcs, Command::SVN_COMMAND, true)) {
+            // @codeCoverageIgnoreStart
             $commands = $this->command->getSvnCommand();
+            // @codeCoverageIgnoreEnd
         }
         if (in_array($vcs, Command::GIT_COMMAND, true)) {
             $commands = $this->command->getGitCommands();
-        }
-
-        if (empty($vcs) === true) {
-            $this->pushNotification('Exception Error [1570009542585]', 'There is no version control system found in your project!', true);
-            throw new UnknownVcsTypeException('There is no version control system found in your project!', 1570009542585);
         }
 
         foreach ($commands as $command) {
@@ -71,7 +71,7 @@ class Finder implements NotifierInterface
 
         $allFiles = array_merge($files, $newFiles);
 
-        return $this->getPhpFilesOnly(array_filter($allFiles), $vcs);
+        return $this->getPhpFilesOnly(array_unique(array_filter($allFiles)), $vcs);
     }
 
     /**
@@ -83,9 +83,11 @@ class Finder implements NotifierInterface
     {
         $filteredFiles = [];
         foreach ($files as $file) {
-            if ($vcs === 'svn') {
+            if ($vcs === self::SVN) {
+                // @codeCoverageIgnoreStart
                 $file = substr($file, 1);
                 $file = preg_replace('/\s+/', '', $file);
+                // @codeCoverageIgnoreEnd
             }
             if (!empty($file) && substr($file, -4) === '.php') {
                 $filteredFiles[] = preg_replace('/\s+/', '\ ', getcwd() . '/' . $file);

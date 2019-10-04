@@ -1,27 +1,16 @@
 <?php
 namespace Refactor\Console;
 
-use Refactor\Utility\PathUtility;
+use Joli\JoliNotif\Notification;
+use Joli\JoliNotif\NotifierFactory;
+use Refactor\Common\NotifierInterface;
 
 /**
- * Class GarbageCollector
+ * Class PushCommand
  * @package Refactor\Console
  */
-class GarbageCollector extends PushCommand
+class PushCommand implements NotifierInterface
 {
-    public const PHP_CS_CACHE_FILE = '.php_cs.cache';
-
-    public function cleanUpCacheFile(): void
-    {
-        if (file_exists(PathUtility::getRootPath() . '/' . self::PHP_CS_CACHE_FILE) === true) {
-            unlink(PathUtility::getRootPath() . '/' . self::PHP_CS_CACHE_FILE);
-            $this->pushNotification(
-                'Garbage notification',
-                'The garbage collector removed the php cache file!',
-                false
-            );
-        }
-    }
 
     /**
      * @param string $title

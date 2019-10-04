@@ -29,9 +29,14 @@ class FinderTest extends TestCase
      * @throws \Refactor\Exception\UnknownVcsTypeException
      * @throws \Refactor\Exception\WrongVcsTypeException
      */
-    public function findAdjustedFilesWorksAsExpected()
+    public function findAdjustedFilesWorksAsExpected(): void
     {
         $files = $this->finder->findAdjustedFiles();
-        $this->assertEmpty($files, 'No GIT diffs where found');
+
+        if (empty($files)) {
+            $this->assertEmpty($files, 'No code changes where found!');
+        } else {
+            $this->assertIsArray($files, 'Some code changes where found!');
+        }
     }
 }
