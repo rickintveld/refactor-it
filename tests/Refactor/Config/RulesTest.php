@@ -1,5 +1,4 @@
 <?php
-
 namespace Refactor\Config;
 
 use PHPUnit\Framework\TestCase;
@@ -39,28 +38,28 @@ class RulesTest extends TestCase
         $rules->setLinebreakAfterOpeningTag(false);
         $rules->setLowercaseCast(true);
 
-        $this->assertEmpty($rules->getOrderedClassElements());
-        $this->assertIsArray($rules->getArraySyntax());
-        $this->assertEmpty($rules->getConcatSpace());
-        $this->assertFalse($rules->isPhpdocTrim());
         $this->assertTrue($rules->isPhpdocOrder());
         $this->assertTrue($rules->isPhpdocScalar());
         $this->assertTrue($rules->isOrderedImports());
-        $this->assertFalse($rules->isBlankLineBeforeReturn());
-        $this->assertFalse($rules->isNoBlankLinesBeforeNamespace());
         $this->assertTrue($rules->isNoBlankLinesAfterPhpdoc());
         $this->assertTrue($rules->isNoEmptyPhpdoc());
         $this->assertTrue($rules->isNoEmptyStatement());
-        $this->assertArrayHasKey('use', $rules->getNoMixedEchoPrint());
-        $this->assertFalse($rules->isNoTrailingWhitespace());
         $this->assertTrue($rules->isNoUnusedImports());
         $this->assertTrue($rules->isNoWhitespaceInBlankLine());
         $this->assertTrue($rules->isObjectOperatorWithoutWhitespace());
         $this->assertTrue($rules->isFunctionTypehintSpace());
-        $this->assertArrayHasKey('token', $rules->getNoExtraConsecutiveBlankLines());
-        $this->assertFalse($rules->isPhpdocAddMissingParamAnnotation());
         $this->assertTrue($rules->isNull());
-        $this->assertFalse($rules->isLinebreakAfterOpeningTag());
         $this->assertTrue($rules->isLowercaseCast());
+        $this->assertEmpty($rules->getOrderedClassElements());
+        $this->assertEmpty($rules->getConcatSpace());
+        $this->assertFalse($rules->isPhpdocTrim());
+        $this->assertFalse($rules->isBlankLineBeforeReturn());
+        $this->assertFalse($rules->isNoBlankLinesBeforeNamespace());
+        $this->assertFalse($rules->isNoTrailingWhitespace());
+        $this->assertFalse($rules->isPhpdocAddMissingParamAnnotation());
+        $this->assertFalse($rules->isLinebreakAfterOpeningTag());
+        $this->assertIsArray($rules->getArraySyntax());
+        $this->assertArrayHasKey('use', $rules->getNoMixedEchoPrint());
+        $this->assertArrayHasKey('token', $rules->getNoExtraConsecutiveBlankLines());
     }
 }
