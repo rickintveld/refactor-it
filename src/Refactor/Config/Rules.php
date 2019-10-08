@@ -546,8 +546,8 @@ class Rules implements JsonParserInterface
             $this->setOrderedImports($json['ordered_imports']);
         }
 
-        if (isset($json['blank_lines_before_return']) && is_bool($json['blank_lines_before_return'])) {
-            $this->setBlankLineBeforeReturn($json['blank_lines_before_return']);
+        if (isset($json['blank_line_before_return']) && is_bool($json['blank_line_before_return'])) {
+            $this->setBlankLineBeforeReturn($json['blank_line_before_return']);
         }
 
         if (isset($json['no_blank_lines_before_namespace']) && is_bool($json['no_blank_lines_before_namespace'])) {

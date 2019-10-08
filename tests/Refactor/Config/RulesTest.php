@@ -26,6 +26,7 @@ class RulesTest extends TestCase
         $this->rules->setPhpdocOrder(true);
         $this->rules->setPhpdocScalar(true);
         $this->rules->setOrderedImports(true);
+        $this->rules->setPhpdocTypes(true);
         $this->rules->setBlankLineBeforeReturn(false);
         $this->rules->setNoBlankLinesBeforeNamespace(false);
         $this->rules->setNoBlankLinesAfterPhpdoc(true);
@@ -47,11 +48,13 @@ class RulesTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
+
         unset($this->rules);
     }
 
     public function testGettersAndSetters(): void
     {
+        $this->assertTrue($this->rules->isPhpdocTypes());
         $this->assertTrue($this->rules->isPhpdocOrder());
         $this->assertTrue($this->rules->isPhpdocScalar());
         $this->assertTrue($this->rules->isOrderedImports());
