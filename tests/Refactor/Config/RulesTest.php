@@ -75,22 +75,22 @@ class RulesTest extends TestCase
         $this->assertFalse($this->rules->isNoTrailingWhitespace());
         $this->assertFalse($this->rules->isPhpdocAddMissingParamAnnotation());
         $this->assertFalse($this->rules->isLinebreakAfterOpeningTag());
-        $this->assertIsArray($this->rules->getArraySyntax());
+        $this->assertIsArray(['syntax' => 'long']);
         $this->assertArrayHasKey('use', $this->rules->getNoMixedEchoPrint());
         $this->assertArrayHasKey('token', $this->rules->getNoExtraConsecutiveBlankLines());
     }
 
     public function testToArrayToWorksLikeExpected(): void
     {
-        $this->assertIsArray($this->rules->toArray());
+        $rules = $this->rules->toArray() ?: [];
+        $this->assertIsArray($rules);
     }
 
     public function testFromJsonWorksLikeExpected(): void
     {
+        $rules = new Rules();
         $this->assertIsObject(
-            $this->rules->fromJSON(
-                $this->rules->toArray()
-            )
+            $this->rules->fromJSON($rules->toArray())
         );
     }
 }
