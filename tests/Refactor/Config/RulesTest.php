@@ -9,57 +9,85 @@ use PHPUnit\Framework\TestCase;
  */
 class RulesTest extends TestCase
 {
+    /** @var Rules */
+    private $rules;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        /** @var \Refactor\Config\Rules $rules */
+        $this->rules = new \Refactor\Config\Rules();
+
+        $this->rules->setOrderedClassElements([]);
+        $this->rules->setArraySyntax(['syntax' => 'long']);
+        $this->rules->setConcatSpace([]);
+        $this->rules->setPhpdocTrim(false);
+        $this->rules->setPhpdocOrder(true);
+        $this->rules->setPhpdocScalar(true);
+        $this->rules->setOrderedImports(true);
+        $this->rules->setBlankLineBeforeReturn(false);
+        $this->rules->setNoBlankLinesBeforeNamespace(false);
+        $this->rules->setNoBlankLinesAfterPhpdoc(true);
+        $this->rules->setNoEmptyPhpdoc(true);
+        $this->rules->setNoEmptyStatement(true);
+        $this->rules->setNoMixedEchoPrint(['use' => 'echo']);
+        $this->rules->setNoTrailingWhitespace(false);
+        $this->rules->setNoUnusedImports(true);
+        $this->rules->setNoWhitespaceInBlankLine(true);
+        $this->rules->setObjectOperatorWithoutWhitespace(true);
+        $this->rules->setFunctionTypehintSpace(true);
+        $this->rules->setNoExtraConsecutiveBlankLines(['token' => ['test']]);
+        $this->rules->setPhpdocAddMissingParamAnnotation(false);
+        $this->rules->setIsNull(true);
+        $this->rules->setLinebreakAfterOpeningTag(false);
+        $this->rules->setLowercaseCast(true);
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+        unset($this->rules);
+    }
+
     public function testGettersAndSetters(): void
     {
-        /** @var \Refactor\Config\Rules $rules */
-        $rules = new \Refactor\Config\Rules();
+        $this->assertTrue($this->rules->isPhpdocOrder());
+        $this->assertTrue($this->rules->isPhpdocScalar());
+        $this->assertTrue($this->rules->isOrderedImports());
+        $this->assertTrue($this->rules->isNoBlankLinesAfterPhpdoc());
+        $this->assertTrue($this->rules->isNoEmptyPhpdoc());
+        $this->assertTrue($this->rules->isNoEmptyStatement());
+        $this->assertTrue($this->rules->isNoUnusedImports());
+        $this->assertTrue($this->rules->isNoWhitespaceInBlankLine());
+        $this->assertTrue($this->rules->isObjectOperatorWithoutWhitespace());
+        $this->assertTrue($this->rules->isFunctionTypehintSpace());
+        $this->assertTrue($this->rules->isNull());
+        $this->assertTrue($this->rules->isLowercaseCast());
+        $this->assertEmpty($this->rules->getOrderedClassElements());
+        $this->assertEmpty($this->rules->getConcatSpace());
+        $this->assertFalse($this->rules->isPhpdocTrim());
+        $this->assertFalse($this->rules->isBlankLineBeforeReturn());
+        $this->assertFalse($this->rules->isNoBlankLinesBeforeNamespace());
+        $this->assertFalse($this->rules->isNoTrailingWhitespace());
+        $this->assertFalse($this->rules->isPhpdocAddMissingParamAnnotation());
+        $this->assertFalse($this->rules->isLinebreakAfterOpeningTag());
+        $this->assertIsArray($this->rules->getArraySyntax());
+        $this->assertArrayHasKey('use', $this->rules->getNoMixedEchoPrint());
+        $this->assertArrayHasKey('token', $this->rules->getNoExtraConsecutiveBlankLines());
+    }
 
-        $rules->setOrderedClassElements([]);
-        $rules->setArraySyntax(['syntax' => 'long']);
-        $rules->setConcatSpace([]);
-        $rules->setPhpdocTrim(false);
-        $rules->setPhpdocOrder(true);
-        $rules->setPhpdocScalar(true);
-        $rules->setOrderedImports(true);
-        $rules->setBlankLineBeforeReturn(false);
-        $rules->setNoBlankLinesBeforeNamespace(false);
-        $rules->setNoBlankLinesAfterPhpdoc(true);
-        $rules->setNoEmptyPhpdoc(true);
-        $rules->setNoEmptyStatement(true);
-        $rules->setNoMixedEchoPrint(['use' => 'echo']);
-        $rules->setNoTrailingWhitespace(false);
-        $rules->setNoUnusedImports(true);
-        $rules->setNoWhitespaceInBlankLine(true);
-        $rules->setObjectOperatorWithoutWhitespace(true);
-        $rules->setFunctionTypehintSpace(true);
-        $rules->setNoExtraConsecutiveBlankLines(['token' => ['test']]);
-        $rules->setPhpdocAddMissingParamAnnotation(false);
-        $rules->setIsNull(true);
-        $rules->setLinebreakAfterOpeningTag(false);
-        $rules->setLowercaseCast(true);
+    public function testToArrayToWorksLikeExpected(): void
+    {
+        $this->assertIsArray($this->rules->toArray());
+    }
 
-        $this->assertTrue($rules->isPhpdocOrder());
-        $this->assertTrue($rules->isPhpdocScalar());
-        $this->assertTrue($rules->isOrderedImports());
-        $this->assertTrue($rules->isNoBlankLinesAfterPhpdoc());
-        $this->assertTrue($rules->isNoEmptyPhpdoc());
-        $this->assertTrue($rules->isNoEmptyStatement());
-        $this->assertTrue($rules->isNoUnusedImports());
-        $this->assertTrue($rules->isNoWhitespaceInBlankLine());
-        $this->assertTrue($rules->isObjectOperatorWithoutWhitespace());
-        $this->assertTrue($rules->isFunctionTypehintSpace());
-        $this->assertTrue($rules->isNull());
-        $this->assertTrue($rules->isLowercaseCast());
-        $this->assertEmpty($rules->getOrderedClassElements());
-        $this->assertEmpty($rules->getConcatSpace());
-        $this->assertFalse($rules->isPhpdocTrim());
-        $this->assertFalse($rules->isBlankLineBeforeReturn());
-        $this->assertFalse($rules->isNoBlankLinesBeforeNamespace());
-        $this->assertFalse($rules->isNoTrailingWhitespace());
-        $this->assertFalse($rules->isPhpdocAddMissingParamAnnotation());
-        $this->assertFalse($rules->isLinebreakAfterOpeningTag());
-        $this->assertIsArray($rules->getArraySyntax());
-        $this->assertArrayHasKey('use', $rules->getNoMixedEchoPrint());
-        $this->assertArrayHasKey('token', $rules->getNoExtraConsecutiveBlankLines());
+    public function testFromJsonWorksLikeExpected(): void
+    {
+        $this->assertIsObject(
+            $this->rules->fromJSON(
+                $this->rules->toArray()
+            )
+        );
     }
 }
