@@ -1,11 +1,8 @@
 <?php
 namespace Refactor\Console;
 
-use Joli\JoliNotif\Notification;
-use Joli\JoliNotif\NotifierFactory;
 use Refactor\Command\RefactorCommand;
 use Refactor\Common\CommandInterface;
-use Refactor\Common\NotifierInterface;
 use Refactor\Exception\FileNotFoundException;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -108,22 +105,5 @@ class Fixer extends PushCommand implements CommandInterface
     private function cleanUp()
     {
         $this->garbageCollector->cleanUpCacheFile();
-    }
-
-    /**
-     * @param string $title
-     * @param string $body
-     * @param bool $exception
-     */
-    public function pushNotification(string $title, string $body, bool $exception): void
-    {
-        $notifier = NotifierFactory::create();
-        $notification = new Notification();
-        $notification
-            ->setTitle($title)
-            ->setBody($body)
-            ->setIcon($exception ? NotifierInterface::SUCCESS_ICON : NotifierInterface::FAIL_ICON);
-
-        $notifier->send($notification);
     }
 }
