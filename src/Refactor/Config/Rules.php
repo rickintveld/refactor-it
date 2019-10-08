@@ -106,7 +106,6 @@ class Rules implements JsonParserInterface
 
     /**
      * @return array
-     * @codeCoverageIgnore
      */
     public function getOrderedClassElements(): array
     {
@@ -122,7 +121,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return array
      */
     public function getArraySyntax(): array
@@ -139,7 +137,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return array
      */
     public function getConcatSpace(): array
@@ -156,7 +153,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isPhpdocTrim(): bool
@@ -173,7 +169,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isPhpdocOrder(): bool
@@ -190,7 +185,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isPhpdocScalar(): bool
@@ -207,7 +201,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isPhpdocTypes(): bool
@@ -224,7 +217,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isOrderedImports(): bool
@@ -241,7 +233,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isBlankLineBeforeReturn(): bool
@@ -258,7 +249,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isNoBlankLinesBeforeNamespace(): bool
@@ -275,7 +265,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isNoBlankLinesAfterPhpdoc(): bool
@@ -292,7 +281,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isNoEmptyPhpdoc(): bool
@@ -309,7 +297,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isNoEmptyStatement(): bool
@@ -326,7 +313,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return array
      */
     public function getNoMixedEchoPrint(): array
@@ -343,7 +329,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isNoTrailingWhitespace(): bool
@@ -360,7 +345,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isNoUnusedImports(): bool
@@ -377,7 +361,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isNoWhitespaceInBlankLine(): bool
@@ -394,7 +377,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isObjectOperatorWithoutWhitespace(): bool
@@ -411,7 +393,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isFunctionTypehintSpace(): bool
@@ -428,7 +409,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return array
      */
     public function getNoExtraConsecutiveBlankLines(): array
@@ -445,7 +425,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isPhpdocAddMissingParamAnnotation(): bool
@@ -462,7 +441,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isNull(): bool
@@ -479,7 +457,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isLinebreakAfterOpeningTag(): bool
@@ -496,7 +473,6 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @codeCoverageIgnore
      * @return bool
      */
     public function isLowercaseCast(): bool
