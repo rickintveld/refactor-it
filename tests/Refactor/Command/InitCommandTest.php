@@ -30,6 +30,6 @@ class InitCommandTest extends TestCase
         $output = new ConsoleOutput();
         $init->execute($input, $output, new HelperSet(), ['reset-rules' => false]);
 
-        $this->assertNotEmpty($output->getErrorOutput(), 'The console output is not empty');
+        self::assertNotEmpty($output->getErrorOutput(), 'The console output is not empty');
     }
 }

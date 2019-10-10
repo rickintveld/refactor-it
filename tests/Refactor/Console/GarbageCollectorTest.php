@@ -36,12 +36,12 @@ class GarbageCollectorTest extends TestCase
 
     public function testCleanUpCacheFileExists(): void
     {
-        $this->assertFileExists($this->cacheFile);
+        self::assertFileExists($this->cacheFile);
     }
 
     public function testCleanUpCacheFileWorksAsExpected(): void
     {
         $this->garbageCollector->cleanUpCacheFile();
-        $this->assertFileNotExists($this->cacheFile);
+        self::assertFileNotExists($this->cacheFile);
     }
 }

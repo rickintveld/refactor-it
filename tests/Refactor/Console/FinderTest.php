@@ -34,9 +34,9 @@ class FinderTest extends TestCase
         $files = $this->finder->findAdjustedFiles();
 
         if (empty($files)) {
-            $this->assertEmpty($files, 'No code changes where found!');
+            self::assertEmpty($files, 'No code changes where found!');
         } else {
-            $this->assertIsArray($files, 'Some code changes where found!');
+            self::assertIsArray($files, 'Some code changes where found!');
         }
     }
 }

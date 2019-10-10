@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  */
 class RulesTest extends TestCase
 {
-    /** @var Rules */
+    /** @var \Refactor\Config\Rules */
     private $rules;
 
     public function setUp()
@@ -48,41 +48,40 @@ class RulesTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-
         unset($this->rules);
     }
 
-    public function testGettersAndSetters(): void
+    public function testObjectGetters(): void
     {
-        $this->assertTrue($this->rules->isPhpdocTypes());
-        $this->assertTrue($this->rules->isPhpdocOrder());
-        $this->assertTrue($this->rules->isPhpdocScalar());
-        $this->assertTrue($this->rules->isOrderedImports());
-        $this->assertTrue($this->rules->isNoBlankLinesAfterPhpdoc());
-        $this->assertTrue($this->rules->isNoEmptyPhpdoc());
-        $this->assertTrue($this->rules->isNoEmptyStatement());
-        $this->assertTrue($this->rules->isNoUnusedImports());
-        $this->assertTrue($this->rules->isNoWhitespaceInBlankLine());
-        $this->assertTrue($this->rules->isObjectOperatorWithoutWhitespace());
-        $this->assertTrue($this->rules->isFunctionTypehintSpace());
-        $this->assertTrue($this->rules->isNull());
-        $this->assertTrue($this->rules->isLowercaseCast());
-        $this->assertEmpty($this->rules->getOrderedClassElements());
-        $this->assertEmpty($this->rules->getConcatSpace());
-        $this->assertFalse($this->rules->isPhpdocTrim());
-        $this->assertFalse($this->rules->isBlankLineBeforeReturn());
-        $this->assertFalse($this->rules->isNoBlankLinesBeforeNamespace());
-        $this->assertFalse($this->rules->isNoTrailingWhitespace());
-        $this->assertFalse($this->rules->isPhpdocAddMissingParamAnnotation());
-        $this->assertFalse($this->rules->isLinebreakAfterOpeningTag());
-        $this->assertIsArray(['syntax' => 'long', 'array' => 'short']);
-        $this->assertArrayHasKey('use', $this->rules->getNoMixedEchoPrint());
-        $this->assertArrayHasKey('token', $this->rules->getNoExtraConsecutiveBlankLines());
+        self::assertTrue($this->rules->isPhpdocTypes());
+        self::assertTrue($this->rules->isPhpdocOrder());
+        self::assertTrue($this->rules->isPhpdocScalar());
+        self::assertTrue($this->rules->isOrderedImports());
+        self::assertTrue($this->rules->isNoBlankLinesAfterPhpdoc());
+        self::assertTrue($this->rules->isNoEmptyPhpdoc());
+        self::assertTrue($this->rules->isNoEmptyStatement());
+        self::assertTrue($this->rules->isNoUnusedImports());
+        self::assertTrue($this->rules->isNoWhitespaceInBlankLine());
+        self::assertTrue($this->rules->isObjectOperatorWithoutWhitespace());
+        self::assertTrue($this->rules->isFunctionTypehintSpace());
+        self::assertTrue($this->rules->isNull());
+        self::assertTrue($this->rules->isLowercaseCast());
+        self::assertEmpty($this->rules->getOrderedClassElements());
+        self::assertEmpty($this->rules->getConcatSpace());
+        self::assertFalse($this->rules->isPhpdocTrim());
+        self::assertFalse($this->rules->isBlankLineBeforeReturn());
+        self::assertFalse($this->rules->isNoBlankLinesBeforeNamespace());
+        self::assertFalse($this->rules->isNoTrailingWhitespace());
+        self::assertFalse($this->rules->isPhpdocAddMissingParamAnnotation());
+        self::assertFalse($this->rules->isLinebreakAfterOpeningTag());
+        self::assertIsArray(['syntax' => 'long', 'array' => 'short']);
+        self::assertArrayHasKey('use', $this->rules->getNoMixedEchoPrint());
+        self::assertArrayHasKey('token', $this->rules->getNoExtraConsecutiveBlankLines());
     }
 
     public function testToArrayToWorksLikeExpected(): void
     {
-        $rules = $this->rules->toArray() ?? [];
-        $this->assertIsArray($rules);
+        $rules = $this->rules->toArray();
+        self::assertIsArray($rules);
     }
 }

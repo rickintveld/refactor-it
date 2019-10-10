@@ -34,6 +34,6 @@ class FixerTest extends TestCase
         $output = new ConsoleOutput();
         $fixer->execute($input, $output, new HelperSet(), []);
 
-        $this->assertNotEmpty($output->getErrorOutput(), 'The console output is not empty');
+        self::assertNotEmpty($output->getErrorOutput(), 'The console output is not empty');
     }
 }

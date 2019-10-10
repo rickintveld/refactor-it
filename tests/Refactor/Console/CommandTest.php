@@ -31,7 +31,7 @@ class CommandTest extends TestCase
     public function validateVcsUsageThrowsExceptionOnFailure(): void
     {
         $this->command->validateVcsUsage();
-        $this->assertTrue(true, 'Whoops, looks like the exception has been thrown');
+        self::assertTrue(true, 'Whoops, looks like the exception has been thrown');
     }
 
     /**
@@ -41,7 +41,7 @@ class CommandTest extends TestCase
     public function validateVcsUsageWorksLikeExpected(): void
     {
         $vcs = $this->command->validateVcsUsage();
-        $this->assertEquals('git', $vcs);
+        self::assertEquals('git', $vcs);
     }
 
     /**
@@ -51,7 +51,7 @@ class CommandTest extends TestCase
     public function validateSvnUsageToFailAsExpected(): void
     {
         $vcs = $this->command->validateVcsUsage();
-        $this->assertNotEquals('svn', $vcs);
+        self::assertNotEquals('svn', $vcs);
     }
 
     /**
@@ -62,6 +62,6 @@ class CommandTest extends TestCase
         $vcs = $this->command->getGitCommands();
 
         $git = $vcs[0];
-        $this->assertEquals('git', $git[0]);
+        self::assertEquals('git', $git[0]);
     }
 }

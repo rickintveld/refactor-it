@@ -9,22 +9,21 @@ use PHPUnit\Framework\TestCase;
  */
 class PathUtilityTest extends TestCase
 {
-
     public function testRefactorItPathExist(): void
     {
         $path = PathUtility::getRefactorItPath();
-        $this->assertDirectoryExists($path);
+        self::assertDirectoryExists($path);
     }
 
     public function testRefactorItRuleFileExist(): void
     {
         $file = PathUtility::getRefactorItRulesFile();
-        $this->assertFileExists($file);
+        self::assertFileExists($file);
     }
 
     public function testRefactorItGitIgnoreFileExist()
     {
         $file = PathUtility::getGitIgnoreFile();
-        $this->assertFileExists($file);
+        self::assertFileExists($file);
     }
 }
