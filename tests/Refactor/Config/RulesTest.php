@@ -84,5 +84,6 @@ class RulesTest extends TestCase
         $rules = $this->rules->toArray();
         self::assertNotEmpty($rules);
         self::assertNotNull($rules);
+        self::assertIsArray($rules);
     }
 }
