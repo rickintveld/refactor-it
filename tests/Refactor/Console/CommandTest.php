@@ -12,13 +12,13 @@ class CommandTest extends TestCase
     /** @var Command */
     protected $command;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->command = new Command();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset($this->command);

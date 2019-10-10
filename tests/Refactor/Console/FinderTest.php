@@ -12,13 +12,13 @@ class FinderTest extends TestCase
     /** @var Finder */
     protected $finder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->finder = new Finder();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         unset($this->finder);

@@ -12,12 +12,12 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  */
 class FixerTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

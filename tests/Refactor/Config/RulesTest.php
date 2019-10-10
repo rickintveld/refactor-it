@@ -12,7 +12,7 @@ class RulesTest extends TestCase
     /** @var \Refactor\Config\Rules */
     private $rules;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -45,7 +45,7 @@ class RulesTest extends TestCase
         $this->rules->setLowercaseCast(true);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->rules);

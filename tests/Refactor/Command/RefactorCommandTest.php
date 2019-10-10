@@ -12,13 +12,13 @@ class RefactorCommandTest extends TestCase
     /** @var RefactorCommand */
     private $refactorCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->refactorCommand = new RefactorCommand();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
