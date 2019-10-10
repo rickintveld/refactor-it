@@ -74,7 +74,7 @@ class RulesTest extends TestCase
         self::assertFalse($this->rules->isNoTrailingWhitespace());
         self::assertFalse($this->rules->isPhpdocAddMissingParamAnnotation());
         self::assertFalse($this->rules->isLinebreakAfterOpeningTag());
-        self::assertNotEmpty($this->rules->getArraySyntax());
+        self::assertIsArray($this->rules->getArraySyntax());
         self::assertArrayHasKey('use', $this->rules->getNoMixedEchoPrint());
         self::assertArrayHasKey('token', $this->rules->getNoExtraConsecutiveBlankLines());
     }
