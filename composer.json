@@ -4,7 +4,7 @@
     "description": "Automated code refactor tool",
     "keywords": ["refactor", "refactor-it", "rintveld", "bad code", "code fixer", "code improvement"],
     "license": "MIT",
-    "type": "project",
+    "type": "application",
     "version": "1.0.5",
     "authors": [{
         "name": "Rick in t Veld",
