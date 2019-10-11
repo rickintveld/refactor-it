@@ -59,9 +59,8 @@ class CommandTest extends TestCase
      */
     public function validateGitUsage(): void
     {
-        $vcs = $this->command->getGitCommands();
+        $vcs = $this->command->getGitCommand();
 
-        $git = $vcs[0];
-        self::assertEquals('git', $git[0]);
+        self::assertEquals('git', $vcs[0]);
     }
 }

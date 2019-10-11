@@ -34,7 +34,7 @@ class Finder extends PushCommand
      */
     public function findAdjustedFiles(): array
     {
-        $commands = [];
+        $command = [];
         $count = 0;
         $files = [];
         $newFiles = [];
@@ -49,24 +49,28 @@ class Finder extends PushCommand
 
         if (in_array($vcs, Command::SVN_COMMAND, true)) {
             // @codeCoverageIgnoreStart
-            $commands = $this->command->getSvnCommand();
+            $command = $this->command->getSvnCommand();
             // @codeCoverageIgnoreEnd
         }
         if (in_array($vcs, Command::GIT_COMMAND, true)) {
-            $commands = $this->command->getGitCommands();
+            $command = $this->command->getGitCommand();
         }
 
-        foreach ($commands as $command) {
-            $process = new Process($command);
-            $process->start();
-            while ($process->isRunning()) {
-                if ($count === 0) {
-                    $files = explode(PHP_EOL, $process->getOutput());
-                } else {
-                    $newFiles = explode(PHP_EOL, $process->getOutput());
-                }
+        if (empty($command)) {
+            // @codeCoverageIgnoreStart
+            $this->pushNotification('Exception Error [1570803899092]', 'There is no command found for the used vcs type!', true);
+            throw new UnknownVcsTypeException('There is no command found for the used vcs type!', 1570803899092);
+            // @codeCoverageIgnoreEnd
+        }
+
+        $process = new Process($command);
+        $process->start();
+        while ($process->isRunning()) {
+            if ($count === 0) {
+                $files = explode(PHP_EOL, $process->getOutput());
+            } else {
+                $newFiles = explode(PHP_EOL, $process->getOutput());
             }
-            $count++;
         }
 
         $allFiles = array_merge($files, $newFiles);

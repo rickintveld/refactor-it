@@ -10,16 +10,15 @@ use Symfony\Component\Process\Process;
  */
 class Command extends PushCommand
 {
-    public const GIT_COMMAND = ['git', 'diff', '--name-only', './'];
-    public const GIT_NEW_FILE_COMMAND = ['git', 'diff', '--name-only', '--diff-filter=A', '--cached'];
+    public const GIT_COMMAND = ['git', 'diff', '--name-only', '--cached'];
     public const SVN_COMMAND = ['svn', 'status'];
 
     /**
      * @return array
      */
-    public function getGitCommands(): array
+    public function getGitCommand(): array
     {
-        return [self::GIT_COMMAND, self::GIT_NEW_FILE_COMMAND];
+        return self::GIT_COMMAND;
     }
 
     /**
@@ -28,7 +27,7 @@ class Command extends PushCommand
      */
     public function getSvnCommand(): array
     {
-        return [self::SVN_COMMAND];
+        return self::SVN_COMMAND;
     }
 
     /**
