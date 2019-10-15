@@ -1,7 +1,8 @@
 <?php
-namespace Refactor\Console;
+namespace Refactor\tests\Console;
 
 use PHPUnit\Framework\TestCase;
+use Refactor\Console\VersionControl;
 
 /**
  * Class CommandTest
@@ -9,19 +10,19 @@ use PHPUnit\Framework\TestCase;
  */
 class CommandTest extends TestCase
 {
-    /** @var Command */
-    protected $command;
+    /** @var VersionControl */
+    protected $versionControl;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->command = new Command();
+        $this->versionControl = new VersionControl();
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        unset($this->command);
+        unset($this->versionControl);
     }
 
     /**
@@ -30,7 +31,7 @@ class CommandTest extends TestCase
      */
     public function validateVcsUsageThrowsExceptionOnFailure(): void
     {
-        $this->command->validateVcsUsage();
+        $this->versionControl->validateVcsUsage();
         self::assertTrue(true, 'Whoops, looks like the exception has been thrown');
     }
 
@@ -40,7 +41,7 @@ class CommandTest extends TestCase
      */
     public function validateVcsUsageWorksLikeExpected(): void
     {
-        $vcs = $this->command->validateVcsUsage();
+        $vcs = $this->versionControl->validateVcsUsage();
         self::assertEquals('git', $vcs);
     }
 
@@ -50,7 +51,7 @@ class CommandTest extends TestCase
      */
     public function validateSvnUsageToFailAsExpected(): void
     {
-        $vcs = $this->command->validateVcsUsage();
+        $vcs = $this->versionControl->validateVcsUsage();
         self::assertNotEquals('svn', $vcs);
     }
 
@@ -59,7 +60,7 @@ class CommandTest extends TestCase
      */
     public function validateGitUsage(): void
     {
-        $vcs = $this->command->getGitCommand();
+        $vcs = $this->versionControl->getGitCommand();
 
         self::assertEquals('git', $vcs[0]);
     }

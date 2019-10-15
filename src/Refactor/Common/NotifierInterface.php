@@ -1,5 +1,4 @@
 <?php
-
 namespace Refactor\Common;
 
 /**
@@ -16,5 +15,5 @@ interface NotifierInterface
      * @param string $body
      * @param bool $exception
      */
-    public function pushNotification(string $title, string $body, bool $exception): void;
+    public function push(string $title, string $body, bool $exception): void;
 }

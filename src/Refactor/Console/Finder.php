@@ -1,6 +1,7 @@
 <?php
 namespace Refactor\Console;
 
+use Refactor\Console\Command\NotifierCommand;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
 use Symfony\Component\Process\Process;
@@ -9,22 +10,22 @@ use Symfony\Component\Process\Process;
  * Class Finder
  * @package Refactor\Fixer
  */
-class Finder extends PushCommand
+class Finder extends NotifierCommand
 {
     public const GIT = 'git';
     public const GIT_CONFIG = '.git';
     public const SVN = 'svn';
     public const SVN_CONFIG = '.svn';
 
-    /** @var Command */
-    protected $command;
+    /** @var VersionControl */
+    protected $versionControl;
 
     /**
      * Finder constructor.
      */
     public function __construct()
     {
-        $this->command = new Command();
+        $this->versionControl = new VersionControl();
     }
 
     /**
@@ -38,27 +39,27 @@ class Finder extends PushCommand
         $count = 0;
         $files = [];
         $newFiles = [];
-        $vcs = $this->command->validateVcsUsage();
+        $vcs = $this->versionControl->validateVcsUsage();
 
         if (empty($vcs)) {
             // @codeCoverageIgnoreStart
-            $this->pushNotification('Exception Error [1570009542585]', 'There is no version control system found in your project!', true);
+            $this->push('Exception Error [1570009542585]', 'There is no version control system found in your project!', true);
             throw new UnknownVcsTypeException('There is no version control system found in your project!', 1570009542585);
             // @codeCoverageIgnoreEnd
         }
 
-        if (in_array($vcs, Command::SVN_COMMAND, true)) {
+        if (in_array($vcs, VersionControl::SVN_COMMAND, true)) {
             // @codeCoverageIgnoreStart
-            $command = $this->command->getSvnCommand();
+            $command = $this->versionControl->getSvnCommand();
             // @codeCoverageIgnoreEnd
         }
-        if (in_array($vcs, Command::GIT_COMMAND, true)) {
-            $command = $this->command->getGitCommand();
+        if (in_array($vcs, VersionControl::GIT_COMMAND, true)) {
+            $command = $this->versionControl->getGitCommand();
         }
 
         if (empty($command)) {
             // @codeCoverageIgnoreStart
-            $this->pushNotification('Exception Error [1570803899092]', 'There is no command found for the used vcs type!', true);
+            $this->push('Exception Error [1570803899092]', 'There is no command found for the used vcs type!', true);
             throw new UnknownVcsTypeException('There is no command found for the used vcs type!', 1570803899092);
             // @codeCoverageIgnoreEnd
         }
