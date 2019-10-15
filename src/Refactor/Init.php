@@ -24,6 +24,9 @@ class Init implements CommandInterface
     /** @var Animal */
     private $animal;
 
+    /**
+     * Init constructor.
+     */
     public function __construct()
     {
         $this->animal = new Animal();

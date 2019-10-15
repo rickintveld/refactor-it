@@ -1,5 +1,5 @@
 <?php
-namespace Refactor\Config;
+namespace Refactor\tests\Config;
 
 use PHPUnit\Framework\TestCase;
 

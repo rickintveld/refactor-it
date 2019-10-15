@@ -1,12 +1,15 @@
 <?php
 namespace Refactor\Console;
 
-use Refactor\Command\RefactorCommand;
 use Refactor\Common\CommandInterface;
+use Refactor\Console\Command\NotifierCommand;
+use Refactor\Console\Command\RefactorCommand;
 use Refactor\Exception\FileNotFoundException;
+use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -14,10 +17,13 @@ use Symfony\Component\Process\Process;
  * Class Fixer
  * @package Refactor\Fixer
  */
-class Fixer extends PushCommand implements CommandInterface
+class Fixer extends NotifierCommand implements CommandInterface
 {
     /** @var Animal */
     private $animal;
+
+    /** @var ApplicationValidator */
+    private $applicationValidator;
 
     /** @var Finder */
     private $finder;
@@ -31,6 +37,7 @@ class Fixer extends PushCommand implements CommandInterface
     public function __construct()
     {
         $this->animal = new Animal();
+        $this->applicationValidator = new ApplicationValidator();
         $this->finder = new Finder();
         $this->garbageCollector = new GarbageCollector();
         $this->refactorCommand = new RefactorCommand();
@@ -45,12 +52,25 @@ class Fixer extends PushCommand implements CommandInterface
      * @throws \Refactor\Exception\UnknownVcsTypeException
      * @throws \Refactor\Exception\WrongVcsTypeException
      */
-    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null)
+    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
+        if (!$this->applicationValidator->validate()) {
+            return;
+        }
+
         $this->runRefactor(
             $this->finder->findAdjustedFiles(),
             $output
         );
+    }
+
+    /**
+     * @param array $files
+     * @throws FileNotFoundException
+     */
+    public function refactorAll(array $files)
+    {
+        $this->runRefactor($files, new ConsoleOutput());
     }
 
     /**
@@ -88,7 +108,7 @@ class Fixer extends PushCommand implements CommandInterface
         $this->cleanUp();
         $progressBar->finish();
 
-        $this->pushNotification(
+        $this->push(
             'Refactor complete',
             'The refactor process is completed!',
             false

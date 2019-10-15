@@ -1,5 +1,5 @@
 <?php
-namespace Refactor\Command;
+namespace Refactor\tests\Console\Command;
 
 use PHPUnit\Framework\TestCase;
 use Refactor\Init;
@@ -13,16 +13,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  */
 class InitCommandTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
     public function testExecuteCommand(): void
     {
         $init = new Init();

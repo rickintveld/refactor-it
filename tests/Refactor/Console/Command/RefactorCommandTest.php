@@ -1,7 +1,8 @@
 <?php
-namespace Refactor\Command;
+namespace Refactor\tests\Console\Command;
 
 use PHPUnit\Framework\TestCase;
+use Refactor\Console\Command\RefactorCommand;
 
 /**
  * Class RefactorCommandTest
@@ -21,6 +22,7 @@ class RefactorCommandTest extends TestCase
     public function tearDown(): void
     {
         parent::tearDown();
+        unset($this->refactorCommand);
     }
 
     /**
