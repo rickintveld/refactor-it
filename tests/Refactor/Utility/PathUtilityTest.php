@@ -26,4 +26,10 @@ class PathUtilityTest extends TestCase
         $file = PathUtility::getGitIgnoreFile();
         self::assertFileExists($file);
     }
+
+    public function testPrivateFolderExist()
+    {
+        $file = PathUtility::getPrivatePath();
+        self::assertFileExists($file);
+    }
 }

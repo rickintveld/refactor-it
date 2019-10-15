@@ -13,6 +13,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 /**
  * Class Remover
  * @package Refactor\Console
+ * @codeCoverageIgnore
  */
 class Remover extends PushCommand implements CommandInterface
 {
