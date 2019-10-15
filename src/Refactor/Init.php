@@ -6,7 +6,6 @@ use Refactor\Config\Rules;
 use Refactor\Console\Animal;
 use Refactor\Console\Signature;
 use Refactor\Utility\PathUtility;
-use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,16 +24,12 @@ class Init implements CommandInterface
     /** @var Animal */
     private $animal;
 
-    /** @var ApplicationValidator */
-    private $applicationValidator;
-
     /**
      * Init constructor.
      */
     public function __construct()
     {
         $this->animal = new Animal();
-        $this->applicationValidator = new ApplicationValidator();
     }
 
     /**
@@ -45,10 +40,6 @@ class Init implements CommandInterface
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
-        if (!$this->applicationValidator->validate()) {
-            return;
-        }
-
         $resetRules = $parameters['reset-rules'];
 
         if ($resetRules === false) {
