@@ -19,7 +19,7 @@ composer global update
 
 When no refactor rules are present yet:
 
-- `refactor-it init`; first time project init
+- `refactor-it init` first time project init
  
  ### Project rules configuration
  
@@ -89,9 +89,10 @@ Default set: **rules.json:**
 - **refactor-it init**                 *Sets the Refactor it rules*
 - **refactor-it init --reset-rules**   *Resets the Refactor it rules*
 - **refactor-it diff**                 *Refactor the changed files*
+- **refactor-it remove**               *Removes all the Refactor-it files and folder* 
 
 ### Done
 You can now use the command `refactor-it`
 
 ### PS
-make sure you've got export PATH=~/.composer/vendor/bin:$PATH in you're .bash_profile :)
+make sure you've got export PATH=~/.composer/vendor/bin:$PATH in you're .bash_profile ಠ_ಠ
