@@ -28,7 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Refactor\\": "tests/Refactor"
+            "Refactor\\tests\\": "tests/Refactor"
         }
     },
     "bin": [

@@ -2,7 +2,9 @@
 namespace Refactor\Console;
 
 use Refactor\Common\CommandInterface;
+use Refactor\Console\Command\NotifierCommand;
 use Refactor\Utility\PathUtility;
+use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -15,19 +17,25 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  * @package Refactor\Console
  * @codeCoverageIgnore
  */
-class Remover extends PushCommand implements CommandInterface
+class Remover extends NotifierCommand implements CommandInterface
 {
+    /** @var ApplicationValidator */
+    private $applicationValidator;
+
+    public function __construct()
+    {
+        $this->applicationValidator = new ApplicationValidator();
+    }
+
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param HelperSet $helperSet
      * @param array ...$parameters
      */
-    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null)
+    public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
-        if (file_exists(PathUtility::getRefactorItPath()) === false) {
-            $output->writeln('<info>The refactor-it folder was not found, stopping command...</info>');
-
+        if (!$this->applicationValidator->validate()) {
             return;
         }
 
@@ -73,7 +81,7 @@ class Remover extends PushCommand implements CommandInterface
         $progressBar->advance();
         $progressBar->finish();
 
-        $this->pushNotification(
+        $this->push(
             'Removing complete',
             'All the files and folder are deleted from your project!',
             false

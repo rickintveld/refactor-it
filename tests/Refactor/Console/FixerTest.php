@@ -1,7 +1,8 @@
 <?php
-namespace Refactor\Console;
+namespace Refactor\tests\Console;
 
 use PHPUnit\Framework\TestCase;
+use Refactor\Console\Fixer;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -12,14 +13,19 @@ use Symfony\Component\Console\Output\ConsoleOutput;
  */
 class FixerTest extends TestCase
 {
+    /** @var Fixer */
+    private $fixer;
+
     public function setUp(): void
     {
         parent::setUp();
+        $this->fixer = new Fixer();
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
+        unset($this->fixer);
     }
 
     /**
@@ -29,11 +35,18 @@ class FixerTest extends TestCase
      */
     public function testFixerCommandWorksLikeExpected(): void
     {
-        $fixer = new Fixer();
         $input = new ArgvInput();
         $output = new ConsoleOutput();
-        $fixer->execute($input, $output, new HelperSet(), []);
+        $this->fixer->execute($input, $output, new HelperSet(), []);
 
         self::assertNotEmpty($output->getErrorOutput(), 'The console output is not empty');
+    }
+
+    /**
+     * @throws \Refactor\Exception\FileNotFoundException
+     */
+    public function testRefactorAllFailsAsExpected(): void
+    {
+        self::assertNull($this->fixer->refactorAll([]));
     }
 }

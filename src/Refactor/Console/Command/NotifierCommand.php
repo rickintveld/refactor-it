@@ -1,5 +1,5 @@
 <?php
-namespace Refactor\Console;
+namespace Refactor\Console\Command;
 
 use Joli\JoliNotif\Notification;
 use Joli\JoliNotif\NotifierFactory;
@@ -9,7 +9,7 @@ use Refactor\Common\NotifierInterface;
  * Class PushCommand
  * @package Refactor\Console
  */
-class PushCommand implements NotifierInterface
+class NotifierCommand implements NotifierInterface
 {
 
     /**
@@ -17,7 +17,7 @@ class PushCommand implements NotifierInterface
      * @param string $body
      * @param bool $exception
      */
-    public function pushNotification(string $title, string $body, bool $exception): void
+    public function push(string $title, string $body, bool $exception): void
     {
         $notifier = NotifierFactory::create();
         $notification = new Notification();

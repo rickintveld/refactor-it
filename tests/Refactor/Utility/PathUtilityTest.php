@@ -1,7 +1,8 @@
 <?php
-namespace Refactor\Utility;
+namespace Refactor\tests\Utility;
 
 use PHPUnit\Framework\TestCase;
+use Refactor\Utility\PathUtility;
 
 /**
  * Class PathUtilityTest

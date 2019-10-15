@@ -17,6 +17,7 @@ $app = new Application('Refactor it', REFACTOR_IT_VERSION);
 
 $init = new \Refactor\Init();
 $fixer = new \Refactor\Console\Fixer();
+$project = new \Refactor\Console\Refactor\Project();
 $remover = new \Refactor\Console\Remover();
 
 $app->command('init [--reset-rules]', function ($resetRules, InputInterface $input, OutputInterface $output) use ($init) {
@@ -29,11 +30,15 @@ $app->command('diff', function (InputInterface $input, OutputInterface $output) 
     } catch (\Exception $exception) {
         $output->writeln('<error>' . $exception->getMessage() . '</error>');
     }
-})->descriptions('Refactors your PHP project GIT diffs to the selected coding standards!');
+})->descriptions('Refactors your PHP project GIT diffs to the selected coding standards');
 
 $app->command('remove', function (InputInterface $input, OutputInterface $output) use ($remover) {
     $remover->execute($input, $output, $this->getHelperSet());
-})->descriptions('Removes the Refactor-it folder and config files!');
+})->descriptions('Removes the Refactor-it folder and config files');
+
+$app->command('all', function (InputInterface $input, OutputInterface $output) use ($project) {
+    $project->execute($input, $output, $this->getHelperSet());
+})->descriptions('Select the project source folder and refactor all the PHP files to the selected coding standards');
 
 /** @noinspection PhpUnhandledExceptionInspection because we do want to display the error through Symfony Console and not handle it ourselves */
 $app->run();

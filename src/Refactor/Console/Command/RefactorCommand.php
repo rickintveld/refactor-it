@@ -1,5 +1,5 @@
 <?php
-namespace Refactor\Command;
+namespace Refactor\Console\Command;
 
 use Refactor\Config\Rules;
 use Refactor\Exception\FileNotFoundException;
@@ -22,7 +22,7 @@ class RefactorCommand
             throw new FileNotFoundException('The requested refactor file could not be found!', 1570183073903);
         }
 
-        $binPath = dirname(__DIR__, 3) . '/vendor/bin';
+        $binPath = dirname(__DIR__, 4) . '/vendor/bin';
 
         return [
             'php',

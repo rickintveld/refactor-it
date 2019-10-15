@@ -1,7 +1,8 @@
 <?php
-namespace Refactor\Console;
+namespace Refactor\tests\Console;
 
 use PHPUnit\Framework\TestCase;
+use Refactor\Console\GarbageCollector;
 use Refactor\Utility\PathUtility;
 
 /**

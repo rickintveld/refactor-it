@@ -1,6 +1,7 @@
 <?php
 namespace Refactor\Console;
 
+use Refactor\Console\Command\NotifierCommand;
 use Refactor\Exception\WrongVcsTypeException;
 use Symfony\Component\Process\Process;
 
@@ -8,7 +9,7 @@ use Symfony\Component\Process\Process;
  * Class Command
  * @package Refactor\Console
  */
-class Command extends PushCommand
+class VersionControl extends NotifierCommand
 {
     public const GIT_COMMAND = ['git', 'diff', '--name-only', '--cached'];
     public const SVN_COMMAND = ['svn', 'status'];
@@ -52,7 +53,7 @@ class Command extends PushCommand
             return Finder::SVN;
         }
 
-        $this->pushNotification(
+        $this->push(
             'Exception Error [1560678044538]',
             'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
             true
