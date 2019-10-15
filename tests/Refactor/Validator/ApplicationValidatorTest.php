@@ -14,13 +14,13 @@ class ApplicationValidatorTest extends TestCase
     /** @var ApplicationValidator */
     private $applicationValidator;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->applicationValidator = new ApplicationValidator();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->applicationValidator);
