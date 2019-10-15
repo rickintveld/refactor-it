@@ -17,6 +17,7 @@ $app = new Application('Refactor it', REFACTOR_IT_VERSION);
 
 $init = new \Refactor\Init();
 $fixer = new \Refactor\Console\Fixer();
+$remover = new \Refactor\Console\Remover();
 
 $app->command('init [--reset-rules]', function ($resetRules, InputInterface $input, OutputInterface $output) use ($init) {
     $init->execute($input, $output, $this->getHelperSet(), ['reset-rules' => $resetRules]);
@@ -29,6 +30,10 @@ $app->command('diff', function (InputInterface $input, OutputInterface $output) 
         $output->writeln('<error>' . $exception->getMessage() . '</error>');
     }
 })->descriptions('Refactors your PHP project GIT diffs to the selected coding standards!');
+
+$app->command('remove', function (InputInterface $input, OutputInterface $output) use ($remover) {
+    $remover->execute($input, $output, $this->getHelperSet());
+})->descriptions('Removes the Refactor-it folder and config files!');
 
 /** @noinspection PhpUnhandledExceptionInspection because we do want to display the error through Symfony Console and not handle it ourselves */
 $app->run();

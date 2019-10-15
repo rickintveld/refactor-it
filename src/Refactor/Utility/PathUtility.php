@@ -41,4 +41,12 @@ class PathUtility
     {
         return self::getRefactorItPath() . '/.gitignore';
     }
+
+    /**
+     * @return string
+     */
+    public static function getPrivatePath(): string
+    {
+        return self::getRootPath() . '/private';
+    }
 }
