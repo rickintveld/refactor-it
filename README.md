@@ -89,6 +89,7 @@ Default set: **rules.json:**
 - **refactor-it init**                 *Sets the Refactor it rules*
 - **refactor-it init --reset-rules**   *Resets the Refactor it rules*
 - **refactor-it diff**                 *Refactor the changed files*
+- **refactor-it all**                  *Refactor the selected source directory*
 - **refactor-it remove**               *Removes all the Refactor-it files and folder* 
 
 ### Done
