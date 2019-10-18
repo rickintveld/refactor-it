@@ -2,7 +2,7 @@
     "name": "rintveld/refactor-it",
     "homepage": "https://github.com/rickone1/refactor-it/README.md",
     "description": "Automated code refactor tool",
-    "keywords": ["refactor", "refactor-it", "rintveld", "bad code", "code fixer", "code improvement"],
+    "keywords": ["refactor", "refactor-it", "rintveld", "bad code", "code fixer", "code improvement", "code quality"],
     "license": "MIT",
     "type": "application",
     "version": "1.0.7",

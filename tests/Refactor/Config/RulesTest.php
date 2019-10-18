@@ -2,6 +2,7 @@
 namespace Refactor\tests\Config;
 
 use PHPUnit\Framework\TestCase;
+use Refactor\Config\Rules;
 
 /**
  * Class RulesTest
@@ -9,15 +10,15 @@ use PHPUnit\Framework\TestCase;
  */
 class RulesTest extends TestCase
 {
-    /** @var \Refactor\Config\Rules */
+    /** @var Rules */
     private $rules;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        /** @var \Refactor\Config\Rules $rules */
-        $this->rules = new \Refactor\Config\Rules();
+        /** @var Rules $rules */
+        $this->rules = new Rules();
 
         $this->rules->setOrderedClassElements([]);
         $this->rules->setArraySyntax(['syntax' => 'long']);

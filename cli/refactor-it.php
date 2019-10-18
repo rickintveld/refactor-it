@@ -16,9 +16,9 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
 $app = new Application('Refactor it', REFACTOR_IT_VERSION);
 
 $init = new \Refactor\Init();
-$fixer = new \Refactor\Console\Fixer();
-$project = new \Refactor\Console\Refactor\Project();
-$remover = new \Refactor\Console\Remover();
+$fixer = new \Refactor\Console\Command\Fixer();
+$project = new \Refactor\Console\Command\Project();
+$remover = new \Refactor\Console\Command\Remover();
 
 $app->command('init [--reset-rules]', function ($resetRules, InputInterface $input, OutputInterface $output) use ($init) {
     $init->execute($input, $output, $this->getHelperSet(), ['reset-rules' => $resetRules]);

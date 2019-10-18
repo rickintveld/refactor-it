@@ -1,8 +1,7 @@
 <?php
-namespace Refactor\Console;
+namespace Refactor\Console\Command;
 
-use Refactor\Common\CommandInterface;
-use Refactor\Console\Command\NotifierCommand;
+use Refactor\Notification\Notifier;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -17,7 +16,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  * @package Refactor\Console
  * @codeCoverageIgnore
  */
-class Remover extends NotifierCommand implements CommandInterface
+class Remover extends Notifier implements CommandInterface
 {
     /** @var ApplicationValidator */
     private $applicationValidator;

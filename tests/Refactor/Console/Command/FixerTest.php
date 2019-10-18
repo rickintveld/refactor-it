@@ -1,8 +1,8 @@
 <?php
-namespace Refactor\tests\Console;
+namespace Refactor\tests\Console\Command;
 
 use PHPUnit\Framework\TestCase;
-use Refactor\Console\Fixer;
+use Refactor\Console\Command\Fixer;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;

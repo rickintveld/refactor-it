@@ -2,7 +2,7 @@
 namespace Refactor\tests\Console\Command;
 
 use PHPUnit\Framework\TestCase;
-use Refactor\Console\Command\RefactorCommand;
+use Refactor\Command\Refactor;
 
 /**
  * Class RefactorCommandTest
@@ -10,13 +10,13 @@ use Refactor\Console\Command\RefactorCommand;
  */
 class RefactorCommandTest extends TestCase
 {
-    /** @var RefactorCommand */
+    /** @var Refactor */
     private $refactorCommand;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->refactorCommand = new RefactorCommand();
+        $this->refactorCommand = new Refactor();
     }
 
     public function tearDown(): void

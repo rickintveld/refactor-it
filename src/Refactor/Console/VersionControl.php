@@ -1,17 +1,18 @@
 <?php
 namespace Refactor\Console;
 
-use Refactor\Console\Command\NotifierCommand;
+use Refactor\Console\Command\Finder;
 use Refactor\Exception\WrongVcsTypeException;
+use Refactor\Notification\Notifier;
 use Symfony\Component\Process\Process;
 
 /**
  * Class Command
  * @package Refactor\Console
  */
-class VersionControl extends NotifierCommand
+class VersionControl extends Notifier
 {
-    public const GIT_COMMAND = ['git', 'diff', '--name-only', '--cached'];
+    public const GIT_COMMAND = ['git', 'diff', '--name-only', '--diff-filter=ACDMRTUXB', '--cached'];
     public const SVN_COMMAND = ['svn', 'status'];
 
     /**

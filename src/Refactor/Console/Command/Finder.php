@@ -1,16 +1,17 @@
 <?php
-namespace Refactor\Console;
+namespace Refactor\Console\Command;
 
-use Refactor\Console\Command\NotifierCommand;
+use Refactor\Console\VersionControl;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
+use Refactor\Notification\Notifier;
 use Symfony\Component\Process\Process;
 
 /**
  * Class Finder
  * @package Refactor\Fixer
  */
-class Finder extends NotifierCommand
+class Finder extends Notifier
 {
     public const GIT = 'git';
     public const GIT_CONFIG = '.git';
@@ -33,7 +34,7 @@ class Finder extends NotifierCommand
      * @throws WrongVcsTypeException
      * @return array
      */
-    public function findAdjustedFiles(): array
+    public function getChangedFiles(): array
     {
         $command = [];
         $count = 0;
@@ -76,7 +77,7 @@ class Finder extends NotifierCommand
 
         $allFiles = array_merge($files, $newFiles);
 
-        return $this->getPhpFilesOnly(array_unique(array_filter($allFiles)), $vcs);
+        return $this->filterForPhpFiles(array_unique(array_filter($allFiles)), $vcs);
     }
 
     /**
@@ -84,9 +85,9 @@ class Finder extends NotifierCommand
      * @param string $vcs
      * @return array
      */
-    private function getPhpFilesOnly(array $files, string $vcs): array
+    private function filterForPhpFiles(array $files, string $vcs): array
     {
-        $filteredFiles = [];
+        $phpFiles = [];
         foreach ($files as $file) {
             if ($vcs === self::SVN) {
                 // @codeCoverageIgnoreStart
@@ -95,10 +96,10 @@ class Finder extends NotifierCommand
                 // @codeCoverageIgnoreEnd
             }
             if (!empty($file) && substr($file, -4) === '.php') {
-                $filteredFiles[] = preg_replace('/\s+/', '\ ', getcwd() . '/' . $file);
+                $phpFiles[] = preg_replace('/\s+/', '\ ', getcwd() . '/' . $file);
             }
         }
 
-        return $filteredFiles;
+        return $phpFiles;
     }
 }

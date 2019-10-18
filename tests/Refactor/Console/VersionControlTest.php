@@ -8,7 +8,7 @@ use Refactor\Console\VersionControl;
  * Class CommandTest
  * @package Refactor\Console
  */
-class CommandTest extends TestCase
+class VersionControlTest extends TestCase
 {
     /** @var VersionControl */
     protected $versionControl;
