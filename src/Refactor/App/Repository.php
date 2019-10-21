@@ -18,8 +18,8 @@ class Repository
      */
     public function __construct()
     {
-        $rootPath = dirname(__DIR__, 3);
-        $this->repository = new \Gitonomy\Git\Repository($rootPath);
+        $repositoryRoot = dirname(__DIR__, 3);
+        $this->repository = new \Gitonomy\Git\Repository($repositoryRoot);
     }
 
     /**
