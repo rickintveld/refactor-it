@@ -1,5 +1,5 @@
 <?php
-namespace Refactor\Console\Command;
+namespace Refactor\Command;
 
 use Refactor\Config\Rules;
 use Refactor\Exception\FileNotFoundException;
@@ -9,7 +9,7 @@ use Refactor\Utility\PathUtility;
  * Class RefactorCommand
  * @package Refactor\Command
  */
-class RefactorCommand
+class Refactor
 {
     /**
      * @param string $file
@@ -22,7 +22,7 @@ class RefactorCommand
             throw new FileNotFoundException('The requested refactor file could not be found!', 1570183073903);
         }
 
-        $binPath = dirname(__DIR__, 4) . '/vendor/bin';
+        $binPath = dirname(__DIR__, 3) . '/vendor/bin';
 
         return [
             'php',
@@ -32,7 +32,7 @@ class RefactorCommand
             '--format=json',
             '--allow-risky=yes',
             '--using-cache=no',
-            "--rules='{$this->getInlineRules($this->getRules()->toJSON())}'"
+            "--rules='{$this->inlineJsonConverter($this->configurationRules()->toJSON())}'"
         ];
     }
 
@@ -40,7 +40,7 @@ class RefactorCommand
      * @throws FileNotFoundException
      * @return Rules
      */
-    private function getRules(): Rules
+    private function configurationRules(): Rules
     {
         if (!file_exists(PathUtility::getRefactorItRulesFile())) {
             // @codeCoverageIgnoreStart
@@ -62,7 +62,7 @@ class RefactorCommand
      * @param string $rules
      * @return false|string
      */
-    private function getInlineRules(string $rules):? string
+    private function inlineJsonConverter(string $rules):? string
     {
         $inlineRules = json_decode($rules, true);
 

@@ -1,8 +1,8 @@
 <?php
-namespace Refactor\tests\Console;
+namespace Refactor\tests\Console\Command;
 
 use PHPUnit\Framework\TestCase;
-use Refactor\Console\Finder;
+use Refactor\Console\Command\Finder;
 
 /**
  * Class FinderTest
@@ -32,7 +32,7 @@ class FinderTest extends TestCase
      */
     public function findAdjustedFilesWorksAsExpected(): void
     {
-        $files = $this->finder->findAdjustedFiles();
+        $files = $this->finder->getChangedFiles();
 
         if (empty($files)) {
             self::assertEmpty($files, 'No code changes where found!');

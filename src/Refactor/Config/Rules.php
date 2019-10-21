@@ -1,8 +1,6 @@
 <?php
 namespace Refactor\Config;
 
-use Refactor\Common\JsonParserInterface;
-
 /**
  * Class DefaultRules
  * @package Refactor\Config

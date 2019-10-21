@@ -1,5 +1,5 @@
 <?php
-namespace Refactor\Common;
+namespace Refactor\Config;
 
 /**
  * Interface JsonParser

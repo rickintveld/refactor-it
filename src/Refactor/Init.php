@@ -1,9 +1,9 @@
 <?php
 namespace Refactor;
 
-use Refactor\Common\CommandInterface;
 use Refactor\Config\Rules;
 use Refactor\Console\Animal;
+use Refactor\Console\Command\CommandInterface;
 use Refactor\Console\Signature;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;

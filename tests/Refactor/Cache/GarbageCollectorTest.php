@@ -1,8 +1,8 @@
 <?php
-namespace Refactor\tests\Console;
+namespace Refactor\tests\Cache;
 
 use PHPUnit\Framework\TestCase;
-use Refactor\Console\GarbageCollector;
+use Refactor\Cache\GarbageCollector;
 use Refactor\Utility\PathUtility;
 
 /**
@@ -42,7 +42,7 @@ class GarbageCollectorTest extends TestCase
 
     public function testCleanUpCacheFileWorksAsExpected(): void
     {
-        $this->garbageCollector->cleanUpCacheFile();
+        $this->garbageCollector->removeCache();
         self::assertFileNotExists($this->cacheFile);
     }
 }

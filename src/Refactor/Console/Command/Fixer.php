@@ -1,10 +1,12 @@
 <?php
-namespace Refactor\Console;
+namespace Refactor\Console\Command;
 
-use Refactor\Common\CommandInterface;
-use Refactor\Console\Command\NotifierCommand;
-use Refactor\Console\Command\RefactorCommand;
+use Refactor\Cache\GarbageCollector;
+use Refactor\Command\Refactor;
+use Refactor\Console\Animal;
+use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
+use Refactor\Notification\Notifier;
 use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -17,7 +19,7 @@ use Symfony\Component\Process\Process;
  * Class Fixer
  * @package Refactor\Fixer
  */
-class Fixer extends NotifierCommand implements CommandInterface
+class Fixer extends Notifier implements CommandInterface
 {
     /** @var Animal */
     private $animal;
@@ -31,7 +33,7 @@ class Fixer extends NotifierCommand implements CommandInterface
     /** @var GarbageCollector */
     private $garbageCollector;
 
-    /** @var RefactorCommand */
+    /** @var Refactor */
     private $refactorCommand;
 
     public function __construct()
@@ -40,7 +42,7 @@ class Fixer extends NotifierCommand implements CommandInterface
         $this->applicationValidator = new ApplicationValidator();
         $this->finder = new Finder();
         $this->garbageCollector = new GarbageCollector();
-        $this->refactorCommand = new RefactorCommand();
+        $this->refactorCommand = new Refactor();
     }
 
     /**
@@ -59,7 +61,7 @@ class Fixer extends NotifierCommand implements CommandInterface
         }
 
         $this->runRefactor(
-            $this->finder->findAdjustedFiles(),
+            $this->finder->getChangedFiles(),
             $output
         );
     }
@@ -78,7 +80,7 @@ class Fixer extends NotifierCommand implements CommandInterface
      * @param OutputInterface $output
      * @throws FileNotFoundException
      */
-    private function runRefactor(array $files, OutputInterface $output)
+    private function runRefactor(array $files, OutputInterface $output): void
     {
         if (empty($files)) {
             $output->writeln('<comment>' . $this->animal->speak('There are no files yet to refactor!') . '</comment>');
@@ -120,10 +122,10 @@ class Fixer extends NotifierCommand implements CommandInterface
     }
 
     /**
-     * Removes the php cs fixer cache file
+     * Removes the php cs cache file
      */
-    private function cleanUp()
+    private function cleanUp(): void
     {
-        $this->garbageCollector->cleanUpCacheFile();
+        $this->garbageCollector->removeCache();
     }
 }

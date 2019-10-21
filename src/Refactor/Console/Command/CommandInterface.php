@@ -1,5 +1,5 @@
 <?php
-namespace Refactor\Common;
+namespace Refactor\Console\Command;
 
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;

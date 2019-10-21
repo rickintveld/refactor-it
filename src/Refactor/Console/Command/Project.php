@@ -1,12 +1,10 @@
 <?php
-namespace Refactor\Console\Refactor;
+namespace Refactor\Console\Command;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
-use Refactor\Common\CommandInterface;
-use Refactor\Console\Command\NotifierCommand;
-use Refactor\Console\Fixer;
+use Refactor\Notification\Notifier;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\ApplicationValidator;
 use RegexIterator;
@@ -21,7 +19,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  * @package Refactor\Console\Refactor
  * @codeCoverageIgnore
  */
-class Project extends NotifierCommand implements CommandInterface
+class Project extends Notifier implements CommandInterface
 {
     /** @var ApplicationValidator */
     private $applicationValidator;
