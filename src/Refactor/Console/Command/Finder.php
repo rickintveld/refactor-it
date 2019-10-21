@@ -4,8 +4,8 @@ namespace Refactor\Console\Command;
 use Refactor\Console\VersionControl;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
+use Refactor\Git\Modifications;
 use Refactor\Notification\Notifier;
-use Symfony\Component\Process\Process;
 
 /**
  * Class Finder
@@ -15,8 +15,9 @@ class Finder extends Notifier
 {
     public const GIT = 'git';
     public const GIT_CONFIG = '.git';
-    public const SVN = 'svn';
-    public const SVN_CONFIG = '.svn';
+
+    /** @var Modifications */
+    protected $modifications;
 
     /** @var VersionControl */
     protected $versionControl;
@@ -26,6 +27,7 @@ class Finder extends Notifier
      */
     public function __construct()
     {
+        $this->modifications = new Modifications();
         $this->versionControl = new VersionControl();
     }
 
@@ -36,67 +38,26 @@ class Finder extends Notifier
      */
     public function getChangedFiles(): array
     {
-        $command = [];
-        $count = 0;
-        $files = [];
-        $newFiles = [];
-        $vcs = $this->versionControl->validateVcsUsage();
-
-        if (empty($vcs)) {
+        if (empty($this->versionControl->validateVcsUsage())) {
             // @codeCoverageIgnoreStart
             $this->push('Exception Error [1570009542585]', 'There is no version control system found in your project!', true);
             throw new UnknownVcsTypeException('There is no version control system found in your project!', 1570009542585);
             // @codeCoverageIgnoreEnd
         }
 
-        if (in_array($vcs, VersionControl::SVN_COMMAND, true)) {
-            // @codeCoverageIgnoreStart
-            $command = $this->versionControl->getSvnCommand();
-            // @codeCoverageIgnoreEnd
-        }
-        if (in_array($vcs, VersionControl::GIT_COMMAND, true)) {
-            $command = $this->versionControl->getGitCommand();
-        }
-
-        if (empty($command)) {
-            // @codeCoverageIgnoreStart
-            $this->push('Exception Error [1570803899092]', 'There is no command found for the used vcs type!', true);
-            throw new UnknownVcsTypeException('There is no command found for the used vcs type!', 1570803899092);
-            // @codeCoverageIgnoreEnd
-        }
-
-        $process = new Process($command);
-        $process->start();
-        while ($process->isRunning()) {
-            if ($count === 0) {
-                $files = explode(PHP_EOL, $process->getOutput());
-            } else {
-                $newFiles = explode(PHP_EOL, $process->getOutput());
-            }
-        }
-
-        $allFiles = array_merge($files, $newFiles);
-
-        return $this->filterForPhpFiles(array_unique(array_filter($allFiles)), $vcs);
+        return $this->filterForPhpFiles($this->modifications->getAllModifiedFiles());
     }
 
     /**
      * @param array $files
-     * @param string $vcs
      * @return array
      */
-    private function filterForPhpFiles(array $files, string $vcs): array
+    private function filterForPhpFiles(array $files): array
     {
         $phpFiles = [];
         foreach ($files as $file) {
-            if ($vcs === self::SVN) {
-                // @codeCoverageIgnoreStart
-                $file = substr($file, 1);
-                $file = preg_replace('/\s+/', '', $file);
-                // @codeCoverageIgnoreEnd
-            }
             if (!empty($file) && substr($file, -4) === '.php') {
-                $phpFiles[] = preg_replace('/\s+/', '\ ', getcwd() . '/' . $file);
+                $phpFiles[] = preg_replace('/\s+/', '\ ', $file);
             }
         }
 

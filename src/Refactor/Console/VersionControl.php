@@ -13,7 +13,6 @@ use Symfony\Component\Process\Process;
 class VersionControl extends Notifier
 {
     public const GIT_COMMAND = ['git', 'diff', '--name-only', '--diff-filter=ACDMRTUXB', '--cached'];
-    public const SVN_COMMAND = ['svn', 'status'];
 
     /**
      * @return array
@@ -21,15 +20,6 @@ class VersionControl extends Notifier
     public function getGitCommand(): array
     {
         return self::GIT_COMMAND;
-    }
-
-    /**
-     * @return array
-     * @codeCoverageIgnore
-     */
-    public function getSvnCommand(): array
-    {
-        return self::SVN_COMMAND;
     }
 
     /**
@@ -49,11 +39,8 @@ class VersionControl extends Notifier
         if (in_array(Finder::GIT_CONFIG, $files, true) === true) {
             return Finder::GIT;
         }
-        // @codeCoverageIgnoreStart
-        if (in_array(Finder::SVN_CONFIG, $files, true) === true) {
-            return Finder::SVN;
-        }
 
+        // @codeCoverageIgnoreStart
         $this->push(
             'Exception Error [1560678044538]',
             'There is no vcs config file found in the root of your project, the only supported vcs types are GIT and SVN!',
