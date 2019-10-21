@@ -49,4 +49,12 @@ class PathUtility
     {
         return self::getRootPath() . '/private';
     }
+
+    /**
+     * @return string
+     */
+    public static function getCommitHookPath(): string
+    {
+        return self::getRootPath() . '/.git/hooks';
+    }
 }
