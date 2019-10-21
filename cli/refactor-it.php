@@ -41,7 +41,7 @@ $app->command('all', function (InputInterface $input, OutputInterface $output) u
     $project->execute($input, $output, $this->getHelperSet());
 })->descriptions('Select the project source folder and refactor all the PHP files to the selected coding standards');
 
-$app->command('hook [--remove-hook]', function($removeHook, InputInterface $input, OutputInterface $output) use ($commitHook) {
+$app->command('pre-commit [--remove-hook]', function ($removeHook, InputInterface $input, OutputInterface $output) use ($commitHook) {
     $commitHook->execute($input, $output, $this->getHelperSet(), ['remove-hook' => $removeHook]);
 })->descriptions('Adds the GIT pre-commit hook', ['--remove-hook' => 'Removes the pre commit hook']);
 

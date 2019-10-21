@@ -34,7 +34,6 @@ class CommitHook implements CommandInterface
      * @param HelperSet $helperSet
      * @param array ...$parameters
      * @throws MissingVersionControlException
-     * @throws FileNotFoundException
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
@@ -42,19 +41,23 @@ class CommitHook implements CommandInterface
             throw new MissingVersionControlException('There was no version control system found in your project!', 1571643538278);
         }
 
-        if (isset($parameters['remove-hook']) && $parameters['remove-hook'] === true) {
+        $removeHook = $parameters['remove-hook'];
+
+        if ($removeHook === true) {
             try {
                 $this->removePreCommitHook();
-                $output->writeln('Removing the GIT pre-commit file from the GIT hooks folder');
+                $output->writeln('<info>Removing the GIT pre-commit file from the GIT hooks folder</info>');
             } catch (FileNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
             }
         }
 
-        try {
-            $this->addPreCommitHook();
-        } catch (FileNotFoundException $exception) {
-            $output->writeln('<error>' . $exception->getMessage() . '</error>');
+        if ($removeHook === false) {
+            try {
+                $this->addPreCommitHook();
+            } catch (FileNotFoundException $exception) {
+                $output->writeln('<error>' . $exception->getMessage() . '</error>');
+            }
         }
     }
 
@@ -63,11 +66,14 @@ class CommitHook implements CommandInterface
      */
     private function addPreCommitHook(): void
     {
-        $preCommitFile = dirname(__DIR__, 4) . '/hooks/' . self::PRE_COMMIT_FILE;
+        $preCommitPlaceholder = dirname(__DIR__, 4) . '/hooks/' . self::PRE_COMMIT_FILE;
+        $preCommitFile = PathUtility::getCommitHookPath() . '/' . self::PRE_COMMIT_FILE;
 
-        if (!copy($preCommitFile, PathUtility::getCommitHookPath() . '/' . self::PRE_COMMIT_FILE)) {
+        if (!copy($preCommitPlaceholder, $preCommitFile)) {
             throw new FileNotFoundException('Something went wrong while copying the pre-commit hook file');
         }
+
+        chmod($preCommitFile, 0755);
     }
 
     /**
