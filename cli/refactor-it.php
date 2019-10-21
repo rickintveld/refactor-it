@@ -4,16 +4,16 @@ use Silly\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-const REFACTOR_IT_VERSION = '1.0.7';
-
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require __DIR__ . '/../vendor/autoload.php';
 } else {
     die('Something went wrong while loading the autoloader!..');
 }
 
+$composer = new \Refactor\App\Composer();
+
 /* Application initiation */
-$app = new Application('Refactor it', REFACTOR_IT_VERSION);
+$app = new Application('Refactor it', $composer->getVersion());
 
 $commitHook = new \Refactor\Console\Command\CommitHook();
 $init = new \Refactor\Init();
