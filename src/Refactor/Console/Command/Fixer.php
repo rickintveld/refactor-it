@@ -6,6 +6,8 @@ use Refactor\Command\Refactor;
 use Refactor\Console\Animal;
 use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
+use Refactor\Exception\UnknownVcsTypeException;
+use Refactor\Exception\WrongVcsTypeException;
 use Refactor\Notification\Notifier;
 use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -51,8 +53,8 @@ class Fixer extends Notifier implements CommandInterface
      * @param HelperSet $helperSet
      * @param array|null $parameters
      * @throws FileNotFoundException
-     * @throws \Refactor\Exception\UnknownVcsTypeException
-     * @throws \Refactor\Exception\WrongVcsTypeException
+     * @throws UnknownVcsTypeException
+     * @throws WrongVcsTypeException
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
@@ -60,10 +62,7 @@ class Fixer extends Notifier implements CommandInterface
             return;
         }
 
-        $this->runRefactor(
-            $this->finder->getChangedFiles(),
-            $output
-        );
+        $this->runRefactor($this->finder->getChangedFiles(), $output);
     }
 
     /**
