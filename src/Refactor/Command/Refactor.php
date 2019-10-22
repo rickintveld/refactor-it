@@ -22,11 +22,13 @@ class Refactor
             throw new FileNotFoundException('The requested refactor file could not be found!', 1570183073903);
         }
 
-        $binPath = dirname(__DIR__, 3) . '/vendor/bin';
+        if (!file_exists($executable = getcwd() . '/vendor/bin/php-cs-fixer')) {
+            throw new \Exception('No php-cs-fixer executable found in the vendor bin folder', 1571751466166);
+        }
 
         return [
             'php',
-            $binPath . '/php-cs-fixer',
+            $executable,
             'fix',
             $file,
             '--format=json',

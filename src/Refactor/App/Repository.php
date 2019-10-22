@@ -3,6 +3,7 @@ namespace Refactor\App;
 
 use Gitonomy\Git\Diff\Diff;
 use Gitonomy\Git\WorkingCopy;
+use Refactor\Utility\PathUtility;
 
 /**
  * Class Repository
@@ -18,8 +19,7 @@ class Repository
      */
     public function __construct()
     {
-        $repositoryRoot = dirname(__DIR__, 3);
-        $this->repository = new \Gitonomy\Git\Repository($repositoryRoot);
+        $this->repository = new \Gitonomy\Git\Repository(PathUtility::getRootPath());
     }
 
     /**

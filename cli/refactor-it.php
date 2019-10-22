@@ -4,10 +4,10 @@ use Silly\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    require __DIR__ . '/../vendor/autoload.php';
+if (file_exists(getcwd() . '/vendor/autoload.php')) {
+    require(getcwd() . '/vendor/autoload.php');
 } else {
-    die('Something went wrong while loading the autoloader!..');
+    throw new \RuntimeException('Unable to load autoloader.');
 }
 
 $composer = new \Refactor\App\Composer();
