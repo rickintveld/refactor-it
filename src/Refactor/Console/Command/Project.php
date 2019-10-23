@@ -4,6 +4,7 @@ namespace Refactor\Console\Command;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
+use Refactor\Exception\FileNotFoundException;
 use Refactor\Notification\Notifier;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\ApplicationValidator;
@@ -80,6 +81,7 @@ class Project extends Notifier implements CommandInterface
     /**
      * @param string $directory
      * @return array
+     * @throws FileNotFoundException
      */
     private function recursiveFileSearch(string $directory): array
     {
@@ -91,10 +93,46 @@ class Project extends Notifier implements CommandInterface
         $source = new RecursiveDirectoryIterator($directory);
         $iterator = new RecursiveIteratorIterator($source);
         $files = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+
+        $ignoreList = $this->getIgnoreContent();
+
         foreach ($files as $file) {
+            if ($this->ignoreFile($file[0], $ignoreList)) {
+                continue;
+            }
+
             $sourceFiles[] = $file[0];
         }
 
         return $sourceFiles;
+    }
+
+    /**
+     * @throws FileNotFoundException
+     * @return array
+     */
+    private function getIgnoreContent(): array
+    {
+        if (!file_exists($gitIgnore = PathUtility::getRootPath() . '/.gitignore')) {
+            throw new FileNotFoundException('No gitignore found in the root of your project.', 1571755999554);
+        }
+
+        return explode("\n", file_get_contents($gitIgnore));
+    }
+
+    /**
+     * @param string $file
+     * @param array $ignoreList
+     * @return bool
+     */
+    private function ignoreFile(string $file, array $ignoreList): bool
+    {
+        foreach ($ignoreList as $ignored) {
+            if (strpos($file, $ignored) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
