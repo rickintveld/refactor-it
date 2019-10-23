@@ -1,5 +1,11 @@
 <?php
 
+use Refactor\App\Composer;
+use Refactor\Console\Command\CommitHook;
+use Refactor\Console\Command\Fixer;
+use Refactor\Console\Command\Project;
+use Refactor\Console\Command\Remover;
+use Refactor\Init;
 use Silly\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -10,16 +16,14 @@ if (file_exists(getcwd() . '/vendor/autoload.php')) {
     throw new \RuntimeException('Unable to load autoloader.');
 }
 
-$composer = new \Refactor\App\Composer();
-
-/* Application initiation */
+$composer = new Composer();
 $app = new Application('Refactor it', $composer->getVersion());
 
-$commitHook = new \Refactor\Console\Command\CommitHook();
-$init = new \Refactor\Init();
-$fixer = new \Refactor\Console\Command\Fixer();
-$project = new \Refactor\Console\Command\Project();
-$remover = new \Refactor\Console\Command\Remover();
+$commitHook = new CommitHook();
+$init = new Init();
+$fixer = new Fixer();
+$project = new Project();
+$remover = new Remover();
 
 $app->command('init [--reset-rules]', function ($resetRules, InputInterface $input, OutputInterface $output) use ($init) {
     $init->execute($input, $output, $this->getHelperSet(), ['reset-rules' => $resetRules]);
