@@ -19,7 +19,7 @@ class ApplicationValidator implements ValidatorInterface
 
         if (file_exists(PathUtility::getRefactorItPath()) === false) {
             // @codeCoverageIgnoreStart
-            $output->writeln('<info>The refactor-it folder was not found, stopping command...</info>');
+            $output->writeln('<info>The refactor-it folder was not found, stopping execution...</info>');
 
             return false;
             // @codeCoverageIgnoreEnd
@@ -27,7 +27,7 @@ class ApplicationValidator implements ValidatorInterface
 
         if (file_exists(PathUtility::getRefactorItRulesFile()) === false) {
             // @codeCoverageIgnoreStart
-            $output->writeln('<info>The refactor-it rules file was not found, stopping command...</info>');
+            $output->writeln('<info>The refactor-it rules file was not found, stopping execution...</info>');
 
             return false;
             // @codeCoverageIgnoreEnd

@@ -1,6 +1,8 @@
 <?php
 namespace Refactor\Git;
 
+use Refactor\Utility\PathUtility;
+
 /**
  * Class Modifications
  * @package Refactor\Git
@@ -29,12 +31,12 @@ class Modifications
 
         /** @var \Gitonomy\Git\Diff\File $file */
         foreach ($pending->getFiles() as $file) {
-            $files[] = getcwd() . '/' . $file->getName();
+            $files[] = PathUtility::getRootPath() . '/' . $file->getName();
         }
 
         /** @var \Gitonomy\Git\Diff\File $stage */
         foreach ($staged->getFiles() as $stage) {
-            $files[] = getcwd() . '/' . $stage->getName();
+            $files[] = PathUtility::getRootPath() . '/' . $stage->getName();
         }
 
         return $files;
