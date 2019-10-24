@@ -7,7 +7,6 @@ use RecursiveRegexIterator;
 use Refactor\App\Repository;
 use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
-use Refactor\Notification\Notifier;
 use Refactor\Troll\Fuck;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\ApplicationValidator;
@@ -23,7 +22,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  * @package Refactor\Console\Refactor
  * @codeCoverageIgnore
  */
-class Project extends Notifier implements CommandInterface
+class Project implements CommandInterface
 {
     /** @var ApplicationValidator */
     private $applicationValidator;

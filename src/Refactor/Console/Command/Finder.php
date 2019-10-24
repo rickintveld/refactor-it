@@ -5,13 +5,12 @@ use Refactor\Console\VersionControl;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
 use Refactor\Git\Modifications;
-use Refactor\Notification\Notifier;
 
 /**
  * Class Finder
  * @package Refactor\Fixer
  */
-class Finder extends Notifier
+class Finder
 {
     public const GIT = 'git';
     public const GIT_CONFIG = '.git';
@@ -40,7 +39,6 @@ class Finder extends Notifier
     {
         if (empty($this->versionControl->validateVcsUsage())) {
             // @codeCoverageIgnoreStart
-            $this->push('Exception Error [1570009542585]', 'There is no version control system found in your project!', true);
             throw new UnknownVcsTypeException('There is no version control system found in your project!', 1570009542585);
             // @codeCoverageIgnoreEnd
         }

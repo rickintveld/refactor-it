@@ -9,7 +9,6 @@ use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
-use Refactor\Notification\Notifier;
 use Refactor\Troll\Fuck;
 use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -23,7 +22,7 @@ use Symfony\Component\Process\Process;
  * Class Fixer
  * @package Refactor\Fixer
  */
-class Fixer extends Notifier implements CommandInterface
+class Fixer implements CommandInterface
 {
     /** @var Animal */
     private $animal;
@@ -121,8 +120,6 @@ class Fixer extends Notifier implements CommandInterface
 
         $this->cleanUp();
         $progressBar->finish();
-
-        $this->push('Refactor complete', 'The refactor process is completed!', false);
 
         $output->writeln('');
         $output->writeln('<info>' . $this->animal->speak("All done... \nYour code has been refactored!") . '</info>');

@@ -3,7 +3,6 @@ namespace Refactor\Console\Command;
 
 use Refactor\App\Repository;
 use Refactor\Console\Signature;
-use Refactor\Notification\Notifier;
 use Refactor\Troll\Fuck;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\ApplicationValidator;
@@ -19,7 +18,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  * @package Refactor\Console
  * @codeCoverageIgnore
  */
-class Remover extends Notifier implements CommandInterface
+class Remover implements CommandInterface
 {
     /** @var ApplicationValidator */
     private $applicationValidator;
@@ -95,12 +94,6 @@ class Remover extends Notifier implements CommandInterface
         $output->writeln('<info> ' . $folder . '</info>');
         $progressBar->advance();
         $progressBar->finish();
-
-        $this->push(
-            'Removing complete',
-            'All the files and folder are deleted from your project!',
-            false
-        );
 
         return rmdir($folder);
     }
