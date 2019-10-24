@@ -4,8 +4,11 @@ namespace Refactor\Console\Command;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
+use Refactor\App\Repository;
+use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Notification\Notifier;
+use Refactor\Troll\Fuck;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\ApplicationValidator;
 use RegexIterator;
@@ -28,10 +31,18 @@ class Project extends Notifier implements CommandInterface
     /** @var Fixer */
     private $fixer;
 
+    /** @var Fuck */
+    private $fuck;
+
+    /** @var Repository */
+    private $repository;
+
     public function __construct()
     {
         $this->applicationValidator = new ApplicationValidator();
         $this->fixer = new Fixer();
+        $this->fuck = new Fuck();
+        $this->repository = new Repository();
     }
 
     /**
@@ -39,10 +50,13 @@ class Project extends Notifier implements CommandInterface
      * @param OutputInterface $output
      * @param HelperSet $helperSet
      * @param array ...$parameters
+     * @throws FileNotFoundException
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
         if (!$this->applicationValidator->validate()) {
+            $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+
             return;
         }
 
@@ -66,6 +80,7 @@ class Project extends Notifier implements CommandInterface
 
             if (empty($files)) {
                 $output->writeln('<error>No files found to refactor, please try again or select another source folder...</error>');
+                $output->writeln('<question> ' . $this->fuck->speakFrom(Signature::noob()) . ' </question>');
 
                 return;
             }
@@ -74,14 +89,15 @@ class Project extends Notifier implements CommandInterface
                 $this->fixer->refactorAll($files);
             } catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
+                $output->writeln('<question> ' . $this->fuck->speakFrom(Signature::team()) . ' </question>');
             }
         }
     }
 
     /**
      * @param string $directory
-     * @return array
      * @throws FileNotFoundException
+     * @return array
      */
     private function recursiveFileSearch(string $directory): array
     {

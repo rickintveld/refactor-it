@@ -13,6 +13,22 @@ class Signature
      */
     public static function write(): string
     {
-        return "Coded with ♥ by Rick in 't Veld \nrick.in.t.veld@opinity.nl";
+        return "\nCoded with ♥ by Rick in 't Veld \nrick.in.t.veld@opinity.nl";
+    }
+
+    /**
+     * @return string
+     */
+    public static function noob(): string
+    {
+        return 'NOOB';
+    }
+
+    /**
+     * @return string
+     */
+    public static function team(): string
+    {
+        return 'Refactor-it';
     }
 }

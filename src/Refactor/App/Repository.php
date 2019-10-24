@@ -4,6 +4,7 @@ namespace Refactor\App;
 use Gitonomy\Git\Diff\Diff;
 use Gitonomy\Git\WorkingCopy;
 use Refactor\Utility\PathUtility;
+use Symfony\Component\Process\Process;
 
 /**
  * Class Repository
@@ -52,5 +53,25 @@ class Repository
     public function getPendingModifications(): Diff
     {
         return $this->getWorkingCopy()->getDiffPending();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserName(): string
+    {
+        $output = [];
+        $process = new Process(['git','config','user.name']);
+        $process->start();
+        while ($process->isRunning()) {
+            $output = $process->getOutput();
+        }
+
+        if (!empty($output)) {
+            $fullName = explode(' ', $output);
+            $firstName = $fullName[0];
+        }
+
+        return $firstName ?? 'Unknown';
     }
 }
