@@ -1,10 +1,11 @@
 <?php
 namespace Refactor;
 
+use Refactor\App\Repository;
 use Refactor\Config\Rules;
-use Refactor\Console\Animal;
 use Refactor\Console\Command\CommandInterface;
 use Refactor\Console\Signature;
+use Refactor\Troll\Fuck;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -21,15 +22,19 @@ class Init implements CommandInterface
     public const REFACTOR_IT_PATH = '/private/refactor-it/';
     public const GITIGNORE_CONTENT = "/rules.json\r\n!/.gitignore";
 
-    /** @var Animal */
-    private $animal;
+    /** @var Fuck */
+    private $fuck;
+
+    /** @var Command\Refactor */
+    private $repository;
 
     /**
      * Init constructor.
      */
     public function __construct()
     {
-        $this->animal = new Animal();
+        $this->fuck = new Fuck();
+        $this->repository = new Repository();
     }
 
     /**
@@ -50,10 +55,13 @@ class Init implements CommandInterface
             } // @codeCoverageIgnoreStart
             catch (\Exception $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
+                $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
 
                 return;
                 // @codeCoverageIgnoreEnd
             }
+
+            $output->writeln('<info>Done writing the refactor-it config. It\'s located in the root of your project in the private folder!</info>');
         }
 
         // @codeCoverageIgnoreStart
@@ -72,15 +80,19 @@ class Init implements CommandInterface
                     $this->configureGitIgnore();
                 } catch (\Exception $exception) {
                     $output->writeln('<error>' . $exception->getMessage() . '</error>');
+                    $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
 
                     return;
                 }
+
+                $output->writeln('<info>Done rewriting the refactor-it config.</info>');
+            } else {
+                $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
             }
         }
-        // @codeCoverageIgnoreEnd
 
-        $output->writeln('<info>' . $this->animal->speak('Done writing the refactor-it config. It\'s located in the root of your project in the private folder!') . '</info>');
         $output->writeln('<info>' . Signature::write() . '</info>');
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -111,7 +123,7 @@ class Init implements CommandInterface
      * @param Rules $rules
      * @throws \Exception
      */
-    private function writeRefactorRules(Rules $rules)
+    private function writeRefactorRules(Rules $rules): void
     {
         $path = dirname(PathUtility::getRefactorItPath());
 
@@ -137,7 +149,7 @@ class Init implements CommandInterface
     /**
      * Generates the git ignore file!
      */
-    private function configureGitIgnore()
+    private function configureGitIgnore(): void
     {
         $gitIgnore = PathUtility::getRefactorItPath() . '.gitignore';
         if (!file_exists($gitIgnore)) {

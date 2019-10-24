@@ -1,8 +1,11 @@
 <?php
 namespace Refactor\Console\Command;
 
+use Refactor\App\Repository;
+use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Exception\MissingVersionControlException;
+use Refactor\Troll\Fuck;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\VersionControlValidator;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -17,6 +20,12 @@ class CommitHook implements CommandInterface
 {
     public const PRE_COMMIT_FILE = 'pre-commit';
 
+    /** @var Fuck */
+    private $fuck;
+
+    /** @var Repository */
+    private $repository;
+
     /** @var VersionControlValidator */
     private $versionControlValidator;
 
@@ -25,6 +34,8 @@ class CommitHook implements CommandInterface
      */
     public function __construct()
     {
+        $this->fuck = new Fuck();
+        $this->repository = new Repository();
         $this->versionControlValidator = new VersionControlValidator();
     }
 
@@ -38,6 +49,7 @@ class CommitHook implements CommandInterface
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
         if (!$this->versionControlValidator->validate()) {
+            $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
             throw new MissingVersionControlException('There was no version control system found in your project!', 1571643538278);
         }
 
@@ -47,16 +59,20 @@ class CommitHook implements CommandInterface
             try {
                 $this->removePreCommitHook();
                 $output->writeln('<info>Removing the GIT pre-commit file from the GIT hooks folder</info>');
+                $output->writeln('<question> ' . $this->fuck->speakTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
             } catch (FileNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
+                $output->writeln('<question> ' . $this->fuck->speakTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
             }
         }
 
         if ($removeHook === false) {
             try {
                 $this->addPreCommitHook();
+                $output->writeln('<info>The pre-commit hook has been added to the hooks folder!</info>');
             } catch (FileNotFoundException $exception) {
                 $output->writeln('<error>' . $exception->getMessage() . '</error>');
+                $output->writeln('<question> ' . $this->fuck->speakTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
             }
         }
     }

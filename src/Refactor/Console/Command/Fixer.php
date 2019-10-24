@@ -1,6 +1,7 @@
 <?php
 namespace Refactor\Console\Command;
 
+use Refactor\App\Repository;
 use Refactor\Cache\GarbageCollector;
 use Refactor\Command\Refactor;
 use Refactor\Console\Animal;
@@ -8,7 +9,7 @@ use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
-use Refactor\Notification\Notifier;
+use Refactor\Troll\Fuck;
 use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -21,7 +22,7 @@ use Symfony\Component\Process\Process;
  * Class Fixer
  * @package Refactor\Fixer
  */
-class Fixer extends Notifier implements CommandInterface
+class Fixer implements CommandInterface
 {
     /** @var Animal */
     private $animal;
@@ -32,19 +33,27 @@ class Fixer extends Notifier implements CommandInterface
     /** @var Finder */
     private $finder;
 
+    /** @var Fuck */
+    private $fuck;
+
     /** @var GarbageCollector */
     private $garbageCollector;
 
     /** @var Refactor */
     private $refactorCommand;
 
+    /** @var Repository */
+    private $repository;
+
     public function __construct()
     {
         $this->animal = new Animal();
         $this->applicationValidator = new ApplicationValidator();
         $this->finder = new Finder();
+        $this->fuck = new Fuck();
         $this->garbageCollector = new GarbageCollector();
         $this->refactorCommand = new Refactor();
+        $this->repository = new Repository();
     }
 
     /**
@@ -59,6 +68,8 @@ class Fixer extends Notifier implements CommandInterface
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
         if (!$this->applicationValidator->validate()) {
+            $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+
             return;
         }
 
@@ -82,13 +93,13 @@ class Fixer extends Notifier implements CommandInterface
     private function runRefactor(array $files, OutputInterface $output): void
     {
         if (empty($files)) {
-            $output->writeln('<comment>' . $this->animal->speak('There are no files yet to refactor!') . '</comment>');
+            $output->writeln('<comment>There are no files yet to refactor!</comment>');
+            $output->writeln('<question> ' . $this->fuck->speakTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
 
             return;
         }
 
-        $output->writeln('<info>Refactoring...</info>');
-        $output->writeln('');
+        $output->writeln("<info>Refactoring...\n</info>");
 
         $progressBar = new ProgressBar($output, count($files));
         $progressBar->start();
@@ -101,6 +112,7 @@ class Fixer extends Notifier implements CommandInterface
                 $output->writeln('<info> ' . $file . '</info>');
             } else {
                 $output->writeln('<error>' . $process->getOutput() . '</error>');
+                $output->writeln('<question> ' . $this->fuck->speakFrom(Signature::team()) . ' </question>');
             }
 
             $progressBar->advance();
@@ -108,12 +120,6 @@ class Fixer extends Notifier implements CommandInterface
 
         $this->cleanUp();
         $progressBar->finish();
-
-        $this->push(
-            'Refactor complete',
-            'The refactor process is completed!',
-            false
-        );
 
         $output->writeln('');
         $output->writeln('<info>' . $this->animal->speak("All done... \nYour code has been refactored!") . '</info>');
