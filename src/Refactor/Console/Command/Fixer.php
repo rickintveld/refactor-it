@@ -1,15 +1,14 @@
 <?php
 namespace Refactor\Console\Command;
 
-use Refactor\App\Repository;
 use Refactor\Cache\GarbageCollector;
 use Refactor\Command\Refactor;
 use Refactor\Console\Animal;
+use Refactor\Console\Output;
 use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
-use Refactor\Troll\Fuck;
 use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -22,7 +21,7 @@ use Symfony\Component\Process\Process;
  * Class Fixer
  * @package Refactor\Fixer
  */
-class Fixer implements CommandInterface
+class Fixer extends OutputCommand implements CommandInterface
 {
     /** @var Animal */
     private $animal;
@@ -33,27 +32,19 @@ class Fixer implements CommandInterface
     /** @var Finder */
     private $finder;
 
-    /** @var Fuck */
-    private $fuck;
-
     /** @var GarbageCollector */
     private $garbageCollector;
 
     /** @var Refactor */
     private $refactorCommand;
 
-    /** @var Repository */
-    private $repository;
-
     public function __construct()
     {
         $this->animal = new Animal();
         $this->applicationValidator = new ApplicationValidator();
         $this->finder = new Finder();
-        $this->fuck = new Fuck();
         $this->garbageCollector = new GarbageCollector();
         $this->refactorCommand = new Refactor();
-        $this->repository = new Repository();
     }
 
     /**
@@ -64,11 +55,14 @@ class Fixer implements CommandInterface
      * @throws FileNotFoundException
      * @throws UnknownVcsTypeException
      * @throws WrongVcsTypeException
+     * @throws \Refactor\Exception\InvalidInputException
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
+        $this->setOutput($output);
+
         if (!$this->applicationValidator->validate()) {
-            $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+            $this->getOutput()->addFuckingLine(Output::TROLL_FROM_TO)->writeLines();
 
             return;
         }
@@ -82,37 +76,42 @@ class Fixer implements CommandInterface
      */
     public function refactorAll(array $files)
     {
-        $this->runRefactor($files, new ConsoleOutput());
+        $output = new ConsoleOutput();
+        $this->setOutput($output);
+        $this->runRefactor($files, $output);
     }
 
     /**
      * @param array $files
      * @param OutputInterface $output
      * @throws FileNotFoundException
+     * @throws \Exception
      */
     private function runRefactor(array $files, OutputInterface $output): void
     {
         if (empty($files)) {
-            $output->writeln('<comment>There are no files yet to refactor!</comment>');
-            $output->writeln('<question> ' . $this->fuck->speakTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+            $this->getOutput()
+                ->addLine('There are no files yet to refactor', Output::FORMAT_COMMENT)
+                ->addFuckingLine(Output::TROLL_FROM_TO)->writeLines();
 
             return;
         }
 
-        $output->writeln("<info>Refactoring...\n</info>");
+        $this->getOutput()->addLine("Refactoring...\n", Output::FORMAT_QUESTION)->writeLines();
 
         $progressBar = new ProgressBar($output, count($files));
         $progressBar->start();
 
+        $failures = 0;
         foreach ($files as $file) {
             $process = Process::fromShellCommandline(implode(' ', $this->refactorCommand->getCommand($file)));
             $process->run();
 
             if ($process->isSuccessful()) {
-                $output->writeln('<info> ' . $file . '</info>');
+                $this->getOutput()->addLine($file, Output::FORMAT_INFO)->writeLines();
             } else {
-                $output->writeln('<error>' . $process->getOutput() . '</error>');
-                $output->writeln('<question> ' . $this->fuck->speakFrom(Signature::team()) . ' </question>');
+                $this->getOutput()->addLine($process->getOutput(), Output::FORMAT_INFO)->writeLines();
+                $failures++;
             }
 
             $progressBar->advance();
@@ -121,9 +120,14 @@ class Fixer implements CommandInterface
         $this->cleanUp();
         $progressBar->finish();
 
-        $output->writeln('');
-        $output->writeln('<info>' . $this->animal->speak("All done... \nYour code has been refactored!") . '</info>');
-        $output->writeln('<info>' . Signature::write() . '</info>');
+        if ($failures > 0) {
+            $this->getOutput()->addFuckingLine(Output::TROLL_TO, true);
+        }
+
+        $this->getOutput()
+            ->addLine($this->animal->speak("All done... \nYour code has been refactored!"), Output::FORMAT_INFO)
+            ->addLine(Signature::write(), Output::FORMAT_INFO)
+            ->writeLines();
     }
 
     /**

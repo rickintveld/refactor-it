@@ -1,11 +1,11 @@
 <?php
 namespace Refactor;
 
-use Refactor\App\Repository;
 use Refactor\Config\Rules;
 use Refactor\Console\Command\CommandInterface;
+use Refactor\Console\Command\OutputCommand;
+use Refactor\Console\Output;
 use Refactor\Console\Signature;
-use Refactor\Troll\Fuck;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -17,34 +17,23 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  * Class Init
  * @package Refactor
  */
-class Init implements CommandInterface
+class Init extends OutputCommand implements CommandInterface
 {
     public const REFACTOR_IT_PATH = '/private/refactor-it/';
     public const GITIGNORE_CONTENT = "/rules.json\r\n!/.gitignore";
-
-    /** @var Fuck */
-    private $fuck;
-
-    /** @var Command\Refactor */
-    private $repository;
-
-    /**
-     * Init constructor.
-     */
-    public function __construct()
-    {
-        $this->fuck = new Fuck();
-        $this->repository = new Repository();
-    }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param HelperSet $helperSet
      * @param array|null $parameters
+     * @throws Exception\InvalidInputException
+     * @throws \Exception
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
+        $this->setOutput($output);
+
         $resetRules = $parameters['reset-rules'];
 
         if ($resetRules === false) {
@@ -54,14 +43,18 @@ class Init implements CommandInterface
                 $this->configureGitIgnore();
             } // @codeCoverageIgnoreStart
             catch (\Exception $exception) {
-                $output->writeln('<error>' . $exception->getMessage() . '</error>');
-                $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+                $this->getOutput()
+                    ->addLine($exception->getMessage(), Output::FORMAT_ERROR)
+                    ->addFuckingLine(Output::TROLL_FROM_TO)
+                    ->writeLines();
 
                 return;
                 // @codeCoverageIgnoreEnd
             }
 
-            $output->writeln('<info>Done writing the refactor-it config. It\'s located in the root of your project in the private folder!</info>');
+            $this->getOutput()
+                ->addLine('Done writing the refactor-it config. It\'s located in the root of your project in the private folder', Output::FORMAT_INFO)
+                ->writeLines();
         }
 
         // @codeCoverageIgnoreStart
@@ -73,25 +66,31 @@ class Init implements CommandInterface
             $question = new ConfirmationQuestion('Are you sure you want to reset your project (y/N)?', false);
 
             if ($helper->ask($input, $output, $question)) {
-                $output->writeln('<info>Resetting the refactor-it rules</info>');
+                $this->getOutput()
+                    ->addLine('Resetting the refactor-it rules', Output::FORMAT_INFO)
+                    ->writeLines();
 
                 try {
                     $this->writeRefactorRules($rules);
                     $this->configureGitIgnore();
                 } catch (\Exception $exception) {
-                    $output->writeln('<error>' . $exception->getMessage() . '</error>');
-                    $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+                    $this->getOutput()
+                        ->addLine($exception->getMessage(), Output::FORMAT_ERROR)
+                        ->addFuckingLine(Output::TROLL_FROM_TO)
+                        ->writeLines();
 
                     return;
                 }
 
-                $output->writeln('<info>Done rewriting the refactor-it config.</info>');
+                $this->getOutput()->addLine('Done rewriting the refactor-it config.', Output::FORMAT_INFO);
             } else {
-                $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+                $this->getOutput()->addFuckingLine(Output::TROLL_FROM_TO, true);
             }
         }
 
-        $output->writeln('<info>' . Signature::write() . '</info>');
+        $this->getOutput()
+            ->addLine(Signature::write(), Output::FORMAT_INFO)
+            ->writeLines();
         // @codeCoverageIgnoreEnd
     }
 
