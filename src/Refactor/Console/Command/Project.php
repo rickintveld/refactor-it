@@ -4,10 +4,8 @@ namespace Refactor\Console\Command;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
-use Refactor\App\Repository;
-use Refactor\Console\Signature;
+use Refactor\Console\Output;
 use Refactor\Exception\FileNotFoundException;
-use Refactor\Troll\Fuck;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\ApplicationValidator;
 use RegexIterator;
@@ -22,7 +20,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  * @package Refactor\Console\Refactor
  * @codeCoverageIgnore
  */
-class Project implements CommandInterface
+class Project extends OutputCommand implements CommandInterface
 {
     /** @var ApplicationValidator */
     private $applicationValidator;
@@ -50,12 +48,17 @@ class Project implements CommandInterface
      * @param HelperSet $helperSet
      * @param array ...$parameters
      * @throws FileNotFoundException
+     * @throws \Refactor\Exception\InvalidInputException
+     * @throws \Exception
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
-        if (!$this->applicationValidator->validate()) {
-            $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+        $this->setOutput($output);
 
+        if (!$this->applicationValidator->validate()) {
+            $this->getOutput()
+                ->addFuckingLine(Output::TROLL_TO)->writeLines();
+          
             return;
         }
 
@@ -74,12 +77,14 @@ class Project implements CommandInterface
 
         if ($answer = $helper->ask($input, $output, $question)) {
             $directory = PathUtility::getRootPath() . '/' . $answer;
-            $output->writeln('<info>Refactoring all the php files within folder ' . $directory . '</info>');
-            $files = $this->recursiveFileSearch($directory);
 
+            $this->getOutput()->addLine('Refactoring all the php files within folder ' . $directory, Output::FORMAT_INFO)->writeLines();
+
+            $files = $this->recursiveFileSearch($directory);
             if (empty($files)) {
-                $output->writeln('<error>No files found to refactor, please try again or select another source folder...</error>');
-                $output->writeln('<question> ' . $this->fuck->speakFrom(Signature::noob()) . ' </question>');
+                $this->getOutput()
+                    ->addLine('No files found to refactor, please try again or select another source folder...', Output::FORMAT_ERROR)
+                    ->addFuckingLine(Output::TROLL_FROM_TO, true)->writeLines();
 
                 return;
             }
@@ -87,8 +92,9 @@ class Project implements CommandInterface
             try {
                 $this->fixer->refactorAll($files);
             } catch (\Exception $exception) {
-                $output->writeln('<error>' . $exception->getMessage() . '</error>');
-                $output->writeln('<question> ' . $this->fuck->speakFrom(Signature::team()) . ' </question>');
+                $this->getOutput()
+                    ->addLine($exception->getMessage(), Output::FORMAT_ERROR)
+                    ->addFuckingLine(Output::TROLL_FROM)->writeLines();
             }
         }
     }

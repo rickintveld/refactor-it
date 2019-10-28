@@ -1,9 +1,7 @@
 <?php
 namespace Refactor\Console\Command;
 
-use Refactor\App\Repository;
-use Refactor\Console\Signature;
-use Refactor\Troll\Fuck;
+use Refactor\Console\Output;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -18,7 +16,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  * @package Refactor\Console
  * @codeCoverageIgnore
  */
-class Remover implements CommandInterface
+class Remover extends OutputCommand implements CommandInterface
 {
     /** @var ApplicationValidator */
     private $applicationValidator;
@@ -41,11 +39,15 @@ class Remover implements CommandInterface
      * @param OutputInterface $output
      * @param HelperSet $helperSet
      * @param array ...$parameters
+     * @throws \Refactor\Exception\InvalidInputException
+     * @throws \Exception
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void
     {
+        $this->setOutput($output);
+
         if (!$this->applicationValidator->validate()) {
-            $output->writeln('<question> ' . $this->fuck->shoutTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+            $this->getOutput()->addFuckingLine(Output::TROLL_TO)->writeLines();
 
             return;
         }
@@ -55,21 +57,27 @@ class Remover implements CommandInterface
         $question = new ConfirmationQuestion('Are you sure you want to remove refactor-it from your project (y/N)?', false);
 
         if ($helper->ask($input, $output, $question)) {
-            $output->writeln('<info>Removing the refactor-it folder and files...</info>');
+            $this->getOutput()->addLine('Removing the refactor-it folder and files...', Output::FORMAT_INFO)->writeLines();
 
             if ($this->removeFilesAndDirectory($output) === true) {
-                $output->writeln('<info> The refactor-it folder and files are removed from the project!</info>');
+                $this->getOutput()->addLine('The refactor-it folder and files are removed from the project!', Output::FORMAT_INFO)->writeLines();
             } else {
-                $output->writeln('<error>Something went wrong while removing the refactor-it folder! Please try again...</error>');
-                $output->writeln('<question> ' . $this->fuck->speakTo($this->repository->getUserName(), Signature::noob()) . ' </question>');
+                $this->getOutput()
+                    ->addLine('The refactor-it folder and files are removed from the project!', Output::FORMAT_INFO)
+                    ->addFuckingLine(Output::TROLL_FROM_TO)
+                    ->writeLines();
             }
 
             if ($this->cleanUpPrivateDirectory() === true) {
-                $output->writeln('<info> The private folder was empty so the folder is removed from your project!</info>');
-                $output->writeln('<question> ' . $this->fuck->speakFrom(Signature::team()) . ' </question>');
+                $this->getOutput()
+                    ->addLine('The private folder was empty so the folder is removed from your project!', Output::FORMAT_INFO)
+                    ->addFuckingLine(Output::TROLL_FROM)
+                    ->writeLines();
             } else {
-                $output->writeln('<error>Something went wrong while removing the private folder! Please try again...</error>');
-                $output->writeln('<question> ' . $this->fuck->speakTo($this->repository->getUserName()) . ' </question>');
+                $this->getOutput()
+                    ->addLine('Something went wrong while removing the private folder! Please try again...', Output::FORMAT_ERROR)
+                    ->addFuckingLine(Output::TROLL_TO)
+                    ->writeLines();
             }
         }
     }
