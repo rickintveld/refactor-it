@@ -1,13 +1,11 @@
 <?php
 namespace Refactor;
 
-use Refactor\App\Repository;
 use Refactor\Config\Rules;
 use Refactor\Console\Command\CommandInterface;
 use Refactor\Console\Command\OutputCommand;
 use Refactor\Console\Output;
 use Refactor\Console\Signature;
-use Refactor\Troll\Fuck;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;

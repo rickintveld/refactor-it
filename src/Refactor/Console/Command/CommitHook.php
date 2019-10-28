@@ -3,7 +3,6 @@ namespace Refactor\Console\Command;
 
 use Refactor\App\Repository;
 use Refactor\Console\Output;
-use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Exception\MissingVersionControlException;
 use Refactor\Troll\Fuck;
