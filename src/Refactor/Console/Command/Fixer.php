@@ -1,7 +1,6 @@
 <?php
 namespace Refactor\Console\Command;
 
-use Refactor\App\Repository;
 use Refactor\Cache\GarbageCollector;
 use Refactor\Command\Refactor;
 use Refactor\Console\Animal;
@@ -39,9 +38,6 @@ class Fixer extends OutputCommand implements CommandInterface
     /** @var Refactor */
     private $refactorCommand;
 
-    /** @var Repository */
-    private $repository;
-
     public function __construct()
     {
         $this->animal = new Animal();
@@ -49,7 +45,6 @@ class Fixer extends OutputCommand implements CommandInterface
         $this->finder = new Finder();
         $this->garbageCollector = new GarbageCollector();
         $this->refactorCommand = new Refactor();
-        $this->repository = new Repository();
     }
 
     /**

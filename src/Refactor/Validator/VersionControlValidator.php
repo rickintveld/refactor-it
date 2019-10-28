@@ -25,11 +25,7 @@ class VersionControlValidator implements ValidatorInterface
             $files = explode("\n", $process->getOutput());
         }
 
-        if (in_array(Finder::GIT_CONFIG, $files, true) === true) {
-            return true;
-        }
-
-        return false;
+        return $this->fileExists($files, Finder::GIT_CONFIG);
     }
 
     /**
@@ -38,10 +34,17 @@ class VersionControlValidator implements ValidatorInterface
     public function preCommitHook(): bool
     {
         $files = scandir(PathUtility::getCommitHookPath());
-        if (in_array(CommitHook::PRE_COMMIT_FILE, $files, true)) {
-            return true;
-        }
 
-        return false;
+        return $this->fileExists($files, CommitHook::PRE_COMMIT_FILE);
+    }
+
+    /**
+     * @param array $files
+     * @param string $configFile
+     * @return bool
+     */
+    private function fileExists(array $files, string $configFile): bool
+    {
+        return in_array($configFile, $files, true);
     }
 }
