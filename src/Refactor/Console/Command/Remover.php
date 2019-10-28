@@ -21,9 +21,17 @@ class Remover extends OutputCommand implements CommandInterface
     /** @var ApplicationValidator */
     private $applicationValidator;
 
+    /** @var Fuck */
+    private $fuck;
+
+    /** @var Repository */
+    private $repository;
+
     public function __construct()
     {
         $this->applicationValidator = new ApplicationValidator();
+        $this->fuck = new Fuck();
+        $this->repository = new Repository();
     }
 
     /**

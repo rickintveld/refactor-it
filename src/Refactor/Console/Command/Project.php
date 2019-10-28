@@ -28,10 +28,18 @@ class Project extends OutputCommand implements CommandInterface
     /** @var Fixer */
     private $fixer;
 
+    /** @var Fuck */
+    private $fuck;
+
+    /** @var Repository */
+    private $repository;
+
     public function __construct()
     {
         $this->applicationValidator = new ApplicationValidator();
         $this->fixer = new Fixer();
+        $this->fuck = new Fuck();
+        $this->repository = new Repository();
     }
 
     /**
@@ -50,7 +58,7 @@ class Project extends OutputCommand implements CommandInterface
         if (!$this->applicationValidator->validate()) {
             $this->getOutput()
                 ->addFuckingLine(Output::TROLL_TO)->writeLines();
-
+          
             return;
         }
 

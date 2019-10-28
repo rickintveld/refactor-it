@@ -1,6 +1,7 @@
 <?php
 namespace Refactor\Console\Command;
 
+use Refactor\App\Repository;
 use Refactor\Cache\GarbageCollector;
 use Refactor\Command\Refactor;
 use Refactor\Console\Animal;
@@ -32,19 +33,27 @@ class Fixer extends OutputCommand implements CommandInterface
     /** @var Finder */
     private $finder;
 
+    /** @var Fuck */
+    private $fuck;
+
     /** @var GarbageCollector */
     private $garbageCollector;
 
     /** @var Refactor */
     private $refactorCommand;
 
+    /** @var Repository */
+    private $repository;
+
     public function __construct()
     {
         $this->animal = new Animal();
         $this->applicationValidator = new ApplicationValidator();
         $this->finder = new Finder();
+        $this->fuck = new Fuck();
         $this->garbageCollector = new GarbageCollector();
         $this->refactorCommand = new Refactor();
+        $this->repository = new Repository();
     }
 
     /**
@@ -93,7 +102,6 @@ class Fixer extends OutputCommand implements CommandInterface
             $this->getOutput()
                 ->addLine('There are no files yet to refactor', Output::FORMAT_COMMENT)
                 ->addFuckingLine(Output::TROLL_FROM_TO)->writeLines();
-
             return;
         }
 
