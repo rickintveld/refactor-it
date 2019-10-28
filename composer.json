@@ -5,7 +5,7 @@
     "keywords": ["refactor", "refactor-it", "rintveld", "bad code", "code fixer", "code improvement", "code quality"],
     "license": "MIT",
     "type": "application",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "authors": [{
         "name": "Rick in t Veld",
         "email": "rick.in.t.veld@opinity.nl"
