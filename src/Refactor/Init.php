@@ -112,7 +112,7 @@ class Init extends OutputCommand implements CommandInterface
     {
         if ($empty === false && file_exists(PathUtility::getRefactorItRulesFile())) {
             $json = file_get_contents(PathUtility::getRefactorItRulesFile());
-            $rules = $rules->fromJSON(json_decode($json, true));
+            $rules = $rules->fromJSON($json);
         }
 
         return $rules;

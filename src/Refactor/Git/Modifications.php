@@ -1,6 +1,7 @@
 <?php
 namespace Refactor\Git;
 
+use Refactor\App\Repository;
 use Refactor\Utility\PathUtility;
 
 /**
@@ -17,7 +18,7 @@ class Modifications
      */
     public function __construct()
     {
-        $this->repository = new \Refactor\App\Repository();
+        $this->repository = new Repository();
     }
 
     /**
@@ -25,19 +26,15 @@ class Modifications
      */
     public function getAllModifiedFiles(): array
     {
-        $files = [];
-        $pending = $this->repository->getPendingModifications();
-        $staged = $this->repository->getStagedModifications();
+        $modifiedFiles = array_merge(
+            $this->repository->getPendingModifications()->getFiles(),
+            $this->repository->getStagedModifications()->getFiles()
+        );
 
-        /** @var \Gitonomy\Git\Diff\File $file */
-        foreach ($pending->getFiles() as $file) {
-            $files[] = PathUtility::getRootPath() . '/' . $file->getName();
-        }
-
-        /** @var \Gitonomy\Git\Diff\File $stage */
-        foreach ($staged->getFiles() as $stage) {
-            $files[] = PathUtility::getRootPath() . '/' . $stage->getName();
-        }
+        $files = array_map(static function ($file) {
+            /** @var \Gitonomy\Git\Diff\File $file */
+            return PathUtility::getRootPath() . '/' . $file->getName();
+        }, $modifiedFiles);
 
         return $files;
     }

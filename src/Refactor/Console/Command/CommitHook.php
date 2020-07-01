@@ -1,11 +1,9 @@
 <?php
 namespace Refactor\Console\Command;
 
-use Refactor\App\Repository;
 use Refactor\Console\Output;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Exception\MissingVersionControlException;
-use Refactor\Troll\Fuck;
 use Refactor\Utility\PathUtility;
 use Refactor\Validator\VersionControlValidator;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -20,12 +18,6 @@ class CommitHook extends OutputCommand implements CommandInterface
 {
     public const PRE_COMMIT_FILE = 'pre-commit';
 
-    /** @var Fuck */
-    private $fuck;
-
-    /** @var Repository */
-    private $repository;
-
     /** @var VersionControlValidator */
     private $versionControlValidator;
 
@@ -34,8 +26,6 @@ class CommitHook extends OutputCommand implements CommandInterface
      */
     public function __construct()
     {
-        $this->fuck = new Fuck();
-        $this->repository = new Repository();
         $this->versionControlValidator = new VersionControlValidator();
     }
 

@@ -37,7 +37,7 @@ class Finder
      */
     public function getChangedFiles(): array
     {
-        if (empty($this->versionControl->validateVcsUsage())) {
+        if (empty($this->versionControl->validateVersionControlUsage())) {
             // @codeCoverageIgnoreStart
             throw new UnknownVcsTypeException('There is no version control system found in your project!', 1570009542585);
             // @codeCoverageIgnoreEnd
