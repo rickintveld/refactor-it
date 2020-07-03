@@ -43,11 +43,7 @@ class HistoryLoggerTest extends TestCase
     {
         $this->historyLogger->log(self::LOG_MESSAGE);
         $this->assertFileExists(PathUtility::getHistoryFile());
-    }
 
-    public function testLogMessage(): void
-    {
-        $this->historyLogger->log(self::LOG_MESSAGE);
         $contents = explode("\n", @file_get_contents(PathUtility::getHistoryFile()));
         $this->assertEquals($contents[0], self::LOG_MESSAGE);
     }
