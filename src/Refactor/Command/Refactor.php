@@ -55,7 +55,7 @@ class Refactor
 
         $rules = new Rules();
         $json = file_get_contents(PathUtility::getRefactorItRulesFile());
-        $rules->fromJSON(json_decode($json, true));
+        $rules->fromJSON($json);
 
         return $rules;
     }

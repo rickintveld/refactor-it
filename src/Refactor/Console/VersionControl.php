@@ -25,7 +25,7 @@ class VersionControl
      * @throws WrongVcsTypeException
      * @return string
      */
-    public function validateVcsUsage(): string
+    public function validateVersionControlUsage(): string
     {
         $files = [];
         $process = new Process(['ls', '-a']);

@@ -8,10 +8,10 @@ namespace Refactor\Config;
 interface JsonParserInterface
 {
     /**
-     * @param array $json
+     * @param string $json
      * @return object
      */
-    public function fromJSON(array $json);
+    public function fromJSON(string $json);
 
     /**
      * @return string

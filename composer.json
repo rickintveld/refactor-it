@@ -20,7 +20,8 @@
         "ext-json": "*",
         "alrik11es/cowsayphp": "^1.2",
         "gitonomy/gitlib": "^1.1",
-        "klaude/foaas": "^1.0"
+        "klaude/foaas": "^1.0",
+        "symfony/serializer": "^5.1"
     },
     "autoload": {
         "psr-4": {

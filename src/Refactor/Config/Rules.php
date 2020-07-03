@@ -1,6 +1,11 @@
 <?php
 namespace Refactor\Config;
 
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 /**
  * Class DefaultRules
  * @package Refactor\Config
@@ -507,106 +512,13 @@ class Rules implements JsonParserInterface
     }
 
     /**
-     * @param array $json
+     * @param string $json
      * @return Rules
      */
-    public function fromJSON(array $json): Rules
+    public function fromJSON(string $json): Rules
     {
-        if (isset($json['ordered_class_elements']) && is_array($json['ordered_class_elements']) && count($json['ordered_class_elements']) > 0) {
-            $this->setOrderedClassElements($json['ordered_class_elements']);
-        }
-
-        if (isset($json['array_syntax']) && is_array($json['array_syntax']) && count($json['array_syntax']) > 0) {
-            $this->setArraySyntax($json['array_syntax']);
-        }
-
-        if (isset($json['concat_space']) && is_array($json['concat_space']) && count($json['concat_space']) > 0) {
-            $this->setConcatSpace($json['concat_space']);
-        }
-
-        if (isset($json['phpdoc_trim']) && is_bool($json['phpdoc_trim'])) {
-            $this->setphpdocTrim($json['phpdoc_trim']);
-        }
-
-        if (isset($json['phpdoc_order']) && is_bool($json['phpdoc_order'])) {
-            $this->setPhpdocOrder($json['phpdoc_order']);
-        }
-
-        if (isset($json['phpdoc_scalar']) && is_bool($json['phpdoc_scalar'])) {
-            $this->setPhpdocScalar($json['phpdoc_scalar']);
-        }
-
-        if (isset($json['phpdoc_types']) && is_bool($json['phpdoc_types'])) {
-            $this->setPhpdocTypes($json['phpdoc_types']);
-        }
-
-        if (isset($json['ordered_imports']) && is_bool($json['ordered_imports'])) {
-            $this->setOrderedImports($json['ordered_imports']);
-        }
-
-        if (isset($json['blank_line_before_return']) && is_bool($json['blank_line_before_return'])) {
-            $this->setBlankLineBeforeReturn($json['blank_line_before_return']);
-        }
-
-        if (isset($json['no_blank_lines_before_namespace']) && is_bool($json['no_blank_lines_before_namespace'])) {
-            $this->setNoBlankLinesBeforeNamespace($json['no_blank_lines_before_namespace']);
-        }
-
-        if (isset($json['no_blank_lines_after_phpdoc']) && is_bool($json['no_blank_lines_after_phpdoc'])) {
-            $this->setNoBlankLinesAfterPhpdoc($json['no_blank_lines_after_phpdoc']);
-        }
-
-        if (isset($json['no_empty_phpdoc']) && is_bool($json['no_empty_phpdoc'])) {
-            $this->setNoEmptyPhpdoc($json['no_empty_phpdoc']);
-        }
-
-        if (isset($json['no_empty_statement']) && is_bool($json['no_empty_statement'])) {
-            $this->setNoEmptyStatement($json['no_empty_statement']);
-        }
-
-        if (isset($json['no_mixed_echo_print']) && is_array($json['no_mixed_echo_print']) && count($json['no_mixed_echo_print']) > 0) {
-            $this->setNoMixedEchoPrint($json['no_mixed_echo_print']);
-        }
-
-        if (isset($json['no_extra_consecutive_blank_lines']) && is_array($json['no_extra_consecutive_blank_lines']) && count($json['no_extra_consecutive_blank_lines']) > 0) {
-            $this->setNoExtraConsecutiveBlankLines($json['no_extra_consecutive_blank_lines']);
-        }
-
-        if (isset($json['no_trailing_whitespace']) && is_bool($json['no_trailing_whitespace'])) {
-            $this->setNoTrailingWhitespace($json['no_trailing_whitespace']);
-        }
-
-        if (isset($json['no_unused_imports']) && is_bool($json['no_unused_imports'])) {
-            $this->setNoUnusedImports($json['no_unused_imports']);
-        }
-
-        if (isset($json['no_whitespace_in_blank_line']) && is_bool($json['no_whitespace_in_blank_line'])) {
-            $this->setNoWhitespaceInBlankLine($json['no_whitespace_in_blank_line']);
-        }
-
-        if (isset($json['object_operator_without_whitespace']) && is_bool($json['object_operator_without_whitespace'])) {
-            $this->setObjectOperatorWithoutWhitespace($json['object_operator_without_whitespace']);
-        }
-
-        if (isset($json['function_typehint_space']) && is_bool($json['function_typehint_space'])) {
-            $this->setFunctionTypehintSpace($json['function_typehint_space']);
-        }
-
-        if (isset($json['phpdoc_add_missing_param_annotation']) && is_bool($json['phpdoc_add_missing_param_annotation'])) {
-            $this->setPhpdocAddMissingParamAnnotation($json['phpdoc_add_missing_param_annotation']);
-        }
-
-        if (isset($json['is_null']) && is_bool($json['is_null'])) {
-            $this->setIsNull($json['is_null']);
-        }
-
-        if (isset($json['linebreak_after_opening_tag']) && is_bool($json['linebreak_after_opening_tag'])) {
-            $this->setLinebreakAfterOpeningTag($json['linebreak_after_opening_tag']);
-        }
-
-        if (isset($json['lowercase_cast']) && is_bool($json['lowercase_cast'])) {
-            $this->setLowercaseCast($json['lowercase_cast']);
-        }
+        $serializer = new Serializer([new GetSetMethodNormalizer()], [new JsonEncoder()]);
+        $serializer->deserialize($json, __CLASS__, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $this]);
 
         return $this;
     }
