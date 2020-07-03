@@ -18,7 +18,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class Init extends OutputCommand implements CommandInterface
 {
     public const REFACTOR_IT_PATH = '/private/refactor-it/';
-    public const GITIGNORE_CONTENT = "/rules.json\r\n/history.log\r\n!/.gitignore";
+    public const GIT_IGNORE_CONTENT = "/rules.json\r\n/history.log\r\n!/.gitignore";
 
     /**
      * @param InputInterface $input
@@ -125,13 +125,17 @@ class Init extends OutputCommand implements CommandInterface
 
         if (file_exists($path) === false) {
             // @codeCoverageIgnoreStart
-            mkdir($path, 0777, true);
+            if (!mkdir($path, 0777, true) && !is_dir($path)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $path));
+            }
             // @codeCoverageIgnoreEnd
         }
 
         if (file_exists(PathUtility::getRefactorItPath()) === false) {
             // @codeCoverageIgnoreStart
-            mkdir(PathUtility::getRefactorItPath(), 0777, true);
+            if (!mkdir($concurrentDirectory = PathUtility::getRefactorItPath(), 0777, true) && !is_dir($concurrentDirectory)) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
             // @codeCoverageIgnoreEnd
         }
 
@@ -150,7 +154,7 @@ class Init extends OutputCommand implements CommandInterface
         $gitIgnore = PathUtility::getRefactorItPath() . '.gitignore';
         if (!file_exists($gitIgnore)) {
             // @codeCoverageIgnoreStart
-            file_put_contents($gitIgnore, self::GITIGNORE_CONTENT);
+            file_put_contents($gitIgnore, self::GIT_IGNORE_CONTENT);
             // @codeCoverageIgnoreEnd
         }
     }

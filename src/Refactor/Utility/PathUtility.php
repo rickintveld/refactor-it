@@ -45,6 +45,14 @@ class PathUtility
     /**
      * @return string
      */
+    public static function getHistoryFile(): string
+    {
+        return self::getRefactorItPath() . '/history.log';
+    }
+
+    /**
+     * @return string
+     */
     public static function getPrivatePath(): string
     {
         return self::getRootPath() . '/private';
@@ -56,13 +64,5 @@ class PathUtility
     public static function getCommitHookPath(): string
     {
         return self::getRootPath() . '/.git/hooks';
-    }
-
-    /**
-     * @return string
-     */
-    public static function getHistoryFile(): string
-    {
-        return self::getRefactorItPath() . '/history.log';
     }
 }

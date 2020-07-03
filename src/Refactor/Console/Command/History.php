@@ -89,7 +89,6 @@ class History extends OutputCommand implements CommandInterface
         }
 
         $history = explode("\n", file_get_contents(PathUtility::getHistoryFile()));
-
         if (empty($history)) {
             $this->noHistoryFound();
 
@@ -111,8 +110,7 @@ class History extends OutputCommand implements CommandInterface
     {
         $this->getOutput()
             ->addLine('No refactor-it history found!', Output::FORMAT_ERROR)
-            ->addFuckingLine(Output::TROLL_TO)
-            ->writeLines();
+            ->addFuckingLine(Output::TROLL_TO)->writeLines();
     }
 
     /**

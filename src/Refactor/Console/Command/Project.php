@@ -67,7 +67,9 @@ class Project extends OutputCommand implements CommandInterface
         if ($answer = $helper->ask($input, $output, $question)) {
             $directory = PathUtility::getRootPath() . '/' . $answer;
 
-            $this->getOutput()->addLine('Refactoring all the php files within folder ' . $directory, Output::FORMAT_INFO)->writeLines();
+            $this->getOutput()
+                ->addLine('Refactoring all the php files within folder ' . $directory, Output::FORMAT_INFO)
+                ->writeLines();
 
             $files = $this->recursiveFileSearch($directory);
             if (empty($files)) {
