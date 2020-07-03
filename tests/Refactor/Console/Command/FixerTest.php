@@ -32,6 +32,7 @@ class FixerTest extends TestCase
      * @throws \Refactor\Exception\FileNotFoundException
      * @throws \Refactor\Exception\UnknownVcsTypeException
      * @throws \Refactor\Exception\WrongVcsTypeException
+     * @throws \Refactor\Exception\InvalidInputException
      */
     public function testFixerCommandWorksLikeExpected(): void
     {

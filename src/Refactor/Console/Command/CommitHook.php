@@ -26,6 +26,8 @@ class CommitHook extends OutputCommand implements CommandInterface
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->versionControlValidator = new VersionControlValidator();
     }
 
@@ -47,26 +49,17 @@ class CommitHook extends OutputCommand implements CommandInterface
             throw new MissingVersionControlException('There was no version control system found in your project!', 1571643538278);
         }
 
-        $removeHook = $parameters['remove-hook'];
-
-        if ($removeHook === true) {
+        if (isset($parameters['remove-hook']) && $parameters['remove-hook'] === true) {
             try {
                 $this->removePreCommitHook();
-                $this->getOutput()
-                    ->addLine('Removing the GIT pre-commit file from the GIT hooks folder', Output::FORMAT_INFO)
-                    ->addFuckingLine(Output::TROLL_FROM_TO)->writeLines();
             } catch (FileNotFoundException $exception) {
                 $this->getOutput()
                     ->addLine($exception->getMessage(), Output::FORMAT_ERROR)
                     ->addFuckingLine(Output::TROLL_FROM_TO)->writeLines();
             }
-        }
-
-        if ($removeHook === false) {
+        } else {
             try {
                 $this->addPreCommitHook();
-                $this->getOutput()
-                    ->addLine('The pre-commit hook has been added to the hooks folder', Output::FORMAT_INFO)->writeLines();
             } catch (FileNotFoundException $exception) {
                 $this->getOutput()
                     ->addLine($exception->getMessage(), Output::FORMAT_ERROR)
@@ -78,6 +71,7 @@ class CommitHook extends OutputCommand implements CommandInterface
     /**
      * @throws FileNotFoundException
      * @throws \Refactor\Exception\InvalidInputException
+     * @throws \Exception
      */
     private function addPreCommitHook(): void
     {
@@ -89,12 +83,17 @@ class CommitHook extends OutputCommand implements CommandInterface
             throw new FileNotFoundException('Something went wrong while copying the pre-commit hook file');
         }
 
+        $this->getOutput()
+            ->addLine('Removing the GIT pre-commit file from the GIT hooks folder', Output::FORMAT_INFO)
+            ->addFuckingLine(Output::TROLL_FROM_TO)->writeLines();
+
         chmod($preCommitFile, 0755);
     }
 
     /**
      * @throws FileNotFoundException
      * @throws \Refactor\Exception\InvalidInputException
+     * @throws \Exception
      */
     private function removePreCommitHook(): void
     {
@@ -102,6 +101,10 @@ class CommitHook extends OutputCommand implements CommandInterface
             $this->getOutput()->addFuckingLine(Output::TROLL_TO)->writeLines();
             throw new FileNotFoundException('There was no pre-commit hook file found to remove');
         }
+
+        $this->getOutput()
+            ->addLine('The pre-commit hook has been added to the hooks folder', Output::FORMAT_INFO)
+            ->addFuckingLine(Output::TROLL_FROM_TO)->writeLines();
 
         unlink(PathUtility::getCommitHookPath() . '/' . self::PRE_COMMIT_FILE);
     }

@@ -67,11 +67,6 @@ class Repository
             $output = $process->getOutput();
         }
 
-        if (!empty($output)) {
-            $fullName = explode(' ', $output);
-            $firstName = $fullName[0];
-        }
-
-        return $firstName ?? 'Unknown';
+        return empty($output) ? 'Unknown' : $output;
     }
 }

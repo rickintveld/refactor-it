@@ -9,7 +9,6 @@ use Refactor\Console\Signature;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
-use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,9 +25,6 @@ class Fixer extends OutputCommand implements CommandInterface
     /** @var Animal */
     private $animal;
 
-    /** @var ApplicationValidator */
-    private $applicationValidator;
-
     /** @var Finder */
     private $finder;
 
@@ -40,8 +36,9 @@ class Fixer extends OutputCommand implements CommandInterface
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->animal = new Animal();
-        $this->applicationValidator = new ApplicationValidator();
         $this->finder = new Finder();
         $this->garbageCollector = new GarbageCollector();
         $this->refactorCommand = new Refactor();

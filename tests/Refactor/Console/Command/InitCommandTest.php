@@ -2,7 +2,7 @@
 namespace Refactor\tests\Console\Command;
 
 use PHPUnit\Framework\TestCase;
-use Refactor\Init;
+use Refactor\Console\Command\Init;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;

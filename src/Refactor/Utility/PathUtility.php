@@ -2,7 +2,7 @@
 namespace Refactor\Utility;
 
 use Refactor\Config\Rules;
-use Refactor\Init;
+use Refactor\Console\Command\Init;
 
 /**
  * Class PathUtility
@@ -40,6 +40,14 @@ class PathUtility
     public static function getGitIgnoreFile(): string
     {
         return self::getRefactorItPath() . '/.gitignore';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getHistoryFile(): string
+    {
+        return self::getRefactorItPath() . '/history.log';
     }
 
     /**

@@ -7,7 +7,6 @@ use RecursiveRegexIterator;
 use Refactor\Console\Output;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Utility\PathUtility;
-use Refactor\Validator\ApplicationValidator;
 use RegexIterator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -22,15 +21,13 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  */
 class Project extends OutputCommand implements CommandInterface
 {
-    /** @var ApplicationValidator */
-    private $applicationValidator;
-
     /** @var Fixer */
     private $fixer;
 
     public function __construct()
     {
-        $this->applicationValidator = new ApplicationValidator();
+        parent::__construct();
+
         $this->fixer = new Fixer();
     }
 
@@ -70,7 +67,9 @@ class Project extends OutputCommand implements CommandInterface
         if ($answer = $helper->ask($input, $output, $question)) {
             $directory = PathUtility::getRootPath() . '/' . $answer;
 
-            $this->getOutput()->addLine('Refactoring all the php files within folder ' . $directory, Output::FORMAT_INFO)->writeLines();
+            $this->getOutput()
+                ->addLine('Refactoring all the php files within folder ' . $directory, Output::FORMAT_INFO)
+                ->writeLines();
 
             $files = $this->recursiveFileSearch($directory);
             if (empty($files)) {
