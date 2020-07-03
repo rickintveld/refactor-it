@@ -3,7 +3,6 @@ namespace Refactor\Console\Command;
 
 use Refactor\Console\Output;
 use Refactor\Utility\PathUtility;
-use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -18,14 +17,6 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  */
 class Remover extends OutputCommand implements CommandInterface
 {
-    /** @var ApplicationValidator */
-    private $applicationValidator;
-
-    public function __construct()
-    {
-        $this->applicationValidator = new ApplicationValidator();
-    }
-
     /**
      * @param InputInterface $input
      * @param OutputInterface $output

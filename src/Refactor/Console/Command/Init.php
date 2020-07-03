@@ -1,9 +1,7 @@
 <?php
-namespace Refactor;
+namespace Refactor\Console\Command;
 
 use Refactor\Config\Rules;
-use Refactor\Console\Command\CommandInterface;
-use Refactor\Console\Command\OutputCommand;
 use Refactor\Console\Output;
 use Refactor\Console\Signature;
 use Refactor\Utility\PathUtility;
@@ -20,14 +18,13 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class Init extends OutputCommand implements CommandInterface
 {
     public const REFACTOR_IT_PATH = '/private/refactor-it/';
-    public const GITIGNORE_CONTENT = "/rules.json\r\n!/.gitignore";
+    public const GITIGNORE_CONTENT = "/rules.json\r\n/history.log\r\n!/.gitignore";
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param HelperSet $helperSet
      * @param array|null $parameters
-     * @throws Exception\InvalidInputException
      * @throws \Exception
      */
     public function execute(InputInterface $input, OutputInterface $output, HelperSet $helperSet, array $parameters = null): void

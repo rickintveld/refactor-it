@@ -26,6 +26,8 @@ class CommitHook extends OutputCommand implements CommandInterface
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->versionControlValidator = new VersionControlValidator();
     }
 

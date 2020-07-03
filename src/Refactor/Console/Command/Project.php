@@ -7,7 +7,6 @@ use RecursiveRegexIterator;
 use Refactor\Console\Output;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Utility\PathUtility;
-use Refactor\Validator\ApplicationValidator;
 use RegexIterator;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -22,15 +21,13 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  */
 class Project extends OutputCommand implements CommandInterface
 {
-    /** @var ApplicationValidator */
-    private $applicationValidator;
-
     /** @var Fixer */
     private $fixer;
 
     public function __construct()
     {
-        $this->applicationValidator = new ApplicationValidator();
+        parent::__construct();
+
         $this->fixer = new Fixer();
     }
 

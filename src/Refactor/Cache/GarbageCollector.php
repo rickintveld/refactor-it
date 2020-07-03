@@ -17,4 +17,11 @@ class GarbageCollector
             unlink(PathUtility::getRootPath() . '/' . self::PHP_CS_CACHE_FILE);
         }
     }
+
+    public function removeHistory(): void
+    {
+        if (file_exists(PathUtility::getHistoryFile()) === true) {
+            unlink(PathUtility::getHistoryFile());
+        }
+    }
 }

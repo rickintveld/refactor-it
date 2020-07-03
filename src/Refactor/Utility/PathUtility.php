@@ -2,7 +2,7 @@
 namespace Refactor\Utility;
 
 use Refactor\Config\Rules;
-use Refactor\Init;
+use Refactor\Console\Command\Init;
 
 /**
  * Class PathUtility
@@ -56,5 +56,13 @@ class PathUtility
     public static function getCommitHookPath(): string
     {
         return self::getRootPath() . '/.git/hooks';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getHistoryFile(): string
+    {
+        return self::getRefactorItPath() . '/history.log';
     }
 }
