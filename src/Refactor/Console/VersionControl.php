@@ -5,10 +5,6 @@ use Refactor\Console\Command\Finder;
 use Refactor\Exception\WrongVcsTypeException;
 use Symfony\Component\Process\Process;
 
-/**
- * Class Command
- * @package Refactor\Console
- */
 class VersionControl
 {
     public const GIT_COMMAND = ['git', 'diff', '--name-only', '--diff-filter=ACDMRTUXB', '--cached'];
@@ -25,7 +21,7 @@ class VersionControl
      * @throws WrongVcsTypeException
      * @return string
      */
-    public function validateVersionControlUsage(): string
+    public function isGitProject(): string
     {
         $files = [];
         $process = new Process(['ls', '-a']);

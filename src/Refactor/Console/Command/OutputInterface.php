@@ -1,10 +1,8 @@
 <?php
 namespace Refactor\Console\Command;
 
-/**
- * Interface OutputInterface
- * @package Refactor\Console\Command
- */
+use Refactor\Console\Output;
+
 interface OutputInterface
 {
     /**
@@ -15,5 +13,5 @@ interface OutputInterface
     /**
      * @return \Refactor\Console\Output
      */
-    public function getOutput(): \Refactor\Console\Output;
+    public function getOutput(): Output;
 }

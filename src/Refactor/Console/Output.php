@@ -1,15 +1,11 @@
 <?php
 namespace Refactor\Console;
 
-use Refactor\App\Repository;
+use Refactor\App\GitRepository;
 use Refactor\Exception\InvalidInputException;
 use Refactor\Troll\Fuck;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class Output
- * @package Refactor\Console
- */
 class Output
 {
     public const FORMAT_COMMENT = 'comment';
@@ -21,27 +17,19 @@ class Output
     public const TROLL_FROM_TO = 2;
     public const TROLL_TO = 3;
 
-    /** @var Fuck */
-    private $fuck;
-
-    /** @var array */
-    private $lines = [];
-
-    /** @var OutputInterface */
-    private $output;
-
-    /** @var Repository */
-    private $repository;
+    private Fuck $fuck;
+    private array $lines = [];
+    private OutputInterface $output;
+    private GitRepository $repository;
 
     /**
-     * Output constructor.
      * @param OutputInterface $output
      */
     public function __construct(OutputInterface $output)
     {
         $this->fuck = new Fuck();
         $this->output = $output;
-        $this->repository = new Repository();
+        $this->repository = new GitRepository();
     }
 
     /**
@@ -69,10 +57,6 @@ class Output
         $this->validateTrollType($trollType);
 
         switch ($trollType) {
-            case self::TROLL_FROM:
-                $outputLine = $this->fuck->speakFrom(Signature::team());
-                break;
-
             case self::TROLL_FROM_TO:
                 if ($shout === true) {
                     $outputLine = $this->fuck->shoutTo($this->repository->getUserName(), Signature::team());

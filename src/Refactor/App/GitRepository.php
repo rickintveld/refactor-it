@@ -2,37 +2,30 @@
 namespace Refactor\App;
 
 use Gitonomy\Git\Diff\Diff;
+use Gitonomy\Git\Repository;
 use Gitonomy\Git\WorkingCopy;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Process\Process;
 
-/**
- * Class Repository
- * @package Refactor\App
- */
-class Repository
+class GitRepository
 {
-    /** @var \Gitonomy\Git\Repository */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * Repository constructor.
-     */
     public function __construct()
     {
-        $this->repository = new \Gitonomy\Git\Repository(PathUtility::getRootPath());
+        $this->repository = new Repository(PathUtility::getRootPath());
     }
 
     /**
      * @return \Gitonomy\Git\Repository
      */
-    protected function getRepository(): \Gitonomy\Git\Repository
+    protected function getRepository(): Repository
     {
         return $this->repository;
     }
 
     /**
-     * @return WorkingCopy
+     * @return \Gitonomy\Git\WorkingCopy
      */
     public function getWorkingCopy(): WorkingCopy
     {
@@ -40,7 +33,7 @@ class Repository
     }
 
     /**
-     * @return Diff
+     * @return \Gitonomy\Git\Diff\Diff
      */
     public function getStagedModifications(): Diff
     {
@@ -48,7 +41,7 @@ class Repository
     }
 
     /**
-     * @return Diff
+     * @return \Gitonomy\Git\Diff\Diff
      */
     public function getPendingModifications(): Diff
     {

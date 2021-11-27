@@ -3,10 +3,6 @@ namespace Refactor\Log;
 
 use Refactor\Utility\PathUtility;
 
-/**
- * Class HistoryLogger
- * @package Refactor\Log
- */
 class HistoryLogger implements LoggerInterface
 {
     /**

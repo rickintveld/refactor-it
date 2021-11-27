@@ -3,18 +3,10 @@ namespace Refactor\Troll;
 
 use Foaas\Foaas;
 
-/**
- * Class Fuck
- * @package Refactor\Troll
- */
 class Fuck
 {
-    /** @var Foaas */
-    private $fuck;
+    private Foaas $fuck;
 
-    /**
-     * Fuck constructor.
-     */
     public function __construct()
     {
         $this->fuck = new Foaas();

@@ -4,10 +4,6 @@ namespace Refactor\Utility;
 use Refactor\Config\Rules;
 use Refactor\Console\Command\Init;
 
-/**
- * Class PathUtility
- * @package Refactor\Utility
- */
 class PathUtility
 {
     /**
@@ -56,13 +52,5 @@ class PathUtility
     public static function getPrivatePath(): string
     {
         return self::getRootPath() . '/private';
-    }
-
-    /**
-     * @return string
-     */
-    public static function getCommitHookPath(): string
-    {
-        return self::getRootPath() . '/.git/hooks';
     }
 }

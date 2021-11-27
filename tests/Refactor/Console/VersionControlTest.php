@@ -31,7 +31,7 @@ class VersionControlTest extends TestCase
      */
     public function validateVcsUsageThrowsExceptionOnFailure(): void
     {
-        $this->versionControl->validateVersionControlUsage();
+        $this->versionControl->isGitProject();
         self::assertTrue(true, 'Whoops, looks like the exception has been thrown');
     }
 
@@ -41,7 +41,7 @@ class VersionControlTest extends TestCase
      */
     public function validateVcsUsageWorksLikeExpected(): void
     {
-        $vcs = $this->versionControl->validateVersionControlUsage();
+        $vcs = $this->versionControl->isGitProject();
         self::assertEquals('git', $vcs);
     }
 
@@ -51,7 +51,7 @@ class VersionControlTest extends TestCase
      */
     public function validateSvnUsageToFailAsExpected(): void
     {
-        $vcs = $this->versionControl->validateVersionControlUsage();
+        $vcs = $this->versionControl->isGitProject();
         self::assertNotEquals('svn', $vcs);
     }
 

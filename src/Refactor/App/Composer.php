@@ -1,20 +1,60 @@
 <?php
 namespace Refactor\App;
 
-/**
- * Class Composer
- * @package Refactor\App
- */
+use Doctrine\Common\Collections\ArrayCollection;
+use Refactor\Builder\ComposerBuilder;
+
 class Composer
 {
+    private \Refactor\Model\Composer $composer;
+
+    public function __construct()
+    {
+        $this->composer = (new ComposerBuilder())->build();
+    }
+
     /**
      * @return string
      */
     public function getVersion(): string
     {
-        $composer = file_get_contents(dirname(__DIR__, 3) . '/composer.json');
-        $data = json_decode($composer, true);
+        return $this->composer->getVersion();
+    }
 
-        return (string)$data['version'];
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getAuthors(): ArrayCollection
+    {
+        return $this->composer->getAuthors();
+    }
+
+    public function getPackageName(): string
+    {
+        return $this->composer->getPackageName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->composer->getDescription();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLicense(): string
+    {
+        return $this->composer->getLicense();
+    }
+
+    /**
+     * @return string
+     */
+    public function getHomepage(): string
+    {
+        return $this->composer->getHomepage();
     }
 }

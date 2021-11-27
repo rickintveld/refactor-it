@@ -11,10 +11,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-/**
- * Class Init
- * @package Refactor
- */
 class Init extends OutputCommand implements CommandInterface
 {
     public const REFACTOR_IT_PATH = '/private/refactor-it/';

@@ -1,14 +1,11 @@
 <?php
 namespace Refactor\Command;
 
+use Refactor\Component\Serializer\JsonSerializer;
 use Refactor\Config\Rules;
 use Refactor\Exception\FileNotFoundException;
 use Refactor\Utility\PathUtility;
 
-/**
- * Class RefactorCommand
- * @package Refactor\Command
- */
 class Refactor
 {
     /**
@@ -16,14 +13,14 @@ class Refactor
      * @throws FileNotFoundException
      * @return array
      */
-    public function getCommand(string $file): array
+    public function execute(string $file): array
     {
         if (!file_exists($file)) {
-            throw new FileNotFoundException('The requested refactor file could not be found!', 1570183073903);
+            throw new FileNotFoundException(sprintf('The requested file %s could not be found!', $file), 1570183073903);
         }
 
         if (!file_exists($executable = PathUtility::getRootPath() . '/vendor/bin/php-cs-fixer')) {
-            throw new \Exception('No php-cs-fixer executable found in the vendor bin folder', 1571751466166);
+            throw new FileNotFoundException('No php-cs-fixer executable found in the vendor bin folder', 1571751466166);
         }
 
         return [
@@ -66,8 +63,9 @@ class Refactor
      */
     private function inlineJsonConverter(string $rules):? string
     {
-        $inlineRules = json_decode($rules, true);
+        $serializer = new JsonSerializer();
+        $inlineRules = $serializer->decode($rules);
 
-        return json_encode($inlineRules);
+        return $serializer->serialize($inlineRules);
     }
 }

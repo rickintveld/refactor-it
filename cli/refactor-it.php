@@ -1,7 +1,6 @@
 <?php
 
 use Refactor\App\Composer;
-use Refactor\Console\Command\CommitHook;
 use Refactor\Console\Command\Fixer;
 use Refactor\Console\Command\History;
 use Refactor\Console\Command\Init;
@@ -19,9 +18,8 @@ if (file_exists(getcwd() . '/vendor/autoload.php')) {
 }
 
 $composer = new Composer();
-$app = new Application('Refactor it', $composer->getVersion());
+$application = new Application('Refactor it', $composer->getVersion());
 
-$commitHook = new CommitHook();
 $history = new History();
 $historyLogger = new HistoryLogger();
 $init = new Init();
@@ -29,13 +27,13 @@ $fixer = new Fixer();
 $project = new Project();
 $remover = new Remover();
 
-$app->command('init [--reset-rules]', function ($resetRules, InputInterface $input, OutputInterface $output) use ($init, $historyLogger) {
+$application->command('init [--reset-rules]', function ($resetRules, InputInterface $input, OutputInterface $output) use ($init, $historyLogger) {
     $resetRules ? $historyLogger->log("refactor-it init --reset-rules\n") : $historyLogger->log("refactor-it init\n");
     $init->execute($input, $output, $this->getHelperSet(), ['reset-rules' => $resetRules]);
 })->descriptions('Generates the file with the refactoring rules', ['--reset-rules' => 'Resets the rules to the default']);
 
-$app->command('diff', function (InputInterface $input, OutputInterface $output) use ($fixer, $historyLogger) {
-    $historyLogger->log("refactor-it diff\n");
+$application->command('fix', function (InputInterface $input, OutputInterface $output) use ($fixer, $historyLogger) {
+    $historyLogger->log("refactor-it fix\n");
 
     try {
         $fixer->execute($input, $output, $this->getHelperSet());
@@ -44,23 +42,21 @@ $app->command('diff', function (InputInterface $input, OutputInterface $output) 
     }
 })->descriptions('Refactors your PHP project GIT diffs to the selected coding standards');
 
-$app->command('remove', function (InputInterface $input, OutputInterface $output) use ($remover, $historyLogger) {
+$application->command('remove', function (InputInterface $input, OutputInterface $output) use ($remover, $historyLogger) {
+    $historyLogger->log("refactor-it remove\n");
     $remover->execute($input, $output, $this->getHelperSet());
 })->descriptions('Removes the Refactor-it folder and config files');
 
-$app->command('all', function (InputInterface $input, OutputInterface $output) use ($project, $historyLogger) {
-    $historyLogger->log("refactor-it all\n");
+$application->command('fix-all', function (InputInterface $input, OutputInterface $output) use ($project, $historyLogger) {
+    $historyLogger->log("refactor-it fix-all\n");
     $project->execute($input, $output, $this->getHelperSet());
 })->descriptions('Select the project source folder and refactor all the PHP files to the selected coding standards');
 
-$app->command('pre-commit [--remove-hook]', function ($removeHook, InputInterface $input, OutputInterface $output) use ($commitHook, $historyLogger) {
-    $removeHook ? $historyLogger->log("refactor-it pre-commit --remove-hook\n") : $historyLogger->log("refactor-it pre-commit\n");
-    $commitHook->execute($input, $output, $this->getHelperSet(), ['remove-hook' => $removeHook]);
-})->descriptions('Adds the GIT pre-commit hook', ['--remove-hook' => 'Removes the pre commit hook']);
-
-$app->command('history [--clear]', function ($clear, InputInterface $input, OutputInterface $output) use ($history) {
+$application->command('history [--clear]', function ($clear, InputInterface $input, OutputInterface $output) use ($history) {
     $history->execute($input, $output, $this->getHelperSet(), ['clear' => $clear]);
-})->descriptions('Displays a list of command history', ['--clear' => 'Removes your refactor-it history']);
+})->descriptions('Displays a list of the command history', ['--clear' => 'Removes your refactor-it command history']);
+
+$application->setAutoExit(true);
 
 /** @noinspection PhpUnhandledExceptionInspection because we do want to display the error through Symfony Console and not handle it ourselves */
-$app->run();
+$application->run();

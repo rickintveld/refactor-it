@@ -2,8 +2,6 @@
 namespace Refactor\Console;
 
 /**
- * Class Signature
- * @package Refactor\Console
  * @codeCoverageIgnore
  */
 class Signature
@@ -14,14 +12,6 @@ class Signature
     public static function write(): string
     {
         return "\nCoded with ♥ by Rick in 't Veld \nrick.in.t.veld@opinity.nl";
-    }
-
-    /**
-     * @return string
-     */
-    public static function noob(): string
-    {
-        return 'NOOB';
     }
 
     /**

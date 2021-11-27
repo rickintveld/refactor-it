@@ -31,6 +31,6 @@ class RefactorCommandTest extends TestCase
      */
     public function testRefactorCommandToFailAsExpected(): void
     {
-        $this->refactorCommand->getCommand(dirname(__DIR__, 3) . '/exception.txt');
+        $this->refactorCommand->execute(dirname(__DIR__, 3) . '/exception.txt');
     }
 }

@@ -3,10 +3,6 @@ namespace Refactor\Cache;
 
 use Refactor\Utility\PathUtility;
 
-/**
- * Class GarbageCollector
- * @package Refactor\Console
- */
 class GarbageCollector
 {
     public const PHP_CS_CACHE_FILE = '.php_cs.cache';

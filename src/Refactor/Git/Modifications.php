@@ -1,39 +1,36 @@
 <?php
 namespace Refactor\Git;
 
-use Refactor\App\Repository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Refactor\App\GitRepository;
 use Refactor\Utility\PathUtility;
 
-/**
- * Class Modifications
- * @package Refactor\Git
- */
 class Modifications
 {
-    /** @var \Refactor\App\Repository */
-    private $repository;
+    private GitRepository $repository;
 
-    /**
-     * Modifications constructor.
-     */
     public function __construct()
     {
-        $this->repository = new Repository();
+        $this->repository = new GitRepository();
     }
 
     /**
-     * @return array
+     * @return ArrayCollection<string>
      */
-    public function getAllModifiedFiles(): array
+    public function getAllModifiedFiles(): ArrayCollection
     {
-        $modifiedFiles = array_merge(
-            $this->repository->getPendingModifications()->getFiles(),
-            $this->repository->getStagedModifications()->getFiles()
-        );
+        $files = new ArrayCollection();
 
-        $files = array_map(static function ($file) {
+        $modifiedFiles = [
+            ...$this->repository->getPendingModifications()->getFiles(),
+            ...$this->repository->getStagedModifications()->getFiles()
+        ];
+
+        array_map(static function ($file) use ($files) {
             /** @var \Gitonomy\Git\Diff\File $file */
-            return PathUtility::getRootPath() . '/' . $file->getName();
+            if (false === $file->isDelete()) {
+                $files->add(PathUtility::getRootPath() . '/' . $file->getName());
+            }
         }, $modifiedFiles);
 
         return $files;

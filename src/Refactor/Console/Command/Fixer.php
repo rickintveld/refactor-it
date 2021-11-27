@@ -10,29 +10,18 @@ use Refactor\Exception\FileNotFoundException;
 use Refactor\Exception\UnknownVcsTypeException;
 use Refactor\Exception\WrongVcsTypeException;
 use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Stopwatch\Stopwatch;
 
-/**
- * Class Fixer
- * @package Refactor\Fixer
- */
 class Fixer extends OutputCommand implements CommandInterface
 {
-    /** @var Animal */
-    private $animal;
-
-    /** @var Finder */
-    private $finder;
-
-    /** @var GarbageCollector */
-    private $garbageCollector;
-
-    /** @var Refactor */
-    private $refactorCommand;
+    private Animal $animal;
+    private Finder $finder;
+    private GarbageCollector $garbageCollector;
+    private Refactor $refactorCommand;
 
     public function __construct()
     {
@@ -42,6 +31,7 @@ class Fixer extends OutputCommand implements CommandInterface
         $this->finder = new Finder();
         $this->garbageCollector = new GarbageCollector();
         $this->refactorCommand = new Refactor();
+        $this->setOutput(new ConsoleOutput());
     }
 
     /**
@@ -64,27 +54,24 @@ class Fixer extends OutputCommand implements CommandInterface
             return;
         }
 
-        $this->runRefactor($this->finder->getChangedFiles(), $output);
+        $this->run($this->finder->getChangedFiles());
     }
 
     /**
      * @param array $files
      * @throws FileNotFoundException
      */
-    public function refactorAll(array $files)
+    public function refactorAll(array $files): void
     {
-        $output = new ConsoleOutput();
-        $this->setOutput($output);
-        $this->runRefactor($files, $output);
+        $this->run($files);
     }
 
     /**
      * @param array $files
-     * @param OutputInterface $output
      * @throws FileNotFoundException
      * @throws \Exception
      */
-    private function runRefactor(array $files, OutputInterface $output): void
+    private function run(array $files): void
     {
         if (empty($files)) {
             $this->getOutput()
@@ -94,42 +81,37 @@ class Fixer extends OutputCommand implements CommandInterface
             return;
         }
 
-        $this->getOutput()->addLine("Refactoring...\n", Output::FORMAT_QUESTION)->writeLines();
+        $this->getOutput()->addLine('Start cleaning up..', Output::FORMAT_INFO)->writeLines();
 
-        $progressBar = new ProgressBar($output, count($files));
-        $progressBar->start();
+        $stopwatch = new Stopwatch('Fixer');
+        $stopwatch->start('Fixer');
 
         $failures = 0;
         foreach ($files as $file) {
-            $process = Process::fromShellCommandline(implode(' ', $this->refactorCommand->getCommand($file)));
+            $process = Process::fromShellCommandline(implode(' ', $this->refactorCommand->execute($file)));
             $process->run();
 
             if ($process->isSuccessful()) {
-                $this->getOutput()->addLine($file, Output::FORMAT_INFO)->writeLines();
+                $this->getOutput()->addLine(sprintf('Code sniffing ==> %s', $file), Output::FORMAT_INFO)->writeLines();
             } else {
                 $this->getOutput()->addLine($process->getOutput(), Output::FORMAT_INFO)->writeLines();
                 $failures++;
             }
-
-            $progressBar->advance();
         }
 
         $this->cleanUp();
-        $progressBar->finish();
+        $event = $stopwatch->stop('Fixer');
 
         if ($failures > 0) {
             $this->getOutput()->addFuckingLine(Output::TROLL_TO, true);
         }
 
         $this->getOutput()
-            ->addLine($this->animal->speak("All done... \nYour code has been refactored!"), Output::FORMAT_INFO)
+            ->addLine($this->animal->speak(sprintf("All done... \nYour code has been refactored \nin %d seconds!", $event->getDuration() / 1000)), Output::FORMAT_INFO)
             ->addLine(Signature::write(), Output::FORMAT_INFO)
             ->writeLines();
     }
 
-    /**
-     * Removes the php cs cache file
-     */
     private function cleanUp(): void
     {
         $this->garbageCollector->removeCache();

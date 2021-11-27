@@ -88,11 +88,9 @@ Default set: **rules.json:**
 ### Available commands:
 - **refactor-it init**                 *Sets the Refactor it rules*
 - **refactor-it init --reset-rules**   *Resets the Refactor it rules*
-- **refactor-it diff**                 *Refactor the changed files*
-- **refactor-it all**                  *Refactor the selected source directory*
+- **refactor-it fix**                  *Refactor the changed files*
+- **refactor-it fix-all**              *Refactor the selected source directory*
 - **refactor-it remove**               *Removes all the Refactor-it files and folder* 
-- **refactor-it pre-commit**           *Adds the GIT pre-commit hook to refactor the diffs*
-- **refactor-it pre-commit --remove-hook**        *Removes the pre-commit hook*
 
 ### Done
 You can now use the command `refactor-it`

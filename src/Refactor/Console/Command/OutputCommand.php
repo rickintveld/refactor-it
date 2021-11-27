@@ -5,17 +5,10 @@ use Refactor\Console\Output;
 use Refactor\Validator\ApplicationValidator;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class Command
- * @package Refactor\Console\Command
- */
 class OutputCommand implements \Refactor\Console\Command\OutputInterface
 {
-    /** @var ApplicationValidator */
-    protected $applicationValidator;
-
-    /** @var Output */
-    private $output;
+    protected ApplicationValidator $applicationValidator;
+    private Output $output;
 
     public function __construct()
     {

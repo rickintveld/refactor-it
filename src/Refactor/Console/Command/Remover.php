@@ -11,8 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
- * Class Remover
- * @package Refactor\Console
  * @codeCoverageIgnore
  */
 class Remover extends OutputCommand implements CommandInterface

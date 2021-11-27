@@ -10,14 +10,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
-/**
- * Class History
- * @package Refactor\Console\Command
- */
 class History extends OutputCommand implements CommandInterface
 {
-    /** @var \Refactor\Cache\GarbageCollector */
-    private $garbageCollector;
+    private GarbageCollector $garbageCollector;
 
     public function __construct()
     {

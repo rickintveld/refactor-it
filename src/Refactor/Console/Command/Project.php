@@ -15,14 +15,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
 /**
- * Class Project
- * @package Refactor\Console\Refactor
  * @codeCoverageIgnore
  */
 class Project extends OutputCommand implements CommandInterface
 {
-    /** @var Fixer */
-    private $fixer;
+    private Fixer $fixer;
 
     public function __construct()
     {

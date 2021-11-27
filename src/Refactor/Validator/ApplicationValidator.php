@@ -4,10 +4,6 @@ namespace Refactor\Validator;
 use Refactor\Utility\PathUtility;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-/**
- * Class ApplicationValidator
- * @package Refactor\Validator
- */
 class ApplicationValidator implements ValidatorInterface
 {
     /**
