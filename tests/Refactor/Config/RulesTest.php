@@ -4,14 +4,9 @@ namespace Refactor\tests\Config;
 use PHPUnit\Framework\TestCase;
 use Refactor\Config\Rules;
 
-/**
- * Class RulesTest
- * @package Refactor\Config
- */
 class RulesTest extends TestCase
 {
-    /** @var Rules */
-    private $rules;
+    private Rules $rules;
 
     public function setUp(): void
     {

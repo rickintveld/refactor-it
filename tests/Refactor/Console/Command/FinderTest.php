@@ -4,14 +4,9 @@ namespace Refactor\tests\Console\Command;
 use PHPUnit\Framework\TestCase;
 use Refactor\Console\Command\Finder;
 
-/**
- * Class FinderTest
- * @package Refactor\Fixer
- */
 class FinderTest extends TestCase
 {
-    /** @var Finder */
-    protected $finder;
+    protected Finder $finder;
 
     protected function setUp(): void
     {

@@ -4,14 +4,9 @@ namespace Refactor\tests\Console;
 use PHPUnit\Framework\TestCase;
 use Refactor\Console\VersionControl;
 
-/**
- * Class CommandTest
- * @package Refactor\Console
- */
 class VersionControlTest extends TestCase
 {
-    /** @var VersionControl */
-    protected $versionControl;
+    protected VersionControl $versionControl;
 
     protected function setUp(): void
     {

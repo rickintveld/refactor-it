@@ -7,14 +7,9 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-/**
- * Class FixerTest
- * @package Refactor\Console
- */
 class FixerTest extends TestCase
 {
-    /** @var Fixer */
-    private $fixer;
+    private Fixer $fixer;
 
     public function setUp(): void
     {
@@ -41,13 +36,5 @@ class FixerTest extends TestCase
         $this->fixer->execute($input, $output, new HelperSet(), []);
 
         self::assertNotEmpty($output->getErrorOutput(), 'The console output is not empty');
-    }
-
-    /**
-     * @throws \Refactor\Exception\FileNotFoundException
-     */
-    public function testRefactorAllFailsAsExpected(): void
-    {
-        self::assertNull($this->fixer->refactorAll([]));
     }
 }

@@ -5,14 +5,11 @@ use PHPUnit\Framework\TestCase;
 use Refactor\Validator\ApplicationValidator;
 
 /**
- * Class ApplicationValidatorTest
- * @package Refactor\tests\Validator
  * @codeCoverageIgnore
  */
 class ApplicationValidatorTest extends TestCase
 {
-    /** @var ApplicationValidator */
-    private $applicationValidator;
+    private ApplicationValidator $applicationValidator;
 
     public function setUp(): void
     {

@@ -6,19 +6,12 @@ use Refactor\Cache\GarbageCollector;
 use Refactor\Log\HistoryLogger;
 use Refactor\Utility\PathUtility;
 
-/**
- * Class HistoryLoggerTest
- * @package Refactor\tests\Log
- */
 class HistoryLoggerTest extends TestCase
 {
     private const LOG_MESSAGE = 'Refactor-it history command log message';
 
-    /** @var \Refactor\Cache\GarbageCollector */
-    private $garbageCollector;
-
-    /** @var \Refactor\Log\HistoryLogger */
-    private $historyLogger;
+    private GarbageCollector $garbageCollector;
+    private HistoryLogger $historyLogger;
 
     public function setUp(): void
     {
@@ -42,9 +35,9 @@ class HistoryLoggerTest extends TestCase
     public function testAddLogMessage(): void
     {
         $this->historyLogger->log(self::LOG_MESSAGE);
-        $this->assertFileExists(PathUtility::getHistoryFile());
+        self::assertFileExists(PathUtility::getHistoryFile());
 
         $contents = explode("\n", @file_get_contents(PathUtility::getHistoryFile()));
-        $this->assertEquals($contents[0], self::LOG_MESSAGE);
+        self::assertEquals(self::LOG_MESSAGE, $contents[0]);
     }
 }

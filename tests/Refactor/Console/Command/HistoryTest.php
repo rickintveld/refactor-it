@@ -8,10 +8,6 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-/**
- * Class InitTest
- * @package Refactor
- */
 class HistoryTest extends TestCase
 {
     /**

@@ -4,14 +4,9 @@ namespace Refactor\tests\Console\Command;
 use PHPUnit\Framework\TestCase;
 use Refactor\Command\Refactor;
 
-/**
- * Class RefactorCommandTest
- * @package Refactor\Command
- */
 class RefactorCommandTest extends TestCase
 {
-    /** @var Refactor */
-    private $refactorCommand;
+    private Refactor $refactorCommand;
 
     public function setUp(): void
     {

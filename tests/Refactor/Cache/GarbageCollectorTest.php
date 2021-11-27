@@ -5,16 +5,10 @@ use PHPUnit\Framework\TestCase;
 use Refactor\Cache\GarbageCollector;
 use Refactor\Utility\PathUtility;
 
-/**
- * Class GarbageCollectorTest
- * @package Refactor\Console
- */
 class GarbageCollectorTest extends TestCase
 {
-    /** @var GarbageCollector */
-    protected $garbageCollector;
-
-    protected $cacheFile;
+    protected GarbageCollector $garbageCollector;
+    protected string $cacheFile;
 
     protected function setUp(): void
     {
@@ -32,7 +26,7 @@ class GarbageCollectorTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        unset($this->garbageCollector);
+        unset($this->garbageCollector, $this->cacheFile);
     }
 
     public function testCleanUpCacheFileExists(): void
